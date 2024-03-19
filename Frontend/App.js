@@ -15,7 +15,7 @@
   const AuthStack = () => {
     return(
       <Stack.Navigator>
-        <Stack.Screen name='Login' component={Login}/>
+        <Stack.Screen options={{headerShown:false}} name='Login' component={Login}/>
         <Stack.Screen name='Signup' component={Signup}/>
       </Stack.Navigator>
     )
@@ -23,7 +23,7 @@
   const AuthenticatedStack = ()=>{
     return(
       <Stack.Navigator>
-        <Stack.Screen name='Homepage' component={HomePage}/>
+        <Stack.Screen options={{headerShown:false}} name='Homepage' component={HomePage}/>
       </Stack.Navigator>
     )
   }
