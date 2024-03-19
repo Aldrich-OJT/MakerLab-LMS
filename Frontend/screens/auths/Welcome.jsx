@@ -1,7 +1,7 @@
 import React from 'react';
 import { Dimensions, Pressable, Image, StyleSheet, Text, View, ImageBackground} from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 const dimensions = Dimensions.get('window');   
 const imageWidth = dimensions.width;
@@ -10,25 +10,30 @@ const imageHeight = dimensions.height;
 export default function Welcome() {
     const navigation = useNavigation();
 
-  return (
+  return ( 
     <SafeAreaView>
       <View style={styles.container}>
         <ImageBackground source={require('../../assets/background.png')} style={styles.bgimage}>
-        <Text style={styles.text}>Let's Get Started!</Text>
-        <Image source={require('../../assets/logo-dark.png')} style={styles.logo}/>
-          <View style={styles.container}>
-              <View style={styles.circle} />
-              <Image source={require('../../assets/pic.png')} style={styles.image}/>
+          
+          <View style={styles.topcontainer}>
+            <Text style={styles.text}>Let's Get Started!</Text>
+            <Image source={require('../../assets/logo-dark.png')} style={styles.logo}/>
+          </View>
+
+          <View style={styles.imagecontainer}>
+            <View style={styles.circle}/>
+            <Image source={require('../../assets/pic.png')} style={styles.image}/>
           </View>
 
           <View>
           <Pressable  onPress={() => navigation.navigate('Signup')}>
-              <Text style={styles.button}>Sign Up</Text>
+            <Text style={styles.button}>Sign Up</Text>
           </Pressable>
           </View>
+
         </ImageBackground>
       </View>
-    </SafeAreaView> 
+    </SafeAreaView>
   )
 }
 
@@ -40,34 +45,49 @@ const styles = StyleSheet.create({
   },
   container:{
     alignItems: 'center',
+    justifyContent: 'space-between',
+    flexDirection: 'column',
+    alignItems: 'center',
+  },
+
+  topcontainer: {
+    justifyContent: 'space-between', 
+    flexDirection:'row',
+  },
+
+  imagecontainer: {
+    position: 'relative'
   },
 
   image:{
-    height: '45%',
-    width: '70%',
-    borderColor: 'black',
-    borderRadius: 550,
+    borderRadius: 150,
     borderWidth: 2,
-    marginTop: '68%',
+    borderColor: 'black',
+    height: '60%',
+    width: '75%',
+    alignSelf: 'center',
+    top: '30%',
   },
+
   circle:{
-    position: 'absolute',
-    height: '30%',
-    width: '70%',
-    borderColor: 'black',
-    borderRadius: 550,
-    backgroundColor: 'black',
+    borderRadius: 150,
     borderWidth: 2,
-    marginTop: '75%',
+    borderColor: 'black',
+    backgroundColor: 'black',
+    height: '60%',
+    width: '75%',
+    position: 'absolute',
+    top: '34%',
+    left: '7%',
   },
+
   logo: {
     height: '30%',
     width: '30%',
     resizeMode: 'contain',
-    position: 'absolute',
-    marginTop: '-12%',
     right: 0,
     marginRight: '5%',
+    marginTop: '7%',
   },
 
   button: {
@@ -83,12 +103,12 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     elevation: 10,
     shadowColor: '#52006A',
+    marginTop: '10%'
   },
 
   text: {
     fontWeight:'bold',
     fontSize: 30,
     marginTop: '23%',
-    position: 'absolute'
   },
 })
