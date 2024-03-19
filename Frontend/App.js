@@ -2,7 +2,8 @@
   import { StatusBar } from 'expo-status-bar';
   import { StyleSheet, Text, View } from 'react-native';
   import HomePage from './screens/HomePage';
-  import {Login, Signup} from './screens/auths/Login';
+  import Login from './screens/auths/Login';
+  import Signup from './screens/auths/Signup';
   import { NavigationContainer} from '@react-navigation/native';
   import { createNativeStackNavigator } from '@react-navigation/native-stack';
   import { PaperProvider } from 'react-native-paper';
@@ -11,7 +12,7 @@
   const Stack = createNativeStackNavigator()
     
 
-  const authStack = () => {
+  const AuthStack = () => {
     return(
       <Stack.Navigator>
         <Stack.Screen name='Login' component={Login}/>
@@ -32,7 +33,7 @@
     return (
       <PaperProvider>
         <NavigationContainer>
-            {isloggedIn ? <authStack/> : <AuthenticatedStack/>}
+            {isloggedIn ? <AuthenticatedStack/>: <AuthStack/>}
         </NavigationContainer>
       </PaperProvider>
     );
