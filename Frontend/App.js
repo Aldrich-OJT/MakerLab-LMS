@@ -15,9 +15,11 @@
   const AuthStack = () => {
     return(
       <Stack.Navigator>
-        <Stack.Screen options={{headerShown:false}} name='Welcome' component={Welcome}/>
-        <Stack.Screen options={{headerShown:false}} name='Signup' component={Signup}/>
+         <Stack.Screen options={{headerShown:false}} name='Signup' component={Signup}/>
         <Stack.Screen options={{headerShown:false}} name='Login' component={Login}/>
+        <Stack.Screen options={{headerShown:false}} name='Welcome' component={Welcome}/>
+       
+        
       </Stack.Navigator>
     )
   }
@@ -30,7 +32,7 @@
   }
 
   export default function App() {
-    const [isloggedIn, SetisLoggedIn] = useState(true)
+    const [isloggedIn, SetisLoggedIn] = useState(false)
     return (
       <PaperProvider>
         <NavigationContainer>
