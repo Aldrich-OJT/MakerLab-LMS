@@ -30,7 +30,7 @@
   }
 
   export default function App() {
-    const [isloggedIn, SetisLoggedIn] = useState(false)
+    const [isloggedIn, SetisLoggedIn] = useState(true)
     return (
       <PaperProvider>
         <NavigationContainer>
