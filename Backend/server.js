@@ -20,7 +20,7 @@ app.use('/api/user',userRoute)
 app.use(errorHandler)
 connectToMongoDB()
     .then(app.listen(PORT,()=>{ //connection to port
-        console.log(`Server is listening to port ${HOST,PORT}`)
+        console.log(`Server is listening to port ${PORT}`)
     })
     )
     .catch(error =>{

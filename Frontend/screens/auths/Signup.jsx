@@ -10,7 +10,7 @@
 
   const signupURL = "/api/user/register";
 
-  export default function Signup() {
+  export default function Signup(islogin) {
 
     const navigation = useNavigation();
     const [inputValid, setInputValid] = useState({
@@ -30,30 +30,37 @@
         ...prevState,
         [textName]: textValue
       }));
+
     }
 
     const submitForm = async () => {
-      if (textInputs.email === "" || textInputs.password === "") {
+      if (textInputs.email === "" || textInputs.password === "" || textInputs.name === "") {
         setInputValid((prevState) => ({
           ...prevState,
           isTextNotEmpty: false
         }));
+        console.log("pls add all fields")
+        return
       }
       if (textInputs.password !== textInputs.confirmpassword) {
         setInputValid((prevState) => ({
           ...prevState,
           isPassMatch: false
         }));
+        console.log("password mismatch")
+        return
       }
+
+     
       try {
-        const response = await axios.post('http://192.168.1.32:5000/api/user/register', textInputs,{
+        const response = await axios.post('http://localhost:5000/api/user/register', textInputs,{
             headers: { "Content-Type": 'application/json' },
             withCredentials: true
           });
 
         const token = response.data.token;
         const role = response.data.role;
-        console.log(JSON.stringify(response.data), token, role);
+        console.log(JSON.stringify(response.data));
       } catch (error) {
         console.log(error);
         console.log(error.status)
