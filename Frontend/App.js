@@ -9,6 +9,7 @@
   import { createNativeStackNavigator } from '@react-navigation/native-stack';
   import { PaperProvider } from 'react-native-paper';
   import { useState } from 'react';
+  import { AuthProvider } from './context/AuthProvider';  
 
   const Stack = createNativeStackNavigator()
     
@@ -34,10 +35,12 @@
   export default function App() {
     const [isloggedIn, SetisLoggedIn] = useState(false)
     return (
-      <PaperProvider>
-        <NavigationContainer>
-            {isloggedIn ? <AuthenticatedStack/>: <AuthStack/>}
-        </NavigationContainer>
-      </PaperProvider>
+      <AuthProvider>
+        <PaperProvider>
+          <NavigationContainer>
+              {isloggedIn ? <AuthenticatedStack/>: <AuthStack/>}
+          </NavigationContainer>
+        </PaperProvider>
+      </AuthProvider>
     );
   }

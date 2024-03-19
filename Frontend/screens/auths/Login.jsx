@@ -1,15 +1,16 @@
-import React, { useState } from 'react';
-import { Dimensions, Pressable, StyleSheet, Text, View, TouchableWithoutFeedback, Keyboard, KeyboardAvoidingView, Platform} from 'react-native';
+import React, { useContext, useState } from 'react';
+import { Pressable, StyleSheet, Text, View, TouchableWithoutFeedback, Keyboard, KeyboardAvoidingView, Platform} from 'react-native';
 import { PaperProvider } from 'react-native-paper';
-import { TextInput } from 'react-native-paper';
 import { useNavigation } from '@react-navigation/native';
 import Inputs from '../../components/Inputs';
+import {AuthContext} from '../../context/AuthProvider'
 
-const dimensions = Dimensions.get('window');   
-const maxWidth = dimensions.width;
-const maxHeight = dimensions.height;
+
+
 
 export default function Login() {
+  const loginURL = "/api/user/login"
+  const {setAuth} = useContext(AuthContext) 
   const navigation = useNavigation();
 
   const [textInputs, setTextinputs] = useState({
