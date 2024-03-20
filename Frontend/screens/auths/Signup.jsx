@@ -50,8 +50,6 @@
         console.log("password mismatch")
         return
       }
-
-     
       try {
         const response = await axios.post('http://localhost:5000/api/user/register', textInputs,{
             headers: { "Content-Type": 'application/json' },

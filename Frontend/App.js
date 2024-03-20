@@ -13,6 +13,7 @@
 
   const Stack = createNativeStackNavigator()
     
+  
   const AuthStack = () => {
     return(
       <Stack.Navigator>

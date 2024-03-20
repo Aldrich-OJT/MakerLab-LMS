@@ -44,7 +44,6 @@ const userRegister = asyncHandler(async (req, res) => {
         name,
         email,
         password: hashedPass,
-        role: 'user'
     });
 
     if (newUser) {
