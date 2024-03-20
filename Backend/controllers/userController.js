@@ -34,7 +34,6 @@ const userRegister = asyncHandler(async (req, res) => {
 
     if (!name || !email || !password) {
         throw new Error("Please fill out all input")
-        return;
     }
 
     const salt = await bcrypt.genSalt(10);

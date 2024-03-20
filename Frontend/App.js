@@ -1,6 +1,4 @@
-  import React from 'react';
-  import { StatusBar } from 'expo-status-bar';
-  import { StyleSheet, Text, View } from 'react-native';
+  import React, { useEffect,useState, useContext } from 'react';
   import HomePage from './screens/HomePage';
   import Login from './screens/auths/Login';
   import Signup from './screens/auths/Signup';
@@ -8,40 +6,58 @@
   import { NavigationContainer} from '@react-navigation/native';
   import { createNativeStackNavigator } from '@react-navigation/native-stack';
   import { PaperProvider } from 'react-native-paper';
-  import { useState } from 'react';
-  import { AuthProvider } from './context/AuthProvider';  
+  import AuthContext, { AuthProvider } from './context/AuthProvider';  
 
   const Stack = createNativeStackNavigator()
-    
-  
-  const AuthStack = () => {
-    return(
-      <Stack.Navigator>
-         <Stack.Screen options={{headerShown:false}} name='Signup' component={Signup}/>
-        <Stack.Screen options={{headerShown:false}} name='Login' component={Login}/>
-        <Stack.Screen options={{headerShown:false}} name='Welcome' component={Welcome}/>
-       
-        
-      </Stack.Navigator>
-    )
-  }
-  const AuthenticatedStack = ()=>{
-    return(
-      <Stack.Navigator>
-        <Stack.Screen options={{headerShown:false}} name='Homepage' component={HomePage}/>
-      </Stack.Navigator>
-    )
-  }
+ 
+  // const AuthStack = () => {
+  //   return(
+      
+  //   )
+  // }
+  // const AuthenticatedStack = ()=>{
+  //   return(
 
+  //   )
+  // }
+  
   export default function App() {
-    const [isloggedIn, SetisLoggedIn] = useState(false)
+    const {auth} = useContext(AuthContext)
+    const [isLoggedIn, setisLoggedIn] = useState(false)
+
+    useEffect(()=>{
+      if(auth){
+        setisLoggedIn(true)
+      }
+    },[auth])
+
+    console.log(isLoggedIn)
     return (
       <AuthProvider>
-        <PaperProvider>
-          <NavigationContainer>
-              {isloggedIn ? <AuthenticatedStack/>: <AuthStack/>}
-          </NavigationContainer>
-        </PaperProvider>
-      </AuthProvider>
+      <PaperProvider>
+        <NavigationContainer>
+          <Stack.Navigator>
+            {/* {isLoggedIn ? (
+              <Stack.Group>
+                <Stack.Screen options={{headerShown:false}} name='HomePage' component={HomePage}/>
+              </Stack.Group>
+            ) : (
+              <Stack.Group>
+                <Stack.Screen options={{headerShown:false}} name='Welcome' component={Welcome}/>
+                <Stack.Screen options={{headerShown:false}} name='Signup' component={Signup}/>
+                <Stack.Screen options={{headerShown:false}} name='Login' component={Login}/> 
+              </Stack.Group>
+            )} */}
+              <Stack.Group>
+                
+                <Stack.Screen options={{headerShown:false}} name='Welcome' component={Welcome}/>
+                <Stack.Screen options={{headerShown:false}} name='Signup' component={Signup}/>
+                <Stack.Screen options={{headerShown:false}} name='Login' component={Login}/> 
+                <Stack.Screen options={{headerShown:false}} name='HomePage' component={HomePage}/>
+              </Stack.Group>
+          </Stack.Navigator>
+        </NavigationContainer>
+      </PaperProvider>
+    </AuthProvider>
     );
   }

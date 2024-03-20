@@ -11,7 +11,6 @@ export default function Welcome() {
     const navigation = useNavigation();
 
   return ( 
-    <SafeAreaView>
       <View style={styles.container}>
         <ImageBackground source={require('../../assets/background.png')} style={styles.bgimage}>
           
@@ -26,14 +25,14 @@ export default function Welcome() {
           </View>
 
           <View>
-          <Pressable  onPress={() => navigation.navigate('Signup')}>
+          <Pressable  onPress={() => navigation.replace('Signup')}>
             <Text style={styles.button}>Sign Up</Text>
           </Pressable>
           </View>
 
         </ImageBackground>
       </View>
-    </SafeAreaView>
+
   )
 }
 

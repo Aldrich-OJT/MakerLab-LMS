@@ -3,16 +3,14 @@ import { Pressable, StyleSheet, Text, View, TouchableWithoutFeedback, Keyboard, 
 import { PaperProvider } from 'react-native-paper';
 import { useNavigation } from '@react-navigation/native';
 import Inputs from '../../components/Inputs';
-import {AuthContext} from '../../context/AuthProvider'
-
-
+import { AxiosInstance } from '../../api/axios';
+import AuthContext from '../../context/AuthProvider';
+const loginURL = "/api/user/login"
 
 
 export default function Login() {
-  const loginURL = "/api/user/login"
-  const {setAuth} = useContext(AuthContext) 
   const navigation = useNavigation();
-
+  const {setAuth} = useContext(AuthContext)
   const [textInputs, setTextinputs] = useState({
     email:"",
     password:""
@@ -27,49 +25,67 @@ export default function Login() {
 
   const [inputValid, setInputValid] = useState(false);
 
-  const submitForm = () => {
-    if (textInputs.email === "" || textInputs.password === "") {
-      setInputValid(true);
-    } else {
-      setInputValid(false);
-      // Submit the form logic here
-    }
-  }
+  // const submitForm = async () => {
+  //   if (textInputs.email === "" || textInputs.password === "") {
+  //     setInputValid(false);
+  //     return
+  //   } else {
+  //     setInputValid(true);
+
+  //     try {
+  //       const response = await axios.post(loginURL, textInputs,{
+  //           headers: { "Content-Type": 'application/json' },
+  //           withCredentials: true
+  //         });
+
+  //       const token = response.data.token;
+  //       const role = response.data.role;
+  //       setloggedin(true)
+  //       setAuth(response.data)
+  //       console.log(JSON.stringify(response.data));
+  //     } catch (error) {
+  //       console.log(error);
+  //       console.log(error.status)
+  //     }
+  //   }
+  // }
 
   return (
-    <PaperProvider>
+
       <KeyboardAvoidingView style={styles.container} behavior={Platform.OS === "ios" ? "padding" : null}>
-        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-          <View style={styles.container}>
-            <View style={styles.topsheet}>
-              <Text>Log In</Text>
-            </View>
-            <View style={styles.bottomsheet}>
-              <Inputs
-                label={'Email'}
-                value={textInputs.email}
-                onChangeText={(textValue) => handleInput("email", textValue)}
-              />
-              <Inputs
-                label={'Password'}
-                value={textInputs.password}
-                onChangeText={(textValue) => handleInput("password", textValue)}
-              />
-              {inputValid && <Text style={styles.invalidText}>Invalid Email or Password</Text>}
-              <Pressable style={{ width: '50%' }} onPress={submitForm}>
+      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+        <View style={styles.container}>
+          <View style={styles.topsheet}>
+            <Text>Log In</Text>
+          </View>
+          <View style={styles.bottomsheet}>
+            <Inputs
+              label={'Email'}
+              value={textInputs.email}
+              onChangeText={(textValue) => handleInput("email", textValue)}
+            />
+            <Inputs
+              label={'Password'}
+              value={textInputs.password}
+              onChangeText={(textValue) => handleInput("password", textValue)}
+            />
+            <View>{inputValid && <Text style={styles.invalidText}>Invalid Email or Password</Text>}</View>
+            <View>
+              <Pressable style={{ width: '50%' }} >
                 <Text style={styles.signupbutton}>Sign up</Text>
               </Pressable>
-              <View style={{ flexDirection: 'row' }}>
-                <Text style={{ color: '#898989' }}>Don't have an account?</Text>
-                <Pressable onPress={() => navigation.replace('Signup')}>
-                  <Text style={{ color: '#7E3290' }}> Log In</Text>
-                </Pressable>
-              </View>
+            </View>
+            <View style={{ flexDirection: 'row' }}>
+              <Text style={{ color: '#898989' }}>Don't have an account?</Text>
+              <Pressable onPress={() => navigation.replace('Signup')}>
+                <Text style={{ color: '#7E3290' }}> Sign Up</Text>
+              </Pressable>
             </View>
           </View>
-        </TouchableWithoutFeedback>
-      </KeyboardAvoidingView>
-    </PaperProvider>
+        </View>
+      </TouchableWithoutFeedback>
+    </KeyboardAvoidingView>
+
   );
 }
 
@@ -80,6 +96,8 @@ const styles = StyleSheet.create({
   },
   topsheet:{
     flex: 1,
+    justifyContent:"center",
+    alignItems:"center"
   },
   bottomsheet: {
     backgroundColor: 'white',
