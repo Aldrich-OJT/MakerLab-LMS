@@ -1,7 +1,6 @@
 import React from 'react';
 import { Dimensions, Pressable, Image, StyleSheet, Text, View, ImageBackground} from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import { SafeAreaView } from 'react-native-safe-area-context';
 
 const dimensions = Dimensions.get('window');   
 const imageWidth = dimensions.width;
@@ -46,7 +45,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
     flexDirection: 'column',
-    alignItems: 'center',
+    
   },
 
   topcontainer: {
