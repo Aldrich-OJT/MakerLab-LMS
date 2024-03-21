@@ -12,8 +12,6 @@ import Title from '../../components/auths/Title';
 import LinkContainer from '../../components/auths/LinkContainer';
 
 
-
-
 const width = Dimensions.get("window").width
 
 const signupURL = "/api/user/register";
@@ -89,10 +87,11 @@ export default function Signup() {
 			<TouchableWithoutFeedback onPress={Keyboard.dismiss}>
 				<KeyboardAvoidingView style={styles.container} behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
 				<View style={styles.container}>
-					<Title>Sign In</Title>
+					<Title/>
 					<View style={styles.bottomsheet}>
+						<Text style={styles.signintext}>Sign up</Text>
 						<TextInput
-							label={'Email'}
+							label={'Full Name'}
 							value={textInputs.name}
 							style={styles.textinput}
 							mode='outlined'
@@ -126,8 +125,8 @@ export default function Signup() {
 						/>
 						{inputValid.isTextEmpty && <Text style={styles.invalidText}>Please fill all fields</Text>}
 						{inputValid.isPassNotMatch && <Text style={styles.invalidText}>Password not match</Text>}
-						<AuthButton submitForm={submitForm}>Signup</AuthButton>
-						<LinkContainer Link="Log in" navigation={navigation}>Already have an account?</LinkContainer>
+						<AuthButton submitForm={submitForm}>Sign up</AuthButton>
+						<LinkContainer Link="Log in" navigation={navigation}>Already have an account? </LinkContainer>
 					</View>
 
 				</View>
@@ -150,7 +149,8 @@ const styles = StyleSheet.create({
 		alignItems: 'center',
 		justifyContent: 'center',
 		paddingHorizontal: 20,
-		paddingVertical: 30,
+		paddingBottom: 30,
+		paddingTop: 15,
 	},
 	bottomsheetTitle:{
 		marginVertical: 10,
@@ -167,5 +167,9 @@ const styles = StyleSheet.create({
 		backgroundColor: Colors.bgOffWhite,
 		margin: 2,
 	},
-
+	signintext: {
+		fontWeight: 'bold',
+		fontSize: 20,
+		padding: 5,
+	},
 });

@@ -1,10 +1,13 @@
-import { Text, StyleSheet, View } from "react-native"
+import { Text, StyleSheet, View, Image, Dimensions } from "react-native"
 
+const dimensions = Dimensions.get('window');   
+const maxWidth = dimensions.width;
+const maxHeight = dimensions.height;
 
 export default function Title({children}) {
   return (
     <View style={styles.topsheet}>
-        <Text style={styles.signInTitle}>{children}</Text>
+		<Image source={require('../../assets/top-register.png')} style={styles.bgimage}></Image>
     </View>
   )
 }
@@ -12,12 +15,11 @@ export default function Title({children}) {
 const styles = StyleSheet.create({
     topsheet: {
 		flex:1,
-		alignItems:"flex-start"
+		alignItems:"center",
+		justifyContent: 'center',
 	},
-    signInTitle:{
-		marginLeft: 20,
-		marginTop:100,
-		fontWeight: "500",
-		fontSize: 60
+	bgimage:{
+		width: maxWidth,
+		height: maxHeight * .4,
 	},
 })

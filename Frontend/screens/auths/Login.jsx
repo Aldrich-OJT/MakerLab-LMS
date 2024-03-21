@@ -61,6 +61,7 @@ export default function Login() {
 				<View style={styles.container}>
 					<Title>Log in</Title>
 					<View style={styles.bottomsheet}>
+						<Text style={styles.logintext}>Log in</Text>
 						<TextInput
 							label={'Email'}
 							value={textInputs.password}
@@ -82,7 +83,7 @@ export default function Login() {
 						/>
 						<View>{inputInvalid && <Text style={styles.invalidText}>Invalid Email or Password</Text>}</View>
 						<AuthButton submitForm={submitForm}>Log in</AuthButton>
-						<LinkContainer Link="Sign up" navigation={navigation}>Don't have an account?</LinkContainer>
+						<LinkContainer Link="Sign up" navigation={navigation}>Don't have an account? </LinkContainer>
 					</View>
 				</View>
 			</TouchableWithoutFeedback>
@@ -107,7 +108,8 @@ const styles = StyleSheet.create({
 		alignItems: 'center',
 		justifyContent: 'center',
 		paddingHorizontal: 20,
-		paddingVertical: 30,
+		paddingBottom: 30,
+		paddingTop: 15,
 	},
 	signupButton: {
 		width: 170,
@@ -139,5 +141,10 @@ const styles = StyleSheet.create({
 		marginTop:100,
 		fontWeight: "500",
 		fontSize: 60
-	}
+	},
+	logintext: {
+		fontWeight: 'bold',
+		fontSize: 20,
+		padding: 5,
+	},
 });

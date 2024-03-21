@@ -1,10 +1,14 @@
 import React from 'react';
 import { Dimensions, Pressable, Image, StyleSheet, Text, View, ImageBackground} from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import Colors from '../../constants/Colors';
 
 const dimensions = Dimensions.get('window');   
-const imageWidth = dimensions.width;
-const imageHeight = dimensions.height;
+const maxWidth = dimensions.width;
+const maxHeight = dimensions.height;
+
+const containerSize = Math.min(maxHeight, maxWidth);
+const containerRadius = containerSize / 2;
 
 export default function Welcome() {
     const navigation = useNavigation();
@@ -14,8 +18,8 @@ export default function Welcome() {
         <ImageBackground source={require('../../assets/background.png')} style={styles.bgimage}>
           
           <View style={styles.topcontainer}>
-            <Text style={styles.text}>Let's Get Started!</Text>
             <Image source={require('../../assets/logo-dark.png')} style={styles.logo}/>
+            <Text style={styles.text}>Let's Get Started!</Text>
           </View>
 
           <View style={styles.imagecontainer}>
@@ -23,7 +27,7 @@ export default function Welcome() {
             <Image source={require('../../assets/pic.png')} style={styles.image}/>
           </View>
 
-          <View>
+          <View style={styles.bottomcontainer}>
           <Pressable  onPress={() => navigation.replace('Signup')}>
             <Text style={styles.button}>Sign Up</Text>
           </Pressable>
@@ -37,57 +41,59 @@ export default function Welcome() {
 
 const styles = StyleSheet.create({
   bgimage: {
-    height: imageHeight, 
-    width: imageWidth,
+    height: '100%', 
+    width: '100%',
     resizeMode: 'cover',
   },
   container:{
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    flexDirection: 'column',
-    
+    height: maxHeight, 
+    width: maxWidth,
+    backgrounColor: Colors.bgYellow
   },
-
   topcontainer: {
-    justifyContent: 'space-between', 
-    flexDirection:'row',
+    flexDirection:'column',
+    flex: 1,
   },
-
-  imagecontainer: {
-    position: 'relative'
-  },
-
-  image:{
-    borderRadius: 150,
-    borderWidth: 2,
-    borderColor: 'black',
-    height: '60%',
-    width: '75%',
-    alignSelf: 'center',
-    top: '30%',
-  },
-
-  circle:{
-    borderRadius: 150,
-    borderWidth: 2,
-    borderColor: 'black',
-    backgroundColor: 'black',
-    height: '60%',
-    width: '75%',
-    position: 'absolute',
-    top: '34%',
-    left: '7%',
-  },
-
   logo: {
     height: '30%',
     width: '30%',
     resizeMode: 'contain',
-    right: 0,
-    marginRight: '5%',
-    marginTop: '7%',
+    alignSelf: 'stretch',
+    left: maxWidth * .65,
+    margin: 5,
   },
-
+  text: {
+    fontWeight:'bold',
+    fontSize: 30,
+    margin: 5
+  },
+  imagecontainer: {
+    position: 'relative',
+    justifyContent: 'center',
+    flex: 2,
+  },
+  image:{
+    borderRadius: containerRadius,
+    alignSelf: 'center',
+    borderWidth: 2,
+    borderColor: 'black',
+    height: maxHeight * .35,
+    width: maxWidth * .7,
+  },
+  circle:{
+    borderRadius: containerRadius,
+    borderWidth: 2,
+    borderColor: 'black',
+    backgroundColor: 'black',
+    height: maxHeight * .35,
+    width: maxWidth * .7,
+    position: 'absolute',
+    left: '11%',
+    bottom: '16%',
+  },
+  bottomcontainer: {
+    flex: .5
+  },
   button: {
     borderColor: 'black',
     backgroundColor: '#ffc42c',
@@ -101,12 +107,5 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     elevation: 10,
     shadowColor: '#52006A',
-    marginTop: '10%'
-  },
-
-  text: {
-    fontWeight:'bold',
-    fontSize: 30,
-    marginTop: '23%',
   },
 })
