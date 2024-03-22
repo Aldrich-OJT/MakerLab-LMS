@@ -59,7 +59,8 @@ const styles = StyleSheet.create({
     width: '30%',
     resizeMode: 'contain',
     alignSelf: 'stretch',
-    left: maxWidth * .65,
+    alignSelf: 'flex-end',
+    right: 10,
     margin: 5,
   },
   text: {

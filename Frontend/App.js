@@ -1,5 +1,6 @@
   import React, { useEffect,useState, useContext } from 'react';
   import HomePage from './screens/HomePage';
+  import ProfilePage from './screens/ProfilePage';
   import Login from './screens/auths/Login';
   import Signup from './screens/auths/Signup';
   import Welcome from './screens/auths/Welcome';
@@ -54,6 +55,7 @@
                 <Stack.Screen options={{headerShown:false}} name='Signup' component={Signup}/>
                 <Stack.Screen options={{headerShown:false}} name='Login' component={Login}/> 
                 <Stack.Screen options={{headerShown:false}} name='HomePage' component={HomePage}/>
+                <Stack.Screen options={{headerShown:false}} name='ProfilePage' component={ProfilePage}/>
               </Stack.Group>
           </Stack.Navigator>
         </NavigationContainer>
