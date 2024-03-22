@@ -18,6 +18,7 @@ const userLogin = asyncHandler(async (req, res) => {
             role: user.role
         });
     } else {
+        res.status(400).json({ message: 'Invalid user Data' });
         throw new Error("Invalid user Data")
     }
 });
@@ -60,12 +61,13 @@ const userRegister = asyncHandler(async (req, res) => {
 });
 
 const getUser = asyncHandler(async (req, res) => {
-    const {id, name, email} =  await User.findById(req.user.id)
+    const {id, name, email, role} =  await User.findById(req.user.id)
 
     res.status(200).json({
         id: id,
         name: name,
         email: email,
+        role: role,
     })
 });
 

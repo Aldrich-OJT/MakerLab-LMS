@@ -7,7 +7,7 @@ const imageWidth = dimensions.width;
 const imageHeight = dimensions.height;
 
 export default function Welcome() {
-    const navigation = useNavigation();
+  const navigation = useNavigation();
 
   return ( 
       <View style={styles.container}>

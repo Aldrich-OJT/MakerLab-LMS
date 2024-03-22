@@ -16,7 +16,7 @@ const styles = StyleSheet.create({
 	},
     signInTitle:{
 		marginLeft: 20,
-		marginTop:100,
+		marginTop: 100,
 		fontWeight: "500",
 		fontSize: 60
 	},

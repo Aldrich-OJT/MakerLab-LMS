@@ -2,11 +2,11 @@ import { Text, Pressable, StyleSheet, View } from "react-native"
 import Colors from "../../constants/Colors"
 
 
-export default function LinkContainer({children,Link, navigation}) {
+export default function LinkContainer({children,Link, navigation,to}) {
   return (
     <View style={styles.signUpLinkContainer}>
         <Text style={styles.haveAccountText}>{children}</Text>
-        <Pressable onPress={() => navigation.replace('Login')}>
+        <Pressable onPress={() => navigation.replace(to)}>
             <Text style={styles.signupLink}>{Link}</Text>
         </Pressable>
     </View>
@@ -15,6 +15,7 @@ export default function LinkContainer({children,Link, navigation}) {
 
 const styles = StyleSheet.create({
     signupLink:{
+        marginLeft:5,
 		color: Colors.bgViolet
 	},
 	haveAccountText:{

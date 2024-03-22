@@ -1,93 +1,89 @@
 import React, { useContext, useState } from 'react';
-import { StyleSheet, Text, View, TouchableWithoutFeedback, Keyboard, KeyboardAvoidingView, Platform, Dimensions} from 'react-native';
+import { StyleSheet, Text, View, TouchableWithoutFeedback, Keyboard, KeyboardAvoidingView, Platform, Dimensions } from 'react-native';
 import { TextInput } from 'react-native-paper';
 import { useNavigation } from '@react-navigation/native';
-import { AxiosInstance } from '../../api/axios';
-import AuthContext from '../../context/AuthProvider';
-import Colors from '../../constants/Colors';
-import Title from '../../components/auths/Title';
-import AuthButton from '../../components/auths/AuthButton';
-import LinkContainer from '../../components/auths/LinkContainer';
+import { AxiosInstance, login } from '../../utils/axios'; 
+import Colors from '../../constants/Colors'; 
+import Title from '../../components/auths/Title'; 
+import AuthButton from '../../components/auths/AuthButton'; 
+import LinkContainer from '../../components/auths/LinkContainer'; 
+import { AuthContext } from '../../context/AuthProvider';
 
 
-const width = Dimensions.get('screen').width
-const loginURL = "/api/user/login"
+
+const width = Dimensions.get('screen').width; 
+const loginURL = "/api/user/login"; 
 
 export default function Login() {
-	const navigation = useNavigation();
+  const navigation = useNavigation();
+  const authContext = useContext(AuthContext); 
+  const [inputInvalid, setInputInvalid] = useState(null); 
+  const initialtextInput = {
+    name: "",
+    email: ""
+  };
+  const [textInputs, setTextInputs] = useState(initialtextInput);
 
-	const {setAuth} = useContext(AuthContext)
-	const [textInputs, setTextinputs] = useState({
-		email:"",
-		password:""
-	}) 
+  const handleInput = (textName, textValue) => {
+    // Function to update the textInputs state when user types in the input fields
+    setTextInputs(prevState => ({
+      ...prevState,
+      [textName]: textValue,
+    }));
+  };
 
-	const handleInput = (textName, textValue) => {
-		setTextinputs(prevState => ({
-			...prevState,
-			[textName]: textValue
-		}));
-	}
+  const submitForm = async () => {
+    // Function handles form submission
+    if (!textInputs.email || !textInputs.password) {
+      setInputInvalid(true); // Set error message if email or password is empty
+      return;
+    }
+    setInputInvalid(false); // Clear error message if validation passes
 
-	const [inputInvalid, setInputInvalid] = useState(null);
+    try {
+	  const data = await login(loginURL, textInputs)
+      console.log("login success"); 
+      authContext.authenticate(data.token)
+      console.log(data.token); 
+    } catch (error) {
+      console.error(error); 
+      console.error(error.response.status); 
+      console.error(error.response.data.message); 
+    }
+  };
 
-	const submitForm = async () => {
-		if (!textInputs.email || !textInputs.password) {
-			setInputInvalid(true);
-
-			return
-		} else {
-			setInputInvalid(false);
-
-			try {
-				const response = await AxiosInstance.post(loginURL, textInputs,{
-						headers: { "Content-Type": 'application/json' },
-						withCredentials: true
-					});
-
-				setloggedin(true)
-				setAuth(response.data)
-				console.log(JSON.stringify(response.data));
-			} catch (error) {
-				console.log(error);
-				console.log(error.status)
-			}
-		}
-	}
-
-	return (
-			<KeyboardAvoidingView style={styles.container} behavior={Platform.OS === "ios" ? "padding" : null}>
-			<TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-				<View style={styles.container}>
-					<Title>Log in</Title>
-					<View style={styles.bottomsheet}>
-						<TextInput
-							label={'Email'}
-							value={textInputs.password}
-							keyboardType="email-address" // Set keyboard type for email suggestions
-  							textContentType="emailAddress"
-							autoCapitalize="none"
-							style={styles.textinput}
-							mode='outlined'
-							onChangeText={(textValue) => handleInput("email", textValue)}
-						/>
-						<TextInput
-							label={'Password'}
-							value={textInputs.password}
-							secureTextEntry={true}
-							style={styles.textinput}
-							placeholderTextColor= "red"
-							mode='outlined'
-							onChangeText={(textValue) => handleInput("password", textValue)}
-						/>
-						<View>{inputInvalid && <Text style={styles.invalidText}>Invalid Email or Password</Text>}</View>
-						<AuthButton submitForm={submitForm}>Log in</AuthButton>
-						<LinkContainer Link="Sign up" navigation={navigation}>Don't have an account?</LinkContainer>
-					</View>
-				</View>
-			</TouchableWithoutFeedback>
-		</KeyboardAvoidingView>
-	);
+  return (
+    <KeyboardAvoidingView style={styles.container} behavior={Platform.OS === "ios" ? "padding" : null}>
+      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+        <View style={styles.container}>
+          <Title>Log in</Title>
+          <View style={styles.bottomsheet}>
+            <TextInput
+              label={'Email'}
+              value={textInputs.email}
+              keyboardType="email-address"
+              textContentType="emailAddress"
+              autoCapitalize="none"
+              style={styles.textinput}
+              mode='outlined'
+              onChangeText={(textValue) => handleInput("email", textValue)} 
+            />
+            <TextInput
+              label={'Password'}
+              value={textInputs.password} 
+              secureTextEntry={true}
+              style={styles.textinput}
+              mode='outlined'
+              onChangeText={(textValue) => handleInput("password", textValue)}
+            />
+            <View>{inputInvalid && <Text style={styles.invalidText}>Invalid Email or Password</Text>}</View> 
+            <AuthButton submitForm={submitForm}>Log in</AuthButton> 
+            <LinkContainer Link="Sign up" to="Signup" navigation={navigation}>Don't have an account?</LinkContainer> 
+          </View>
+        </View>
+      </TouchableWithoutFeedback>
+    </KeyboardAvoidingView>
+  );
 }
 
 const styles = StyleSheet.create({
@@ -95,10 +91,6 @@ const styles = StyleSheet.create({
 		flex: 1,
 		justifyContent: "flex-end",
 		backgroundColor: Colors.bgYellow,
-	},
-	topsheet:{
-		flex: 1,
-		alignItems:"flex-start"
 	},
 	bottomsheet: {
 		backgroundColor: 'white',
@@ -108,21 +100,6 @@ const styles = StyleSheet.create({
 		justifyContent: 'center',
 		paddingHorizontal: 20,
 		paddingVertical: 30,
-	},
-	signupButton: {
-		width: 170,
-		marginBottom: 15
-	},
-	signupText: {
-		backgroundColor: 'black',
-		borderRadius: 6,
-		paddingVertical: 15,
-		marginTop: 10,
-		color: 'white',
-		fontSize: 16,
-		fontWeight: 'bold',
-		textAlign: 'center',
-		overflow:"hidden",
 	},
 	invalidText:{
 		color: '#Be254b',
