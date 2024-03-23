@@ -47,17 +47,23 @@ export default function Login() {
       console.log(data.token); 
     } catch (error) {
       console.error(error); 
-      console.error(error.response.status); 
-      console.error(error.response.data.message); 
+	  if(error.response.status === 400){
+		console.error(error.response.status); 
+		console.error(error.response.data.message); 
+		setInputInvalid(true)
+	  }
+
     }
   };
 
+  console.log(textInputs)
   return (
-    <KeyboardAvoidingView style={styles.container} behavior={Platform.OS === "ios" ? "padding" : null}>
+    <KeyboardAvoidingView style={styles.container} behavior={Platform.OS === "ios" ? "padding" : "height"}>
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
         <View style={styles.container}>
-          <Title>Log in</Title>
+			<Title/>
           <View style={styles.bottomsheet}>
+			<Text style={styles.logintext}>Log in</Text>
             <TextInput
               label={'Email'}
               value={textInputs.email}
@@ -78,7 +84,7 @@ export default function Login() {
             />
             <View>{inputInvalid && <Text style={styles.invalidText}>Invalid Email or Password</Text>}</View> 
             <AuthButton submitForm={submitForm}>Log in</AuthButton> 
-            <LinkContainer Link="Sign up" to="Signup" navigation={navigation}>Don't have an account?</LinkContainer> 
+            <LinkContainer Link="Sign up" to="Signup" navigation={navigation}>Don't have an account? </LinkContainer> 
           </View>
         </View>
       </TouchableWithoutFeedback>
@@ -116,5 +122,10 @@ const styles = StyleSheet.create({
 		marginTop:100,
 		fontWeight: "500",
 		fontSize: 60
-	}
+	},
+	logintext: {
+		fontWeight: 'bold',
+		fontSize: 20,
+		padding: 5,
+	},
 });

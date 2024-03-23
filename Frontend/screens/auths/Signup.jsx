@@ -10,8 +10,10 @@ import AuthButton from '../../components/auths/AuthButton';
 import Title from '../../components/auths/Title';
 import LinkContainer from '../../components/auths/LinkContainer';
 
-const width = Dimensions.get("window").width; 
 
+
+
+const width = Dimensions.get("window").width
 const signupURL = "/api/user/register"; 
 
 export default function Signup() {
@@ -24,15 +26,15 @@ export default function Signup() {
     password: "",
     confirmpassword: ""
   };
+  const initialErrorState = {
+	isTextEmpty: false,
+    isPassNotMatch: false,
+	isEmailInvalid: false,
+	isPasswordInvalid: false
+  }
 
   const [textInputs, setTextinputs] = useState(initialtextInput);
-  const [inputValid, setInputValid] = useState({
-    isTextEmpty: false,
-    isPassNotMatch: false,
-	isEmailInvalid: false
-  });
-
-
+  const [inputValid, setInputValid] = useState(initialErrorState);
 
   // Function to update the text input state when user types
   const handleInput = (textName, textValue) => {
@@ -72,6 +74,16 @@ export default function Signup() {
 		console.log("email not avail");
 		return;
 	  }
+	if(textInputs.password.length <= 6 && textInputs.confirmpassword.length <= 6){
+		if (emailValid === false) {
+			setInputValid(prevState => ({
+			  ...prevState,
+			  isPasswordInvalid: true
+			}));
+			console.log("email not avail");
+			return;
+		}
+	}
 
     try {
       // Make a POST request to the signup API endpoint with form data
@@ -88,63 +100,63 @@ export default function Signup() {
   // Update inputValid state based on text input values
   useEffect(() => {
     if (textInputs.email || textInputs.password || textInputs.name || textInputs.confirmpassword) {
-      setInputValid({
-        isPassNotMatch:false,
-        isTextEmpty: false,
-		isEmailInvalid:false
-      });
+      setInputValid(initialErrorState);
     }
   }, [textInputs]);
 
-  console.log(textInputs)
+
 	return (
-		<TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-			<KeyboardAvoidingView style={styles.container} behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
-			<View style={styles.container}>
-				<Title>Sign Up</Title>
-				<View style={styles.bottomsheet}>
-					<TextInput
-						label={'Name'}
-						value={textInputs.name}
-						style={styles.textinput}
-						mode='outlined'
-						onChangeText={(textValue) => handleInput("name", textValue)}
-					/>
-					<TextInput
-						label={'Email'}
-						value={textInputs.email}
-						keyboardType="email-address" // Set keyboard type for email suggestions
-						textContentType="emailAddress"
-						autoCapitalize="none"
-						style={styles.textinput}
-						mode='outlined'
-						onChangeText={(textValue) => handleInput("email", textValue)}
-					/>
-					<TextInput
-						label={'Password'}
-						value={textInputs.password}
-						secureTextEntry={true}
-						style={styles.textinput}
-						mode='outlined'
-						onChangeText={(textValue) => handleInput("password", textValue)}
-					/>
-					<TextInput
-						label={'Confirm Password'}
-						value={textInputs.confirmpassword}
-						secureTextEntry={true}
-						style={styles.textinput}
-						mode='outlined'
-						onChangeText={(textValue) => handleInput("confirmpassword", textValue)}
-					/>
-					{inputValid.isTextEmpty && <Text style={styles.invalidText}>Please fill all fields</Text>}
-					{inputValid.isPassNotMatch && <Text style={styles.invalidText}>Password not match</Text>}
-					{inputValid.isEmailInvalid && <Text style={styles.invalidText}>Invalid email</Text>}
-					<AuthButton submitForm={submitForm}>Sign up</AuthButton>
-					<LinkContainer Link="Log in" to="Login" navigation={navigation}>Already have an account?</LinkContainer>
+		
+			<TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+				<KeyboardAvoidingView style={styles.container} behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
+				<View style={styles.container}>
+					<Title/>
+					<View style={styles.bottomsheet}>
+						<Text style={styles.signintext}>Sign up</Text>
+						<TextInput
+							label={'Full Name'}
+							value={textInputs.name}
+							style={styles.textinput}
+							mode='outlined'
+							onChangeText={(textValue) => handleInput("name", textValue)}
+						/>
+						<TextInput
+							label={'Email'}
+							value={textInputs.email}
+							keyboardType="email-address" // Set keyboard type for email suggestions
+  							textContentType="emailAddress"
+							autoCapitalize="none"
+							style={styles.textinput}
+							mode='outlined'
+							onChangeText={(textValue) => handleInput("email", textValue)}
+						/>
+						<TextInput
+							label={'Password'}
+							value={textInputs.password}
+							secureTextEntry={true}
+							style={styles.textinput}
+							mode='outlined'
+							onChangeText={(textValue) => handleInput("password", textValue)}
+						/>
+						<TextInput
+							label={'Confirm Password'}
+							value={textInputs.confirmpassword}
+							secureTextEntry={true}
+							style={styles.textinput}
+							mode='outlined'
+							onChangeText={(textValue) => handleInput("confirmpassword", textValue)}
+						/>
+						{inputValid.isTextEmpty && <Text style={styles.invalidText}>Please fill all fields</Text>}
+						{inputValid.isPassNotMatch && <Text style={styles.invalidText}>Password not match</Text>}
+						{inputValid.isEmailInvalid && <Text style={styles.invalidText}>invalid Email</Text>}
+						{inputValid.isPasswordInvalid && <Text style={styles.invalidText}>Password must be above 6 characters</Text>}
+						<AuthButton submitForm={submitForm}>Sign up</AuthButton>
+						<LinkContainer Link="Log in" to="Login" navigation={navigation}>Already have an account? </LinkContainer>
+					</View>
+
 				</View>
-			</View>
-			</KeyboardAvoidingView>
-		</TouchableWithoutFeedback>
+				</KeyboardAvoidingView>
+			</TouchableWithoutFeedback>
 	);
 }
 
@@ -162,7 +174,8 @@ const styles = StyleSheet.create({
 		alignItems: 'center',
 		justifyContent: 'center',
 		paddingHorizontal: 20,
-		paddingVertical: 30,
+		paddingBottom: 30,
+		paddingTop: 15,
 	},
 	bottomsheetTitle:{
 		marginVertical: 10,
@@ -179,5 +192,9 @@ const styles = StyleSheet.create({
 		backgroundColor: Colors.bgOffWhite,
 		margin: 2,
 	},
-
+	signintext: {
+		fontWeight: 'bold',
+		fontSize: 20,
+		padding: 5,
+	},
 });
