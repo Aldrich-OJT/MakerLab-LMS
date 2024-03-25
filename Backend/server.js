@@ -3,6 +3,7 @@ const cors = require('cors')
 const { connectToMongoDB } = require('./connection')
 require('dotenv').config()
 const userRoute = require('./routes/userRoute');
+const videoRoute = require('./routes/videoRoute')
 const { errorHandler } = require('./middleware/errorMiddleware') 
 
 
@@ -16,6 +17,8 @@ app.use(express.json())
 app.use(express.urlencoded({ extended: false }))
 
 app.use('/api/user',userRoute)
+
+app.use('/api/video',videoRoute)
 
 app.use(errorHandler)
 connectToMongoDB()

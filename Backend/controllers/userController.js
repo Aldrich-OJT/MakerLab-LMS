@@ -34,12 +34,13 @@ const userRegister = asyncHandler(async (req, res) => {
     }
 
     if (!name || !email || !password) {
+        res.status(400).json({ message: "Please fill out all input" });
         throw new Error("Please fill out all input")
     }
 
     const salt = await bcrypt.genSalt(10);
     const hashedPass = await bcrypt.hash(password, salt);
-
+a
     const newUser = await User.create({
         name,
         email,
@@ -56,6 +57,7 @@ const userRegister = asyncHandler(async (req, res) => {
             role: newUser.role
         });
     } else {
+        res.status(400).json({ message: "Please fill out all input" });
         throw new Error("Invalid user Data")
     }
 });

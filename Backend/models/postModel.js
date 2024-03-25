@@ -9,11 +9,11 @@ const postSchema = new mongoose.Schema(
         },
         title:{
             type: String,
-            required:[true, 'add title']
+            required:[true, 'please add title']
         },
         description:{
             type: String,
-            required:[true, 'add desc']
+            required:[true, 'please add desc']
         },
         
     },
@@ -22,4 +22,4 @@ const postSchema = new mongoose.Schema(
     }
 )
 
-module.exports= mongoose.model(Post, postSchema)
+module.exports= mongoose.model('Post', postSchema)
