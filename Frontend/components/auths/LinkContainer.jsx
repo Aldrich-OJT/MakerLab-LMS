@@ -6,7 +6,7 @@ export default function LinkContainer({children,Link, navigation,to}) {
   return (
     <View style={styles.signUpLinkContainer}>
         <Text style={styles.haveAccountText}>{children}</Text>
-        <Pressable onPress={() => navigation.replace(to)}>
+        <Pressable onPress={() => navigation.navigate(to)}>
             <Text style={styles.signupLink}>{Link}</Text>
         </Pressable>
     </View>

@@ -23,12 +23,11 @@ export default function Welcome() {
           </View>
 
           <View style={styles.imagecontainer}>
-            <View style={styles.circle}></View>
             <Image source={require('../../assets/pic.png')} style={styles.image}/>
           </View>
 
           <View style={styles.bottomcontainer}>
-          <Pressable  onPress={() => navigation.replace('Signup')}>
+          <Pressable  onPress={() => navigation.navigate('Signup')}>
             <Text style={styles.button}>Sign Up</Text>
           </Pressable>
           </View>
@@ -56,12 +55,14 @@ const styles = StyleSheet.create({
     width: '30%',
     resizeMode: 'contain',
     alignSelf: 'flex-end',
-    margin: 20,
+    margin: 25,
+    top: 5
   },
   text: {
     fontWeight:'bold',
-    fontSize: 30,
-    margin: 5
+    fontSize: 35,
+    margin: 5,
+    alignSelf: 'center'
   },
   imagecontainer: {
     position: 'relative',
@@ -69,23 +70,9 @@ const styles = StyleSheet.create({
     flex: 2,
   },
   image:{
-    borderRadius: 999,
     alignSelf: 'center',
-    borderWidth: 2,
-    borderColor: 'black',
-    height: 200,
-    width: 200,
-  },
-  circle:{
-    borderRadius: 999,
-    borderWidth: 2,
-    borderColor: 'black',
-    backgroundColor: 'black',
-    height: 200,
-    width: 200,
-    position: 'absolute',
-    left: '22%',
-    bottom: '22%',
+    height: maxHeight * .4,
+    width: maxWidth * .77,
   },
   bottomcontainer: {
     flex: .5
