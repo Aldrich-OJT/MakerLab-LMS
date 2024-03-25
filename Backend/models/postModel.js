@@ -7,6 +7,10 @@ const postSchema = new mongoose.Schema(
             type: String,
             required: [true, 'Please add a video file path']
         },
+        videoName:{
+            type: String,
+            required: [true, 'Please add a video name']
+        },
         title:{
             type: String,
             required:[true, 'please add title']

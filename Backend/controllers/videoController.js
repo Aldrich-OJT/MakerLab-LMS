@@ -1,41 +1,142 @@
 const asyncHandler = require("express-async-handler")
+const fs = require("fs")
 const Post = require("../models/postModel")
 
-const postVideo = asyncHandler( async(req, res)=>{
-    const {file} = req.file
-    const {title, description} = req.body
+const postsingleVideo = asyncHandler(async (req, res) => {
+    const { title, description } = req.body
+    const singleVideo = req.file
 
-    if(!file || !title || !description){
-        res.status(400).json({ message: 'Fill all data' });
-        throw new Error ("fill all data")
+    if (!singleVideo || !title || !description) {
+        res.status(400).json({ message: 'Fill all data' })
+        throw new Error("Fill all data")
     }
 
-    const newPost = Post.create({
-        videoPath: file.path,
+    const videoExist = await Post.findOne({ videoName: singleVideo.filename })
+
+    if (videoExist) {
+        console.log("Video was blocked")
+        res.status(400).json({ message: 'Video Already Exist' })
+        throw new Error('Video Already Exist')
+    }
+
+    const newPost = new Post({
+        videoPath: singleVideo.path,
+        videoName: singleVideo.filename,
         title: title,
-        description: description,
+        description: description
+    });
 
-    })
+    const savedPost = await newPost.save()
+    res.status(201).json(savedPost)
+});
 
-}) 
-const getVideo = asyncHandler( async(req, res)=>{
+
+const postmultipleVideo = asyncHandler(async (req, res) => {
+    const { title, description } = req.body
+    const multipleVideos = req.files
+
+    if (!multipleVideos || !title || !description) {
+        res.status(400).json({ message: 'Fill all data' })
+        throw new Error("Fill all data")
+    }
+
+    // if (!Array.isArray(title) || !Array.isArray(description) || title.length !== multipleVideos.length || description.length !== multipleVideos.length) {
+    //     res.status(400).json({ message: 'Number of titles/descriptions does not match the number of uploaded files' })
+    //     throw new Error("Number of titles/descriptions does not match the number of uploaded files")
+    // }
+
+    const existingVideo = await Post.find({ videoName: { $in: multipleVideos.map(video => video.filename) } })
+
+
+    if (existingVideo) {
+        console.log("Video was blocked");
+        res.status(400).json({ message: 'One or more videos already exist' });
+        throw new Error('One or more videos already exist');
+    }
+
+    const newPosts = multipleVideos.map((video, index) => new Post({
+        videoPath: video.path,
+        videoName: video.filename,
+        title: title[index],
+        description: description[index]
+    }));
+
+    const savedPosts = await Post.insertMany(newPosts)
+    res.status(201).json(savedPosts);
+});
+const getVideo = asyncHandler(async (req, res) => {
+    const videoId = req.params.id;
+
+    const video = await Post.findById(videoId);
+
+    if (!video) {
+        res.status(404).json({ message: "Video not found" });
+        throw new Error("Video not found");
+    }
+
+    res.json({ video });
+});
+const getAllVideos = asyncHandler(async (req, res) => {
+    const videos = await Post.find();
+
+    if (!videos || videos.length === 0) {
+        res.status(404).json({ message: "There are no videos" });
+        throw new Error("There are no videos");
+    }
+    res.json({ videos });
+
+});const updateVideo = asyncHandler(async (req, res) => {
+    const currvideo = await Post.findById(req.params.id);
+    const { title, description } = req.body;
+
+    console.log(title,description)
+    if (!currvideo) {
+        throw new Error(`Video with id ${req.params.id} not found`);
+    }
+
     
+    if (!title || !description) {
+        throw new Error("Please provide title and description to update");
+    }
 
-}) 
+    // Update the video document
+    const updatedVideo = await Post.findByIdAndUpdate(
+        req.params.id,
+        { title, description }, // Update only title and description fields
+        { new: true } // Return the updated document
+    );
 
-const updateVideo = asyncHandler( async(req, res)=>{
-    
+    res.status(200).json({ updatedVideo });
+});
 
-}) 
+const deleteVideo = asyncHandler(async (req, res) => {
+    const video = await Post.findById(req.params.id);
 
-const deleteVideo = asyncHandler( async(req, res)=>{
-    
+    if (!video) {
+        res.status(404).json({ message: `Video with id ${req.params.id} not found` });
+        throw new Error("Video not found");
+    }
 
-}) 
+    // Delete the video document from the database
+    await Post.findByIdAndDelete(req.params.id);
 
-module.exports ={
-    postVideo,
+    // Delete the associated video file from the filesystem
+    const filePath = video.videoPath; // Assuming 'videoPath' is the path to the video file
+    fs.unlink(filePath, (err) => {
+        if (err) {
+            console.error(`Error deleting video file: ${err}`);
+            // Handle error if needed
+        } else {
+            console.log(`Video file ${filePath} deleted successfully`);
+        }
+    });
+})
+
+module.exports = {
+    postsingleVideo,
+    postmultipleVideo,
     getVideo,
     updateVideo,
     deleteVideo,
+    getAllVideos
 }

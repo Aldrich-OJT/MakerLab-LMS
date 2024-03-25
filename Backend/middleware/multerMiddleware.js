@@ -7,13 +7,14 @@ const storage = multer.diskStorage({
     },
     filename: (req, file, cb) => {
         console.log(file)
-        cb(null, Date.now + path.extname(file.originalname))
+        console.log(file.originalname)
+        cb(null, file.originalname)
     }
 })
 
-const upload = multer({ storage: storage })
-
-
+const singleUpload = multer({ storage: storage }).single('video');
+const multipleUpload = multer({ storage: storage }).array('videos', 5);
 module.exports = {
-    upload
+    singleUpload,
+    multipleUpload
 }

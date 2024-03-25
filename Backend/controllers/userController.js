@@ -40,7 +40,6 @@ const userRegister = asyncHandler(async (req, res) => {
 
     const salt = await bcrypt.genSalt(10);
     const hashedPass = await bcrypt.hash(password, salt);
-a
     const newUser = await User.create({
         name,
         email,
