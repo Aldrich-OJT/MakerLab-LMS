@@ -2,6 +2,7 @@ import { LinearGradient } from "expo-linear-gradient";
 import React from "react";
 import { View, Text, StyleSheet, Dimensions,Image} from "react-native";
 import ProgressBar from 'react-native-progress/Bar';
+import Header from "../components/auths/Header";
 
 const dimensions = Dimensions.get('window');   
 const maxWidth = dimensions.width;
@@ -10,10 +11,7 @@ const maxHeight = dimensions.height;
 export default function Settings () {
   return (
       <View style={styles.container}>
-        <View>
-          <Image source={require('../assets/top-home.png')} style={styles.bgimage}></Image>
-          <Image source={require('../assets/logo-light.png')} style={styles.logo}></Image>
-        </View>
+        <Header/>
         <View style={styles.avatarcontainer}>
     
             <LinearGradient colors={['#ffc42c', '#9300FF']} style={styles.gradientborder}>
