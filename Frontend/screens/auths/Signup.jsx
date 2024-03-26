@@ -188,7 +188,8 @@ const styles = StyleSheet.create({
 	},
 	textinput: {
 		width: '80%',
-		height: width < 380 ? 40: 35 ,
+		// height: width < 380 ? 40: 35 ,
+		height: 40,
 		backgroundColor: Colors.bgOffWhite,
 		margin: 2,
 	},

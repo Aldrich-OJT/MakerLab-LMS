@@ -55,15 +55,14 @@ export default function Login() {
 
     }
   };
-
   console.log(textInputs)
   return (
     <KeyboardAvoidingView style={styles.container} behavior={Platform.OS === "ios" ? "padding" : "height"}>
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
         <View style={styles.container}>
-			<Title/>
+			    <Title/>
           <View style={styles.bottomsheet}>
-			<Text style={styles.logintext}>Log in</Text>
+			    <Text style={styles.logintext}>Log in</Text>
             <TextInput
               label={'Email'}
               value={textInputs.email}
