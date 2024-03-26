@@ -1,5 +1,7 @@
 import { View, StyleSheet, Text, Dimensions, ImageBackground, Image, Pressable } from "react-native";
 import Colors from "../constants/Colors";
+import QuizItem from "../components/QuizItem";
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 
 const dimensions = Dimensions.get('window');   
 const devicewidth = dimensions.width;
@@ -10,36 +12,24 @@ export default function Assess() {
         <View style={styles.mainContainer}>
             <ImageBackground source={require('../assets/assess-background.png')} style={styles.bgimage}>
             <Image source={require('../assets/logo-light.png')} style={styles.logo}/>
-            <View style={styles.quizcontainer}>
-                <Text>Quiz Name</Text>
-                <Text>Description</Text>
-                <View style={styles.itemcontainer}>
-                    <View style={styles.questioncontainer}>
-                        <Text style={styles.questiontext}>1. Lorem ipsum dolor sit amet?</Text>
-                    </View>
-
-                    <View style={styles.choicescontainer}>
-                        <View style={styles.choicesrow}>
-                            <Pressable style={styles.choices}>
-                                <Text style={styles.choicestext}>a. Nulla Vitae</Text>
-                            </Pressable>
-
-                            <Pressable style={styles.choices}>
-                                <Text style={styles.choicestext}>b. Nulla Vitae</Text>
-                            </Pressable>
-                        </View>
-
-                        <View style={styles.choicesrow}>
-                            <Pressable style={styles.choices}>
-                                <Text style={styles.choicestext}>c. Nulla Vitae</Text>
-                            </Pressable>
-
-                            <Pressable style={styles.choices}>
-                                <Text style={styles.choicestext}>d. Nulla Vitae</Text>
-                            </Pressable>
-                        </View>
-                    </View>
-                </View>
+            <View style={styles.quizContainer}>
+              <View style={styles.quizEditContainer}>
+                <Text style={styles.quizName}>Quiz Name:</Text>
+                <MaterialCommunityIcons name="square-edit-outline" size={27} color="white" />
+              </View>
+                <Text style={styles.quizDescription}>Description--</Text>
+                <QuizItem question={'What is the powerhouse of the cell?'} 
+                  choice1={'JavaScript'}
+                  choice2={'Photosynthesis'}
+                  choice3={'Kapampangan'}
+                  choice4={'Mitochondria'}
+                />
+                <QuizItem question={'Who sang Leaves by Ben&Ben?'} 
+                  choice1={'Yung puno'}
+                  choice2={'Bato'}
+                  choice3={'Ben&Ben'}
+                  choice4={'Putek'}
+                />
             </View>
             </ImageBackground>
         </View>
@@ -66,48 +56,24 @@ const styles = StyleSheet.create({
         alignSelf: 'flex-end',
         margin: 10,
       },
-      quizcontainer: {
+      quizContainer: {
         backgroundColor: Colors.bgDarkViolet,
         height: '85%',
         width: '95%',
         borderRadius: 10,
         padding: 15,
       },
-      itemcontainer: {
-        backgroundColor: Colors.bgYellow,
-        borderWidth: 2,
-        borderColor: 'black',
-        height: '40%',
-        width: '100%',
+      quizName:{
+        color: 'white',
+        fontSize: 25,
       },
-      questioncontainer: {
-        borderBottomWidth: 2,
-        padding: 15,
+      quizDescription: {
+        color: 'white',
+        fontSize: 16,
+        paddingTop: 5,
       },
-      questiontext:{
-        fontSize: 20,
-      },
-      choicescontainer: {
-        flexDirection: 'column',
-        gap: 20,
-        height: '60%',
-        width: '100%',
-        backgroundColor: 'red',
-        justifyContent:"center",
-        alignItems:"center",
-      },
-      choicesrow:{
+      quizEditContainer: {
         flexDirection: 'row',
-        gap: 20,
-      },
-      choices: {
-        backgroundColor: Colors.bgDarkYellow,
-        borderRadius: 10,
-        borderColor: 'black',
-        borderWidth: 1,
-        width: '40%'
-      },
-      choicestext: {
-        fontSize: 17,
+        justifyContent: 'space-between'
       },
 })
