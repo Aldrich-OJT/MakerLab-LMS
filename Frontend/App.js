@@ -68,6 +68,7 @@ const Root = ()=>{
 
   useEffect(()=>{
     const fetchToken = async()=>{
+      
         const token = await AsyncStorage.getItem('token')
         
         if (token) {

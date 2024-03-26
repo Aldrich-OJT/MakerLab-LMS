@@ -1,13 +1,18 @@
-import React from "react";
+import React, { useContext } from "react";
 import { View, Text, StyleSheet, Dimensions, Image } from "react-native";
 import CircularProgress from "react-native-circular-progress-indicator";
 import Header from "../components/Header";
+
 
 const dimensions = Dimensions.get('window');
 const deviceWidth = dimensions.width;
 const deviceHeight = dimensions.height;
 
 export default function HomePage() {
+    //const authContext = useContext(AuthContext)
+
+
+    //console.log(authContext)
   return (
     <View style={styles.container}>
       <Header/>

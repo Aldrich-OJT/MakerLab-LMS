@@ -3,14 +3,17 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export const AuthContext = createContext({
     token:"",
+    //userRole:"",
     isAuthenticated: false,
     authenticate: (token)=>{},
     logout: ()=>{}
 })
 
 
+
 const AuthProvider = ({children})=>{
     const [authToken, setAuthToken] = useState(null)
+    //const [userRole, setUserRole] = useState(null)
 
 
     const authenticate = (token)=>{
@@ -24,6 +27,7 @@ const AuthProvider = ({children})=>{
     }
     const value = {
         token: authToken,
+        userRole:"",
         isAuthenticated: !!authToken,
         authenticate: authenticate,
         logout: logout

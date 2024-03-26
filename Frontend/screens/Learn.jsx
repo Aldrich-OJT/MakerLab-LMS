@@ -1,8 +1,11 @@
-import React from "react";
-import { View, Text, StyleSheet, Dimensions, Image, Pressable, SafeAreaView } from "react-native";
-import { Searchbar } from "react-native-paper";
+import { useState, useEffect, useContext } from "react";
+import { View, Text, StyleSheet, Dimensions, FlatList, Pressable, Modal, KeyboardAvoidingView, Platform } from "react-native";
+import { Searchbar, TextInput } from "react-native-paper";
 import Header from "../components/Header";
 import Colors from "../constants/Colors";
+import LearnCards from "../components/LearnComponent/LearnCards";
+import { axiosGet } from ".././utils/axios"
+import { AuthContext } from "../context/AuthProvider";
 
 
 
@@ -10,50 +13,107 @@ const dimensions = Dimensions.get('window');
 const maxWidth = dimensions.width;
 const maxHeight = dimensions.height;
 
+
+
+const getVideosURL = "/api/video/videos"
+
 export default function Learn() {
-  const [searchQuery, setSearchQuery] = React.useState('');
+  const [modalVisible, setModalVisible] = useState(false)
+
+  const authContext = useContext(AuthContext)
+  const [searchQuery, setSearchQuery] = useState('');
+  const [videoData, setVideoData] = useState(null);
+
+  useEffect(() => {
+
+    const fetchData = async () => {
+      //console.log(authContext.token)
+      const data = await axiosGet(getVideosURL, authContext.token)
+      setVideoData(data.videos)
+    }
+    fetchData()
+  }, [])
+
+  const addVideo = () => {
+
+  }
+
+  const showSingleItem = (item) => {
+    console.log(item)
+  }
+  const modal = () => {
+    return (
+      <KeyboardAvoidingView behavior={Platform.OS === "ios" ? "padding" : "height"}>
+        <View>
+          <View>
+            <TextInput
+              label="Title"
+              style
+              onChangeText
+              mode="flat"
+            />
+
+            <TextInput
+              label="Title"
+              style
+              onChangeText
+              mode="flat"
+            />
+            <Pressable
+              onPress={() => setModalVisible(!modalVisible)}>
+              <Text style={styles.textStyle}>Hide Modal</Text>
+            </Pressable>
+
+          </View>
+        </View>
+      </KeyboardAvoidingView>
+    )
+  }
 
   return (
-    <View>
-     <Header>
-      <Searchbar
+    <View style={styles.mainContainer}>
+      <Modal
+        animationType="slide"
+        visible={modalVisible}
+        onRequestClose={() => setModalVisible(false)}
+      >
+        {modal()}
+      </Modal>
+      <Header>
+        <Searchbar
           style={styles.searchbar}
           placeholder="Search"
           onChangeText={setSearchQuery}
           value={searchQuery}
         />
-     </Header>
+      </Header>
       <View style={styles.bottomsheet}>
         <View>
-          <Text style={styles.coursenameshadow}></Text>
-          <Pressable style={styles.coursename}>
-            <Text style={styles.coursenametext}>COURSE NAME</Text>
-          </Pressable>
+          <View style={styles.titleContainer}>
+            <Text style={styles.titleText}>Maker Lab</Text>
+          </View>
+          <View style={styles.titleShadow}></View>
         </View>
 
-        <View style={styles.lessonshadow}>
-          <Text style={styles.lesson}></Text>
-          <Image source={require('../assets/video.png')} style={styles.video}></Image>
-          <View style={styles.textcontainer}>
-            <Text style={styles.text1}>Section 1</Text>
-            <Text style={styles.text2}>Sollicitudin massa pellentesque bibendum id felis ut commodo. </Text>
-          </View>
-        </View>
+        <FlatList
+          style={styles.videoFlatList}
+          keyExtractor={item => item._id}
+          data={videoData}
+          renderItem={({ item }) => <LearnCards title={item.title} description={item.description} onPress={() => showSingleItem(item)} />}
+        />
 
-        <View style={styles.lessonshadow}>
-          {/* <Text style={styles.lesson}></Text> */}
-          <Image source={require('../assets/video.png')} style={styles.video}></Image>
-          <View style={styles.textcontainer}>
-            <Text style={styles.text1}>Section 2</Text>
-            <Text style={styles.text2}>Sollicitudin massa pellentesque bibendum id felis ut commodo. </Text>
-          </View>
-        </View>
+        <Pressable onPress={() => setModalVisible(true)}>
+          <Text style={{ fontSize: 20, borderWidth: 2, padding: 10, textAlign: "center", borderRadius: 10 }}>+</Text>
+        </Pressable>
       </View>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
+  mainContainer: {
+    flex: 1
+  },
   bgimage: {
     height: maxHeight * .25,
     width: maxWidth * 1,
@@ -73,70 +133,53 @@ const styles = StyleSheet.create({
     left: 20
   },
   bottomsheet: {
+    flex: 1,
     alignItems: 'center',
     padding: 25,
-    backgroundColor: 'white',
+    backgroundColor: Colors.bgOffWhite,
     gap: 20,
-    height: '100%',
-    width: '100%',
   },
-  coursename: {
-    justifyContent: 'center',
-    backgroundColor: '#ffc42c',
+  titleContainer: {
+    position: 'relative',
+    backgroundColor: Colors.bgYellow,
     borderRadius: 50,
     borderColor: 'black',
     borderWidth: 2,
-    height: maxHeight * .07,
-    width: maxWidth * .50,
+    justifyContent: "center",
+    height: maxHeight * 0.07,
+    width: maxWidth * 0.5,
+    zIndex: 2
   },
-  coursenametext: {
+  titleTextContainer: {
+    borderRadius: 50,
+    borderColor: 'black',
+    backgroundColor: Colors.bgYellow,
+    height: maxHeight * 0.07,
+    width: maxWidth * 0.5,
+  },
+  titleText: {
     fontSize: 17,
     textAlign: 'center',
   },
-  coursenameshadow: {
-    position: 'absolute',
-    justifyContent: 'center',
+  titleShadow: {
+    position: "absolute",
     backgroundColor: 'black',
     borderRadius: 100,
-    height: maxHeight * .07,
-    width: maxWidth * .50,
-    top: 5,
-    left: 2,
+    height: maxHeight * 0.07,
+    width: maxWidth * 0.5,
+    top: 2,
+    zIndex: 1
   },
-  lessonshadow: {
-    backgroundColor: Colors.bgYellow,
-    borderTopWidth:5,
-    borderBottomWidth:5,
-    borderColor: Colors.bgDarkViolet,
-    borderRadius: 10,
-    flexDirection: 'row',
-    alignItems: 'center',
-    overflow:"hidden",
-    height: '15%',
-    paddingHorizontal: 20
-  },
-  video: {
-    paddingVertical:20,
-    width: '45%',
-    height: '70%',
-    resizeMode:"contain",
-  },
+
   lesson: {
     backgroundColor: '#ffc42c',
     position: 'absolute',
     width: '100%',
     height: '90%',
   },
-  textcontainer: {
-    flex: 1,
-    flexDirection: 'column',
-    gap: 20
-  },
-  text1: {
-    fontSize: 20,
-    fontWeight: 'bold',
-  },
-  text2: {
-    fontSize: 12,
+  videoFlatList: {
+    width: "100%",
+    borderRadius: 10
   }
+
 })
