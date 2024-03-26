@@ -13,7 +13,8 @@ import Learn from './screens/Learn';
 import Settings from './screens/Settings';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Assess from './screens/Assess';
-
+import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { Ionicons } from '@expo/vector-icons';
 
 const Stack = createNativeStackNavigator()
 const Tab = createBottomTabNavigator()
@@ -21,8 +22,29 @@ const Tab = createBottomTabNavigator()
 const TabGroup = ()=>{
   const {logout} = useContext(AuthContext)
     return(
-      <Tab.Navigator>
-      <Tab.Screen options={{headerShown:false}} name='HomePage' component={HomePage}/>
+      <Tab.Navigator
+      screenOptions={({ route, navigation }) => ({
+        tabBarIcon: ({focused}) => {
+          let iconName;
+          if (route.name !== 'Learn') {
+            if (route.name === 'HomePage') {
+              iconName = focused ? 'home': 'home-outline';
+            } else if (route.name === 'Assess') {
+              iconName = focused ? 'book': 'book-outline';
+            } else if (route.name === 'Settings') {
+              iconName = focused ? 'settings': 'settings-outline';
+            } 
+            return <Ionicons name={iconName} size={23} color={'black'}/>
+          }  
+          else if (route.name === 'Learn') {
+            iconName = focused ? 'school': 'school-outline';
+            return <Ionicons name={iconName} size={25} color={'black'}/>
+          }
+        }
+      })}
+      >
+
+      <Tab.Screen options={{headerShown:false}} name='HomePage' component={HomePage} />
       <Tab.Screen options={{headerShown:false}} name='Learn' component={Learn}/>
       <Tab.Screen options={{headerShown:false}} name='Assess' component={Assess}/>
       <Tab.Screen options={{

@@ -66,11 +66,11 @@ export default function Settings () {
       alignItems: 'center',
       borderRadius: 150,
       backgroundColor: 'black',
-      height: maxHeight * .21,
+      height: maxHeight * .20,
       width: maxWidth * .41,
       position: 'absolute',
       alignSelf: 'center',
-      top: 110,
+      top: 5,
       zIndex: 1,
     },
     avatar: {
@@ -91,7 +91,7 @@ export default function Settings () {
       padding: 20,
       gap: 20,
       backgroundColor: 'white',
-      top: 80,
+      top: 70,
     },
     progresscontainer: {
       backgroundColor: '#ffc42c',
