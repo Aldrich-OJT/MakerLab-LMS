@@ -2,12 +2,17 @@ import { View, StyleSheet, Text, Dimensions, ImageBackground, Image, Pressable }
 import Colors from "../constants/Colors";
 import QuizItem from "../components/QuizItem";
 import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { useFonts, Dongle_400Regular } from '@expo-google-fonts/dongle';
 
 const dimensions = Dimensions.get('window');   
 const devicewidth = dimensions.width;
 const deviceheight = dimensions.height;
 
 export default function Assess() {
+  let [fontsloaded] = useFonts({
+    Dongle_400Regular,
+  });
+
     return(
         <View style={styles.mainContainer}>
             <ImageBackground source={require('../assets/assess-background.png')} style={styles.bgimage}>
@@ -65,7 +70,8 @@ const styles = StyleSheet.create({
       },
       quizName:{
         color: 'white',
-        fontSize: 25,
+        fontSize: 50,
+        fontFamily: 'Dongle_400Regular',
       },
       quizDescription: {
         color: 'white',
