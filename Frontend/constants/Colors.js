@@ -3,6 +3,7 @@ const Colors = {
     bgError: "#640233",
     bgOffWhite: '#EDEDED',
     bgViolet: "#7E3290",
+    bgDarkViolet: "#9300FF",
     bgGray: "#898989"
 }
 

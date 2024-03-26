@@ -2,7 +2,7 @@ import { LinearGradient } from "expo-linear-gradient";
 import React from "react";
 import { View, Text, StyleSheet, Dimensions,Image} from "react-native";
 import ProgressBar from 'react-native-progress/Bar';
-import Header from "../components/auths/Header";
+import Header from "../components/Header";
 
 const dimensions = Dimensions.get('window');   
 const maxWidth = dimensions.width;

@@ -1,17 +1,16 @@
 import React from "react";
 import { View, Text, StyleSheet, Dimensions, Image } from "react-native";
 import CircularProgress from "react-native-circular-progress-indicator";
-import Header from "../components/auths/Header";
+import Header from "../components/Header";
 
 const dimensions = Dimensions.get('window');
-const maxWidth = dimensions.width;
-const maxHeight = dimensions.height;
+const deviceWidth = dimensions.width;
+const deviceHeight = dimensions.height;
 
 export default function HomePage() {
   return (
     <View style={styles.container}>
       <Header/>
-
       <View style={styles.bottomsheet}>
         <View style={styles.progresscontainer}>
           <CircularProgress
@@ -49,25 +48,8 @@ export default function HomePage() {
 }
 
 const styles = StyleSheet.create({
-  bgimage: {
-    resizeMode: "cover",
-    width: "auto",
-    height:100
-
-    //position: 'relative'
-  },
-  logo: {
-    position: 'absolute',
-    right: 10,
-    top: 20,
-    height: 30,
-    width: 100,
-  },
   container: {
     flex: 1
-  },
-  topsheet: {
-    //flex: 2
   },
   bottomsheet: {
     flex: 1,
@@ -97,17 +79,15 @@ const styles = StyleSheet.create({
     fontSize: 16
   },
   coursecontainer: {
-    height: maxHeight * .2,
     flexDirection: 'row',
     borderRadius: 10,
     gap: 20,
   },
   courses: {
-    width: maxWidth * 1,
-    height: maxHeight * .2,
+    flex:1,
     backgroundColor: '#ffc42c',
     padding: 20,
     borderRadius: 10,
-    flex: 1,
+
   },
 })

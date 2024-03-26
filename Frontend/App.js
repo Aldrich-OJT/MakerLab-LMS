@@ -12,6 +12,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import Learn from './screens/Learn';
 import Settings from './screens/Settings';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import Assess from './screens/Assess';
 
 
 const Stack = createNativeStackNavigator()
@@ -23,6 +24,7 @@ const TabGroup = ()=>{
       <Tab.Navigator>
       <Tab.Screen options={{headerShown:false}} name='HomePage' component={HomePage}/>
       <Tab.Screen options={{headerShown:false}} name='Learn' component={Learn}/>
+      <Tab.Screen options={{headerShown:false}} name='Assess' component={Assess}/>
       <Tab.Screen options={{
         headerTitle: "Settings",
         headerRight: ()=>(

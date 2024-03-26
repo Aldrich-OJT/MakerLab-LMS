@@ -4,10 +4,10 @@ import { useNavigation } from '@react-navigation/native';
 import Colors from '../../constants/Colors';
 
 const dimensions = Dimensions.get('window');   
-const maxWidth = dimensions.width;
-const maxHeight = dimensions.height;
+const devicewidth = dimensions.width;
+const deviceheight = dimensions.height;
 
-const containerSize = Math.min(maxHeight, maxWidth);
+const containerSize = Math.min(deviceheight, devicewidth);
 const containerRadius = containerSize / 2;
 
 export default function Welcome() {
@@ -23,14 +23,17 @@ export default function Welcome() {
           </View>
 
           <View style={styles.imagecontainer}>
+            {/* <View style={styles.circle}></View> */}
             <Image source={require('../../assets/pic.png')} style={styles.image}/>
           </View>
 
           <View style={styles.bottomcontainer}>
-          <Pressable  onPress={() => navigation.navigate('Signup')}>
+          <Pressable  onPress={() => navigation.replace('Signup')}>
             <Text style={styles.button}>Sign Up</Text>
           </Pressable>
           </View>
+
+      
 
         </ImageBackground>
       </View>
@@ -40,7 +43,8 @@ export default function Welcome() {
 
 const styles = StyleSheet.create({
   bgimage: {
-    flex:1,
+    height:"100%",
+    width:"100%",
     resizeMode: "contain",
   },
   container:{
@@ -55,24 +59,25 @@ const styles = StyleSheet.create({
     width: '30%',
     resizeMode: 'contain',
     alignSelf: 'flex-end',
-    margin: 25,
-    top: 5
+    margin: 20,
   },
   text: {
+    textAlign:"center",
     fontWeight:'bold',
     fontSize: 35,
-    margin: 5,
-    alignSelf: 'center'
+    margin: 5
   },
   imagecontainer: {
-    position: 'relative',
+    width: devicewidth > 380 ? 300 : 250,
+    alignSelf:"center",
     justifyContent: 'center',
     flex: 2,
   },
   image:{
-    alignSelf: 'center',
-    height: maxHeight * .4,
-    width: maxWidth * .77,
+    resizeMode:"contain",
+    width: "100%",
+    height: "100%",
+   
   },
   bottomcontainer: {
     flex: .5

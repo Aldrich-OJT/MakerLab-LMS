@@ -55,6 +55,7 @@ export default function Login() {
 
     }
   };
+  
   console.log(textInputs)
   return (
     <KeyboardAvoidingView style={styles.container} behavior={Platform.OS === "ios" ? "padding" : "height"}>
@@ -112,7 +113,8 @@ const styles = StyleSheet.create({
 	},
 	textinput: {
 		width: '80%',
-		height: width < 380 ? 40: 35 ,
+		//height: width < 380 ? 40: 35 ,
+    height: 40,
 		backgroundColor: Colors.bgOffWhite,
 		marginVertical: 5,
 },
