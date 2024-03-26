@@ -4,7 +4,8 @@ const { connectToMongoDB } = require('./connection')
 require('dotenv').config()
 const userRoute = require('./routes/userRoute');
 const videoRoute = require('./routes/videoRoute')
-const { errorHandler } = require('./middleware/errorMiddleware') 
+const { errorHandler } = require('./middleware/errorMiddleware')
+const quizRoute == require('./routes/quizRoute')
 
 
 
@@ -17,7 +18,7 @@ app.use(express.json())
 app.use(express.urlencoded({ extended: false }))
 
 app.use('/api/user',userRoute)
-
+app.use('/api/quiz', quizRoute)
 app.use('/api/video',videoRoute)
 
 app.use(errorHandler)
@@ -30,8 +31,3 @@ connectToMongoDB()
         console.error('Error starting server', error)
         process.exit(1)
     })
-
-
-app.get('/', (req, res)=>{
-    res.send('sample')
-})
