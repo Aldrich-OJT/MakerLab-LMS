@@ -13,6 +13,7 @@ const storage = multer.diskStorage({
 })
 
 const singleUpload = multer({ storage: storage }).single('video');
+
 const multipleUpload = multer({ storage: storage }).array('videos', 5);
 module.exports = {
     singleUpload,

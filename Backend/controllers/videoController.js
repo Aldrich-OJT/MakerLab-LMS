@@ -111,21 +111,20 @@ const getAllVideos = asyncHandler(async (req, res) => {
 
 const deleteVideo = asyncHandler(async (req, res) => {
     const video = await Post.findById(req.params.id);
+    const filePath = video.videoPath;
 
     if (!video) {
         res.status(404).json({ message: `Video with id ${req.params.id} not found` });
         throw new Error("Video not found");
     }
 
-    // Delete the video document from the database
     await Post.findByIdAndDelete(req.params.id);
 
     // Delete the associated video file from the filesystem
-    const filePath = video.videoPath; // Assuming 'videoPath' is the path to the video file
+    
     fs.unlink(filePath, (err) => {
         if (err) {
-            console.error(`Error deleting video file: ${err}`);
-            // Handle error if needed
+            throw new Error(`Error deleting video file${err}`);
         } else {
             console.log(`Video file ${filePath} deleted successfully`);
         }

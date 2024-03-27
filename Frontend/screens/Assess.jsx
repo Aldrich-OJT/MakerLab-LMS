@@ -9,7 +9,7 @@ const devicewidth = dimensions.width;
 const deviceheight = dimensions.height;
 
 export default function Assess() {
-  let [fontsloaded] = useFonts({
+  let [fontsLoaded] = useFonts({
     Dongle_400Regular,
   });
 

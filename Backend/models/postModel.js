@@ -3,9 +3,8 @@ const mongoose = require('mongoose')
 
 const postSchema = new mongoose.Schema(
     {
-        videoPath: {
+        filePath: {
             type: String,
-            required: [true, 'Please add a video file path']
         },
         videoName:{
             type: String,
