@@ -24,11 +24,13 @@ const styles = StyleSheet.create({
     borderTopWidth:5,
     borderBottomWidth:5,
     borderColor: Colors.bgDarkViolet,
-    borderRadius: 10,
-    alignItems: 'flex-start',
-    overflow:"hidden",
-    height: "auto",
-    padding: 20,
+    //borderRadius: 10,
+    flexDirection:"column",
+    alignItems: 'center',
+    justifyContent:"center",
+    //height: "fit-content",
+    paddingHorizontal: 20,
+    paddingVertical:10,
     marginBottom:5
   },
   video: {
@@ -39,7 +41,7 @@ const styles = StyleSheet.create({
   textcontainer: {
     flex: 1,
     flexDirection: 'column',
-    gap: 10
+    //gap: 10
   },
   title: {
     fontSize: 20,

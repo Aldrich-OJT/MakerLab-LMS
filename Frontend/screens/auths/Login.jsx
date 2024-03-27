@@ -86,6 +86,7 @@ export default function Login() {
                 value={textInputs.password}
                 secureTextEntry={passhidden}
                 style={styles.textinput}
+                autoCapitalize="none"
                 mode='outlined'
                 right={<TextInput.Icon icon="eye" onPress={passwordhandler} />}
                 onChangeText={(textValue) => handleInput("password", textValue)}

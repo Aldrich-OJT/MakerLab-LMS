@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 
-const baseURL = 'http://192.168.1.208:5000'; 
+const baseURL = 'http://192.168.100.66:5000'; 
 
 const axiosPost = async (URL, formdata) => {
   try {
