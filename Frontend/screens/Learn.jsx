@@ -1,74 +1,67 @@
 import { useState, useEffect, useContext } from "react";
-import { View, Text, StyleSheet, Dimensions, FlatList, Pressable, Modal, KeyboardAvoidingView, Platform } from "react-native";
+import {
+  View,
+  Text,
+  StyleSheet,
+  Dimensions,
+  FlatList,
+  Pressable,
+  Modal,
+  KeyboardAvoidingView,
+  Platform,
+} from "react-native";
 import { Searchbar, TextInput } from "react-native-paper";
 import Header from "../components/Header";
 import Colors from "../constants/Colors";
 import LearnCards from "../components/LearnComponent/LearnCards";
-import { axiosGet } from ".././utils/axios"
+import { axiosGet } from ".././utils/axios";
 import { AuthContext } from "../context/AuthProvider";
 
-
-
-const dimensions = Dimensions.get('window');
+const dimensions = Dimensions.get("window");
 const maxWidth = dimensions.width;
 const maxHeight = dimensions.height;
 
-
-
-const getVideosURL = "/api/video/videos"
+const getVideosURL = "/api/video/videos";
 
 export default function Learn() {
-  const [modalVisible, setModalVisible] = useState(false)
+  const [modalVisible, setModalVisible] = useState(false);
 
-  const authContext = useContext(AuthContext)
-  const [searchQuery, setSearchQuery] = useState('');
+  const authContext = useContext(AuthContext);
+  const [searchQuery, setSearchQuery] = useState("");
   const [videoData, setVideoData] = useState(null);
 
   useEffect(() => {
-
     const fetchData = async () => {
       //console.log(authContext.token)
-      const data = await axiosGet(getVideosURL, authContext.token)
-      setVideoData(data.videos)
-    }
-    fetchData()
-  }, [])
+      const data = await axiosGet(getVideosURL, authContext.token);
+      setVideoData(data.videos);
+    };
+    fetchData();
+  }, []);
 
-  const addVideo = () => {
-
-  }
+  const addVideo = () => {};
 
   const showSingleItem = (item) => {
-    console.log(item)
-  }
+    console.log(item);
+  };
   const modal = () => {
     return (
-      <KeyboardAvoidingView behavior={Platform.OS === "ios" ? "padding" : "height"}>
+      <KeyboardAvoidingView
+        behavior={Platform.OS === "ios" ? "padding" : "height"}
+      >
         <View>
           <View>
-            <TextInput
-              label="Title"
-              style
-              onChangeText
-              mode="flat"
-            />
+            <TextInput label="Title" style onChangeText mode="flat" />
 
-            <TextInput
-              label="Title"
-              style
-              onChangeText
-              mode="flat"
-            />
-            <Pressable
-              onPress={() => setModalVisible(!modalVisible)}>
+            <TextInput label="Title" style onChangeText mode="flat" />
+            <Pressable onPress={() => setModalVisible(!modalVisible)}>
               <Text style={styles.textStyle}>Hide Modal</Text>
             </Pressable>
-
           </View>
         </View>
       </KeyboardAvoidingView>
-    )
-  }
+    );
+  };
 
   return (
     <View style={styles.mainContainer}>
@@ -88,98 +81,114 @@ export default function Learn() {
         />
       </Header>
       <View style={styles.bottomsheet}>
-        <View>
+        <View >
           <View style={styles.titleContainer}>
             <Text style={styles.titleText}>Maker Lab</Text>
+            
           </View>
           <View style={styles.titleShadow}></View>
         </View>
 
-        <FlatList
-          style={styles.videoFlatList}
-          keyExtractor={item => item._id}
-          data={videoData}
-          renderItem={({ item }) => <LearnCards title={item.title} description={item.description} onPress={() => showSingleItem(item)} />}
-        />
+        {/* <View style={styles.FlatListContainer}> */}
+          <FlatList
+            style={styles.videoFlatList}
+            keyExtractor={(item) => item._id}
+            data={videoData}
+            renderItem={({ item }) => (
+              <LearnCards
+                title={item.title}
+                description={item.description}
+                onPress={() => showSingleItem(item)}
+              />
+            )}
+          />
+        {/* </View> */}
 
         <Pressable onPress={() => setModalVisible(true)}>
-          <Text style={{ fontSize: 20, borderWidth: 2, padding: 10, textAlign: "center", borderRadius: 10 }}>+</Text>
+          <Text
+            style={styles.addButton}
+          >
+            +
+          </Text>
         </Pressable>
       </View>
     </View>
   );
-};
+}
 
 const styles = StyleSheet.create({
   mainContainer: {
-    flex: 1
+    flex: 1,
   },
-  bgimage: {
-    height: maxHeight * .25,
-    width: maxWidth * 1,
-    position: 'relative'
-  },
-  logo: {
-    position: 'absolute',
-    right: 10,
-    top: 20,
-    height: 30,
-    width: 100,
-  },
+
   searchbar: {
-    position: 'absolute',
-    width: maxWidth * .6,
+    position: "absolute",
+    width: maxWidth * 0.6,
     top: 25,
-    left: 20
+    left: 20,
   },
   bottomsheet: {
     flex: 1,
-    alignItems: 'center',
-    padding: 25,
     backgroundColor: Colors.bgOffWhite,
-    gap: 20,
+
   },
   titleContainer: {
-    position: 'relative',
+    position: "relative",
     backgroundColor: Colors.bgYellow,
     borderRadius: 50,
-    borderColor: 'black',
+    borderColor: "black",
     borderWidth: 2,
     justifyContent: "center",
     height: maxHeight * 0.07,
     width: maxWidth * 0.5,
-    zIndex: 2
+    marginVertical:15,
+    zIndex: 2,
+    alignSelf:"center"
   },
   titleTextContainer: {
     borderRadius: 50,
-    borderColor: 'black',
+    borderColor: "black",
     backgroundColor: Colors.bgYellow,
     height: maxHeight * 0.07,
     width: maxWidth * 0.5,
   },
   titleText: {
     fontSize: 17,
-    textAlign: 'center',
+    textAlign: "center",
   },
   titleShadow: {
     position: "absolute",
-    backgroundColor: 'black',
+    backgroundColor: "black",
     borderRadius: 100,
     height: maxHeight * 0.07,
     width: maxWidth * 0.5,
-    top: 2,
-    zIndex: 1
+    bottom: 10,
+    zIndex: 1,
+    alignSelf:"center"
   },
 
-  lesson: {
-    backgroundColor: '#ffc42c',
-    position: 'absolute',
-    width: '100%',
-    height: '90%',
+  FlatListContainer:{
+    flex:1,
+    //overflow:"scroll",
+    //borderRadius:10,
+    //overflow:"hidden"
+
   },
   videoFlatList: {
-    width: "100%",
-    borderRadius: 10
+    flex:1
+    //overflow: "scroll",
+  },
+  addButton:{
+    position:"absolute",
+    right: 10,
+    bottom: 10,
+    height: 50,
+    width: 50,
+    fontSize: 20,
+    borderWidth: 2,
+    padding: 10,
+    textAlign: "center",
+    borderRadius: 10,
+    backgroundColor: Colors.bgViolet
   }
-
-})
+});

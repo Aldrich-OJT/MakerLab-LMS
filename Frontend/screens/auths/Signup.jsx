@@ -149,6 +149,7 @@ export default function Signup() {
 							label={'Password'}
 							value={textInputs.password}
 							secureTextEntry={passhidden.password}
+							autoCapitalize="none"
 							style={styles.textinput}
 							mode='outlined'
 							right={<TextInput.Icon icon="eye" onPress={()=> passwordhandler('password')} />}
@@ -158,6 +159,7 @@ export default function Signup() {
 							label={'Confirm Password'}
 							value={textInputs.confirmpassword}
 							secureTextEntry={passhidden.confirmpass}
+							autoCapitalize="none"
 							style={styles.textinput}
 							mode='outlined'
 							right={<TextInput.Icon icon="eye" onPress={()=> passwordhandler('confirmpass')} />}
