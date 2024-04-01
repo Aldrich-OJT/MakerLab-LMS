@@ -2,7 +2,7 @@ import React, { useContext, useState } from 'react';
 import { StyleSheet, Text, View, TouchableWithoutFeedback, Keyboard, KeyboardAvoidingView, Platform, Dimensions } from 'react-native';
 import { TextInput } from 'react-native-paper';
 import { useNavigation } from '@react-navigation/native';
-import { AxiosInstance, login } from '../../utils/axios';
+import { login } from '../../utils/axios';
 import Colors from '../../constants/Colors';
 import Title from '../../components/auths/Title';
 import AuthButton from '../../components/auths/AuthButton';
@@ -12,17 +12,17 @@ import { AuthContext } from '../../context/AuthProvider';
 
 
 const width = Dimensions.get('screen').width;
-const loginURL = "/api/user/login";
+const loginURL = "/api/user/login"
 
 export default function Login() {
-  const navigation = useNavigation();
-  const authContext = useContext(AuthContext);
-  const [inputInvalid, setInputInvalid] = useState(null);
+  const navigation = useNavigation()
+  const authContext = useContext(AuthContext)
+  const [inputInvalid, setInputInvalid] = useState(null)
   const initialtextInput = {
     email: "",
     password: ""
   };
-  const [textInputs, setTextInputs] = useState(initialtextInput);
+  const [textInputs, setTextInputs] = useState(initialtextInput)
   const [passhidden, setpasshidden] = useState(true)
 
 
@@ -42,10 +42,10 @@ export default function Login() {
   const submitForm = async () => {
     // Function handles form submission
     if (!textInputs.email || !textInputs.password) {
-      setInputInvalid(true); // Set error message if email or password is empty
+      setInputInvalid(true) // Set error message if email or password is empty
       return
     }
-    setInputInvalid(false); // Clear error message if validation passes
+    setInputInvalid(false) // Clear error message if validation passes
 
     try {
       const data = await login(loginURL, textInputs)

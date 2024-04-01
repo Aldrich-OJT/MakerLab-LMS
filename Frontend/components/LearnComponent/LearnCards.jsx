@@ -3,13 +3,9 @@ import Colors from "../../constants/Colors"
 
 export default function LearnCards({title, description, onPress}){
 
-
-  const press = ()=>{
-    console.log("working")
-  }
     return(
       <Pressable style={styles.container} onPress={onPress}>
-        <Image source={require('../../assets/video.png')} style={styles.video}></Image>
+        {/* <Image source={require('../../assets/video.png')} style={styles.video}></Image> */}
         <View style={styles.textcontainer}>
           <Text style={styles.title}>{title}</Text>
           <Text style={styles.description}>{description}</Text>
@@ -21,25 +17,26 @@ export default function LearnCards({title, description, onPress}){
 const styles = StyleSheet.create({
   container: {
     backgroundColor: Colors.bgYellow,
-    borderTopWidth:5,
-    borderBottomWidth:5,
+    // borderTopWidth:5,
+    // borderBottomWidth:5,
+    borderWidth: 4,
     borderColor: Colors.bgDarkViolet,
-    //borderRadius: 10,
-    flexDirection:"column",
-    alignItems: 'center',
-    justifyContent:"center",
+    borderRadius: 10,
+    //flexDirection:"row",
+    // alignItems: 'center',
+    // justifyContent:"center",
     //height: "fit-content",
     paddingHorizontal: 20,
     paddingVertical:10,
-    marginBottom:5
+    marginBottom:5,
   },
-  video: {
-    width: '50%',
-    height: '50%',
-    resizeMode:"stretch",
-  },
+  // video: {
+  //   width: '50%',
+  //   height: '50%',
+  //   resizeMode:"contain",
+  //   alignSelf:"center"
+  // },
   textcontainer: {
-    flex: 1,
     flexDirection: 'column',
     //gap: 10
   },

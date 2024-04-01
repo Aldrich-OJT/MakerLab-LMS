@@ -11,7 +11,7 @@ const containerSize = Math.min(deviceheight, devicewidth);
 const containerRadius = containerSize / 2;
 
 export default function Welcome() {
-  const navigation = useNavigation();
+  const navigation = useNavigation()
 
   return ( 
       <View style={styles.container}>

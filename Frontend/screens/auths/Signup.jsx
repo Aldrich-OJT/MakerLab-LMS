@@ -49,7 +49,7 @@ export default function Signup() {
 				[label]: !prevState[label]
 			}
 		)
-	  });
+	  })
 	}
 
 	// Function to update the text input state when user types
@@ -57,7 +57,7 @@ export default function Signup() {
 		setTextinputs(prevState => ({
 			...prevState,
 			[textName]: textValue
-		}));
+		}))
 	};
 
 	// Function to handle form submission
@@ -111,7 +111,7 @@ export default function Signup() {
 			console.error(error.response.status);
 			console.error(error.response.data.message);
 		}
-	};
+	}
 
 	// Update inputValid state based on text input values
 	useEffect(() => {
@@ -176,7 +176,7 @@ export default function Signup() {
 				</View>
 			</KeyboardAvoidingView>
 		</TouchableWithoutFeedback>
-	);
+	)
 }
 
 const styles = StyleSheet.create({
@@ -217,4 +217,4 @@ const styles = StyleSheet.create({
 		fontSize: 20,
 		padding: 5,
 	},
-});
+})

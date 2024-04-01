@@ -2,16 +2,16 @@ import { View, StyleSheet, Text, Dimensions, ImageBackground, Image, Pressable }
 import Colors from "../constants/Colors";
 import QuizItem from "../components/QuizItem";
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-import { useFonts, Dongle_400Regular } from '@expo-google-fonts/dongle';
+// import { useFonts, Dongle_400Regular } from '@expo-google-fonts/dongle';
 
 const dimensions = Dimensions.get('window');   
 const devicewidth = dimensions.width;
 const deviceheight = dimensions.height;
 
 export default function Assess() {
-  let [fontsLoaded] = useFonts({
-    Dongle_400Regular,
-  });
+  // let [fontsLoaded] = useFonts({
+  //   Dongle_400Regular,
+  // });
 
     return(
         <View style={styles.mainContainer}>
@@ -71,7 +71,7 @@ const styles = StyleSheet.create({
       quizName:{
         color: 'white',
         fontSize: 50,
-        fontFamily: 'Dongle_400Regular',
+        fontFamily: 'Dongle-Regular',
       },
       quizDescription: {
         color: 'white',

@@ -2,20 +2,22 @@ import React, { useContext } from "react";
 import { View, Text, StyleSheet, Dimensions, Image } from "react-native";
 import CircularProgress from "react-native-circular-progress-indicator";
 import Header from "../components/Header";
+import Colors from "../constants/Colors";
 
 
-const dimensions = Dimensions.get('window');
-const deviceWidth = dimensions.width;
-const deviceHeight = dimensions.height;
+
+const dimensions = Dimensions.get('window')
+const deviceWidth = dimensions.width
+const deviceHeight = dimensions.height
 
 export default function HomePage() {
-    //const authContext = useContext(AuthContext)
+  //const authContext = useContext(AuthContext)
 
 
-    //console.log(authContext)
+  //console.log(authContext)
   return (
     <View style={styles.container}>
-      <Header/>
+      <Header />
       <View style={styles.bottomsheet}>
         <View style={styles.progresscontainer}>
           <CircularProgress
@@ -45,16 +47,15 @@ export default function HomePage() {
           <View style={styles.courses}><Text>option 2</Text></View>
         </View>
       </View>
-
-
-
     </View>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1
+    flex: 1,
+    backgroundColor: Colors.bgOffWhite,
+    
   },
   bottomsheet: {
     flex: 1,
@@ -63,7 +64,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
   },
   progresscontainer: {
-    backgroundColor: '#ffc42c',
+    backgroundColor: Colors.bgYellow,
     padding: 20,
     borderRadius: 10,
     flexDirection: 'row',
@@ -89,8 +90,8 @@ const styles = StyleSheet.create({
     gap: 20,
   },
   courses: {
-    flex:1,
-    backgroundColor: '#ffc42c',
+    flex: 1,
+    backgroundColor: Colors.bgYellow,
     padding: 20,
     borderRadius: 10,
 
