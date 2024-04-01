@@ -8,7 +8,7 @@ export default function LearnCards({title, description, onPress}){
         {/* <Image source={require('../../assets/video.png')} style={styles.video}></Image> */}
         <View style={styles.textcontainer}>
           <Text style={styles.title}>{title}</Text>
-          <Text style={styles.description}>{description}</Text>
+          <Text style={styles.description} numberOfLines={1}>{description}</Text>
         </View>
       </Pressable>
     )
@@ -38,6 +38,8 @@ const styles = StyleSheet.create({
   // },
   textcontainer: {
     flexDirection: 'column',
+    minWidth: "95%",
+    maxWidth: "95%"
     //gap: 10
   },
   title: {

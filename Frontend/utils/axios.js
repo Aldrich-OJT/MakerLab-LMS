@@ -1,9 +1,9 @@
 import axios from 'axios';
 
 
-const baseURL = 'http://192.168.1.208:5000'; 
+const baseURL = 'http://192.168.1.118:5000'; 
 
-const axiosPost = async (URL, formdata) => {
+export const axiosPost = async (URL, formdata) => {
   try {
     const response = await axios.post(`${baseURL}${URL}`, formdata, {
       headers: { 'Content-Type': 'application/json' },
