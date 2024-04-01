@@ -62,21 +62,20 @@ const styles = StyleSheet.create({
         margin: 10,
       },
       quizContainer: {
-        backgroundColor: Colors.bgDarkViolet,
+        backgroundColor: Colors.bgOffWhite,
         height: '85%',
         width: '95%',
         borderRadius: 10,
-        padding: 15,
+        paddingHorizontal: 15,
       },
       quizName:{
-        color: 'white',
         fontSize: 50,
         fontFamily: 'Dongle-Regular',
       },
       quizDescription: {
-        color: 'white',
+        marginTop:-10,
+        marginLeft:6,
         fontSize: 16,
-        paddingTop: 5,
       },
       quizEditContainer: {
         flexDirection: 'row',

@@ -5,31 +5,31 @@ const dimensions = Dimensions.get('window');
 const deviceWidth = dimensions.width;
 const deviceHeight = dimensions.height;
 
-export default function QuizItem(param) {
+export default function QuizItem(props) {
   return (
     <View style={styles.itemcontainer}>
       <View style={styles.questioncontainer}>
-          <Text style={styles.questiontext}>{param.question}</Text>
+          <Text style={styles.questiontext}>{props.question}</Text>
       </View>
 
       <View style={styles.choicescontainer}>
         <View style={styles.choicesrow}>
             <Pressable style={styles.choices}>
-                <Text style={styles.choicestext}>{'a. '+param.choice1}</Text>
+                <Text style={styles.choicestext}>{'a. '+props.choice1}</Text>
             </Pressable>
 
             <Pressable style={styles.choices}>
-                <Text style={styles.choicestext}>{'b. '+param.choice2}</Text>
+                <Text style={styles.choicestext}>{'b. '+props.choice2}</Text>
             </Pressable>
         </View>
 
         <View style={styles.choicesrow}>
             <Pressable style={styles.choices}>
-                <Text style={styles.choicestext}>{'c. '+param.choice3}</Text>
+                <Text style={styles.choicestext}>{'c. '+props.choice3}</Text>
             </Pressable>
 
             <Pressable style={styles.choices}>
-                <Text style={styles.choicestext}>{'d. '+param.choice4}</Text>
+                <Text style={styles.choicestext}>{'d. '+props.choice4}</Text>
             </Pressable>
         </View>
       </View>
@@ -43,11 +43,12 @@ const styles = StyleSheet.create({
     itemcontainer: {
       backgroundColor: Colors.bgYellow,
       borderWidth: 2,
-      borderColor: 'black',
+      borderColor: "black",
       height: 'fit-content',
       width: '100%',
       justifyContent:"center",
       alignItems:"center",
+      borderRadius:10,
       marginTop: 15,
     },
     questioncontainer: {
