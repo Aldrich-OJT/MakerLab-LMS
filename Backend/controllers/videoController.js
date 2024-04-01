@@ -31,39 +31,39 @@ const postsingleVideo = asyncHandler(async (req, res) => {
 });
 
 
-const postmultipleVideo = asyncHandler(async (req, res) => {
-    const { title, description } = req.body
-    const multipleVideos = req.files
+// const postmultipleVideo = asyncHandler(async (req, res) => {
+//     const { title, description } = req.body
+//     const multipleVideos = req.files
 
-    if (!multipleVideos || !title || !description) {
-        res.status(400).json({ message: 'Fill all data' })
-        throw new Error("Fill all data")
-    }
+//     if (!multipleVideos || !title || !description) {
+//         res.status(400).json({ message: 'Fill all data' })
+//         throw new Error("Fill all data")
+//     }
 
-    // if (!Array.isArray(title) || !Array.isArray(description) || title.length !== multipleVideos.length || description.length !== multipleVideos.length) {
-    //     res.status(400).json({ message: 'Number of titles/descriptions does not match the number of uploaded files' })
-    //     throw new Error("Number of titles/descriptions does not match the number of uploaded files")
-    // }
+//     // if (!Array.isArray(title) || !Array.isArray(description) || title.length !== multipleVideos.length || description.length !== multipleVideos.length) {
+//     //     res.status(400).json({ message: 'Number of titles/descriptions does not match the number of uploaded files' })
+//     //     throw new Error("Number of titles/descriptions does not match the number of uploaded files")
+//     // }
 
-    const existingVideo = await Post.find({ videoName: { $in: multipleVideos.map(video => video.filename) } })
+//     const existingVideo = await Post.find({ videoName: { $in: multipleVideos.map(video => video.filename) } })
 
 
-    if (existingVideo) {
-        console.log("Video was blocked");
-        res.status(400).json({ message: 'One or more videos already exist' });
-        throw new Error('One or more videos already exist');
-    }
+//     if (existingVideo) {
+//         console.log("Video was blocked");
+//         res.status(400).json({ message: 'One or more videos already exist' });
+//         throw new Error('One or more videos already exist');
+//     }
 
-    const newPosts = multipleVideos.map((video, index) => new Post({
-        videoPath: video.path,
-        videoName: video.filename,
-        title: title[index],
-        description: description[index]
-    }));
+//     const newPosts = multipleVideos.map((video, index) => new Post({
+//         videoPath: video.path,
+//         videoName: video.filename,
+//         title: title[index],
+//         description: description[index]
+//     }));
 
-    const savedPosts = await Post.insertMany(newPosts)
-    res.status(201).json(savedPosts);
-});
+//     const savedPosts = await Post.insertMany(newPosts)
+//     res.status(201).json(savedPosts);
+// });
 const getVideo = asyncHandler(async (req, res) => {
     const videoId = req.params.id;
 
@@ -88,8 +88,7 @@ const getAllVideos = asyncHandler(async (req, res) => {
 });const updateVideo = asyncHandler(async (req, res) => {
     const currvideo = await Post.findById(req.params.id);
     const { title, description } = req.body;
-
-    console.log(title,description)
+s
     if (!currvideo) {
         throw new Error(`Video with id ${req.params.id} not found`);
     }
@@ -133,7 +132,7 @@ const deleteVideo = asyncHandler(async (req, res) => {
 
 module.exports = {
     postsingleVideo,
-    postmultipleVideo,
+    // postmultipleVideo,
     getVideo,
     updateVideo,
     deleteVideo,
