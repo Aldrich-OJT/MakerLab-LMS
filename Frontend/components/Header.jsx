@@ -2,11 +2,11 @@ import { StyleSheet, View, Image, Dimensions } from "react-native"
 
 const dimensions = Dimensions.get('window');   
 const deviceWidth = dimensions.width;
-const deviceHeight = dimensions.height;
 
 export default function Header({children}) {
   return (
     <View style={styles.container}>
+      <View style={{backgroundColor: 'black', height: deviceWidth * 0.09}}></View>
         <Image source={require('.././assets/top-home.png')} style={styles.bgimage}></Image>
         {children}
         <Image source={require('.././assets/logo-light.png')} style={styles.logo}></Image>
@@ -19,13 +19,14 @@ const styles = StyleSheet.create({
       position: 'relative'
     },
     bgimage: {
-        height: 100,
+        height: deviceWidth * 0.3,
         width: deviceWidth * 1,
+        resizeMode: 'stretch'
       },
       logo: {
         position: 'absolute',
         right: 10,
-        top: 30,
+        top: deviceWidth * 0.19,
         height: 30,
         width: 100,
       },

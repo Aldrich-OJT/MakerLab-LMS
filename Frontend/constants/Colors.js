@@ -5,7 +5,8 @@ const Colors = {
     bgOffWhite: '#EDEDED',
     bgViolet: "#7E3290",
     bgDarkViolet: "#733AD1",
-    bgGray: "#898989"
+    bgGray: "#898989",
+    bgRedInvalid: "#Be254b",
 }
 
 

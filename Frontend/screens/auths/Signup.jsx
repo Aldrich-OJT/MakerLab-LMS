@@ -1,5 +1,5 @@
 import React, { useState, useContext, useEffect } from 'react';
-import { Dimensions, StyleSheet, Text, View, KeyboardAvoidingView, Platform } from 'react-native';
+import { StyleSheet, Text, View, KeyboardAvoidingView, Platform } from 'react-native';
 import { TextInput } from 'react-native-paper';
 import { useNavigation } from '@react-navigation/native';
 import { TouchableWithoutFeedback, Keyboard } from 'react-native';
@@ -10,10 +10,6 @@ import AuthButton from '../../components/auths/AuthButton';
 import Title from '../../components/auths/Title';
 import LinkContainer from '../../components/auths/LinkContainer';
 
-
-
-
-const width = Dimensions.get("window").width
 const signupURL = "/api/user/register";
 
 export default function Signup() {
@@ -39,7 +35,6 @@ export default function Signup() {
 		password: true,
 		confirmpass: true
 	})
-
 
 	const passwordhandler = (label) => {
 	  setpasshidden((prevState) => {
@@ -127,7 +122,7 @@ export default function Signup() {
 				<View style={styles.container}>
 					<Title />
 					<View style={styles.bottomsheet}>
-						<Text style={styles.signintext}>Sign up</Text>
+						<Text style={styles.signuptext}>Sign up</Text>
 						<TextInput
 							label={'Full Name'}
 							value={textInputs.name}
@@ -152,7 +147,7 @@ export default function Signup() {
 							autoCapitalize="none"
 							style={styles.textinput}
 							mode='outlined'
-							right={<TextInput.Icon icon="eye" onPress={()=> passwordhandler('password')} />}
+							right={<TextInput.Icon icon="eye" style={{top:5}} onPress={()=> passwordhandler('password')} />}
 							onChangeText={(textValue) => handleInput("password", textValue)}
 						/>
 						<TextInput
@@ -162,7 +157,7 @@ export default function Signup() {
 							autoCapitalize="none"
 							style={styles.textinput}
 							mode='outlined'
-							right={<TextInput.Icon icon="eye" onPress={()=> passwordhandler('confirmpass')} />}
+							right={<TextInput.Icon icon="eye" style={{top:5}} onPress={()=> passwordhandler('confirmpass')} />}
 							onChangeText={(textValue) => handleInput("confirmpassword", textValue)}
 						/>
 						{inputValid.isTextEmpty && <Text style={styles.invalidText}>Please fill all fields</Text>}
@@ -192,17 +187,11 @@ const styles = StyleSheet.create({
 		width: "100%",
 		alignItems: 'center',
 		justifyContent: 'center',
-		paddingHorizontal: 20,
-		paddingBottom: 30,
-		paddingTop: 15,
-	},
-	bottomsheetTitle: {
-		marginVertical: 10,
-		fontWeight: "500",
-		fontSize: 20,
+		paddingHorizontal: 10,
+    	paddingVertical: 30,
 	},
 	invalidText: {
-		color: '#Be254b',
+		color: Colors.bgRedInvalid,
 		textAlign: "left",
 	},
 	textinput: {
@@ -212,7 +201,7 @@ const styles = StyleSheet.create({
 		backgroundColor: Colors.bgOffWhite,
 		margin: 2,
 	},
-	signintext: {
+	signuptext: {
 		fontWeight: 'bold',
 		fontSize: 20,
 		padding: 5,

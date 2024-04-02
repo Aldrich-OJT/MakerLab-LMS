@@ -9,9 +9,6 @@ import AuthButton from '../../components/auths/AuthButton';
 import LinkContainer from '../../components/auths/LinkContainer';
 import { AuthContext } from '../../context/AuthProvider';
 
-
-
-const width = Dimensions.get('screen').width;
 const loginURL = "/api/user/login"
 
 export default function Login() {
@@ -24,9 +21,6 @@ export default function Login() {
   };
   const [textInputs, setTextInputs] = useState(initialtextInput)
   const [passhidden, setpasshidden] = useState(true)
-
-
-  
 
   const passwordhandler = () => {
     setpasshidden((prevState) => !prevState);
@@ -88,7 +82,7 @@ export default function Login() {
                 style={styles.textinput}
                 autoCapitalize="none"
                 mode='outlined'
-                right={<TextInput.Icon icon="eye" onPress={passwordhandler} />}
+                right={<TextInput.Icon icon="eye" style={{top:5}} onPress={passwordhandler} />}
                 onChangeText={(textValue) => handleInput("password", textValue)}
               />
             <View>{inputInvalid && <Text style={styles.invalidText}>Invalid Email or Password</Text>}</View>
@@ -113,11 +107,11 @@ const styles = StyleSheet.create({
     borderTopLeftRadius: 40,
     alignItems: 'center',
     justifyContent: 'center',
-    paddingHorizontal: 20,
+    paddingHorizontal: 10,
     paddingVertical: 30,
   },
   invalidText: {
-    color: '#Be254b',
+    color: Colors.bgRedInvalid,
     textAlign: "left",
   },
   textinput: {
@@ -128,16 +122,9 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.bgOffWhite,
     marginVertical: 5,
   },
-  signInTitle: {
-    marginLeft: 20,
-    marginTop: 100,
-    fontWeight: "500",
-    fontSize: 60
-  },
   logintext: {
     fontWeight: 'bold',
     fontSize: 20,
     padding: 5,
   },
-
 });

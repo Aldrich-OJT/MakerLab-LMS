@@ -1,7 +1,10 @@
-import { View, StyleSheet, Text, Dimensions, ImageBackground, Image, Pressable } from "react-native";
+import { View, StyleSheet, Text, Dimensions, Pressable } from "react-native";
 import Colors from "../constants/Colors";
 import QuizItem from "../components/QuizItem";
 import { MaterialCommunityIcons } from '@expo/vector-icons';
+import Header from "../components/Header";
+import { useState } from "react";
+import { FlatList } from "react-native";
 // import { useFonts, Dongle_400Regular } from '@expo-google-fonts/dongle';
 
 const dimensions = Dimensions.get('window');   
@@ -12,61 +15,81 @@ export default function Assess() {
   // let [fontsLoaded] = useFonts({
   //   Dongle_400Regular,
   // });
+  const [quizData, setQuizData] = useState([
+  {
+    id: '1',
+    question: 'Musta araw mo?',
+    choices: ['Gutom', 'YIPPEEEE', 'Antok na ako', 'COFFEEEEEEE']
+  },
+  {
+    id: '2',
+    question: 'Ano gusto mo?',
+    choices: ['Siya', 'Pera', 'Baon', 'Uwi']
+  },
+  {
+    id: '3',
+    question: 'Kumain kana ba?',
+    choices: ['Oo', 'Hindi', 'Pake mo', 'Who u']
+  },
+  {
+    id: '4',
+    question: 'Ano ulam mo?',
+    choices: ['Chicken Fillet', 'Chicken Fillet', 'Chicken Fillet', 'Chicken Fillet']
+  }
+]);
+
+const renderQuizItem = ({ item }) => (
+  <QuizItem
+    question={item.question}
+    choice1={item.choices[0]}
+    choice2={item.choices[1]}
+    choice3={item.choices[2]}
+    choice4={item.choices[3]}
+  />
+);
 
     return(
         <View style={styles.mainContainer}>
-            <ImageBackground source={require('../assets/assess-background.png')} style={styles.bgimage}>
-            <Image source={require('../assets/logo-light.png')} style={styles.logo}/>
-            <View style={styles.quizContainer}>
-              <View style={styles.quizEditContainer}>
-                <Text style={styles.quizName}>Quiz Name:</Text>
-                <MaterialCommunityIcons name="square-edit-outline" size={27} color="white" />
-              </View>
-                <Text style={styles.quizDescription}>Description--</Text>
-                <QuizItem question={'What is the powerhouse of the cell?'} 
-                  choice1={'JavaScript'}
-                  choice2={'Photosynthesis'}
-                  choice3={'Kapampangan'}
-                  choice4={'Mitochondria'}
-                />
-                <QuizItem question={'Who sang Leaves by Ben&Ben?'} 
-                  choice1={'Yung puno'}
-                  choice2={'Bato'}
-                  choice3={'Ben&Ben'}
-                  choice4={'Putek'}
-                />
+          <Header />
+          <View style={styles.quizContainer}>
+            <View style={styles.quizEditContainer}>
+              <Text style={styles.quizName}>Quiz Name:</Text>
+              <MaterialCommunityIcons 
+                name="square-edit-outline" 
+                size={25} 
+                style={{marginTop: 20}} 
+                color="black" />
             </View>
-            </ImageBackground>
+            
+            <Text style={styles.quizDescription}>Choose the correct answer.</Text>
+            <FlatList
+              style={styles.flatlist}
+              showsVerticalScrollIndicator={false}
+              data={quizData}
+              renderItem={renderQuizItem}
+              keyExtractor={item => item.id}
+              ListFooterComponent={
+                <Pressable style={styles.submitbutton}>
+                <Text style={styles.submittext}>Submit</Text>
+                </Pressable>
+              }
+            />
+            </View>
         </View>
     )
 }
 
-
 const styles = StyleSheet.create({
     mainContainer: {
         flex:1,
-        justifyContent:"center",
         alignItems:"center",
     },
-    bgimage: {
-        height:"100%",
-        width:"100%",
-        resizeMode: "contain",
-        justifyContent:"center",
-        alignItems:"center",
-      },
-      logo: {
-        height: 30,
-        width: 100,
-        alignSelf: 'flex-end',
-        margin: 10,
-      },
       quizContainer: {
         backgroundColor: Colors.bgOffWhite,
-        height: '85%',
+        height: '75%',
         width: '95%',
         borderRadius: 10,
-        paddingHorizontal: 15,
+        paddingHorizontal: 16,
       },
       quizName:{
         fontSize: 50,
@@ -80,5 +103,18 @@ const styles = StyleSheet.create({
       quizEditContainer: {
         flexDirection: 'row',
         justifyContent: 'space-between'
+      },
+      submitbutton: {
+        alignSelf: 'center',
+        backgroundColor: Colors.bgYellow,
+        borderRadius: 6,
+        margin: 10,
+        padding: 15,
+
+      },
+      submittext: {
+        fontSize: 20,
+        color: 'black',
+        alignSelf: 'center',
       },
 })
