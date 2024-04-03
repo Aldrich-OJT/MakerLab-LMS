@@ -128,21 +128,21 @@ const Root = () => {
         const token = await AsyncStorage.getItem('token');
         if (token) {
           authContext.authenticate(token);
+          console.log(authContext.token)
         } else {
           console.log("no token found");
         }
       } catch (error) {
         console.error("Error fetching token:", error);
-        // Display appropriate error message in LoadingScreen based on error type
+
       } finally {
         if (fontsLoaded) {
           setLoading(false);
         } else if (fontError) {
           console.error("Error loading fonts:", fontError);
-          // Display error message or fallback font in LoadingScreen
-          setLoading(false); // Ensure loading screen disappears even on error
+          setLoading(false); 
         } else {
-          setLoading(false); // Ensure loading screen disappears even on success
+          setLoading(false); 
         }
       }
     };

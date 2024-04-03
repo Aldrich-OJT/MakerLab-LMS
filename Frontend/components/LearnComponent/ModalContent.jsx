@@ -1,59 +1,163 @@
 import { TextInput } from "react-native-paper"
-import { View, Pressable, Text, StyleSheet, Modal, KeyboardAvoidingView } from "react-native"
-import { useState } from "react"
+import { View, Pressable, Text, StyleSheet, Modal, KeyboardAvoidingView, TouchableWithoutFeedback, Keyboard } from "react-native"
+import { useContext, useState } from "react"
 import Colors from "../../constants/Colors";
+import * as DocumentPicker from 'expo-document-picker';
 import { axiosPost } from "../../utils/axios";
+import axios from "axios";
+import { AuthContext } from "../../context/AuthProvider";
+//import { SafeAreaView } from "react-native-safe-area-context";
+import { useNavigation } from '@react-navigation/native';
 
 const URL = "/api/video/upload"
+const contentType = "multipart/form-data"
 
-export default function ModalContent({ visibility, onPress }) {
-  const [addData, setAddData] = useState({
-    title: "",
-    description: ""
+export default function ModalContent({title, description, visibility, onPress,children,id }) {
+  const [formData, setFormData] = useState({
+    title: null,
+    description: null,
+    document:null
   })
+  const authContext = useContext(AuthContext)
+  const [selectedFile, setSelectedFile] = useState(null);
+  const navigation = useNavigation()
 
-  const handleForm = (inputName, inputValue)=>{
-    setAddData( prevData => ({
+
+  const handleForm = (inputName, inputValue) => {
+    setFormData(prevData => ({
       ...prevData,
       [inputName]: inputValue
     }))
 
   }
- 
+
+
+  const pickDocument = async () => {
+    const mimeTypes = [
+      "application/pdf",
+      "application/vnd.openxmlformats-officedocument.presentationml.presentation"
+    ]
+    try {
+      const result = await DocumentPicker.getDocumentAsync({
+        type: mimeTypes
+      });
+      if (result) {
+        setSelectedFile(result.assets[0])
+        handleForm("document", result.assets[0])
   
+      }
+    } catch (err) {
+      console.log("error getting document", err);
+    }
+
+    
+  }
+  const submitForm = async()=>{
+    const formDataToSend = new FormData();
+    formDataToSend.append('title', formData.title);
+    formDataToSend.append('description', formData.description);
+    formDataToSend.append('document', {
+      uri: selectedFile.uri,
+      type: selectedFile.mimeType, // You can adjust the MIME type if needed
+      name: selectedFile.name // You can adjust the filename if needed
+    });
+
+    // console.log(formDataToSend)
+    if(children.split(" ")[0] === "Upload"){
+      try {
+      
+        const response = await axios.post("http://192.168.1.208:5000/api/video/upload",formDataToSend,{
+          headers: {
+            "Content-Type":"multipart/form-data",
+            Authorization: `Bearer ${authContext.token}`
+            
+          }
+        })
+        if(response){
+          // console.log("poost suscuhscush",response)
+          navigation.navigate("TabGroup")
+        }
+      } catch (error) {
+        console.log(error.response.data)
+      } 
+    }else{
+      try {
+      
+        const response = await axios.put(`http://192.168.1.208:5000/api/video/update/${id}`,formDataToSend,{
+          headers: {
+            "Content-Type":"multipart/form-data",
+            Authorization: `Bearer ${authContext.token}`
+            
+          }
+          
+        })
+        console.log(response.data)
+        // if(response){
+        //   console.log("poost suscuhscush",response)
+        // }
+      } catch (error) {
+        console.log(error.response.data)
+      } 
+    }
+  }
+  // console.log(selectedFile)
+  // console.log(formData)
+  console.log()
   return (
     <KeyboardAvoidingView behavior="padding">
-    <Modal
-      animationType="slide"
-      visible={visibility}
-      onRequestClose={onPress}
-      transparent={true}
-
-    >
-      <View style={styles.mainContainer} >
-        <View style={styles.inputcontainer}>
-          <Text style={styles.texttitle}>Upload Lesson</Text>
-          <TextInput label="Title" style onChangeText={(inputvalue) => handleForm("title", inputvalue)} mode="flat" />
-          <TextInput multiline={true} label="Description" style onChangeText={(inputvalue) =>handleForm("description", inputvalue)} mode="flat" />
-          <Pressable>
-            <Text>Select</Text>
-          </Pressable>
-          <Pressable onPress={onPress}>
-            <Text>Hide Modal</Text>
-          </Pressable>
-        </View>
-      </View>
-    </Modal></KeyboardAvoidingView>
+      <Modal
+        animationType="fade"
+        visible={visibility}
+        onRequestClose={onPress}
+        transparent={true}
+      >
+        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+          <View style={styles.mainContainer} >
+            <View style={styles.inputcontainer}>
+              <Text style={styles.texttitle}>{children}</Text>
+              <TextInput
+                label="Title"
+                style={styles.textInput}
+                onChangeText={(inputvalue) => handleForm("title", inputvalue)}
+                mode="flat" 
+                value={formData.title ? formData.title : title}
+                />
+                
+              <TextInput
+                multiline={true}
+                label="Description"
+                style={styles.textInput}
+                onChangeText={(inputvalue) => handleForm("description", inputvalue)}
+                mode="flat"
+                value={formData.description ? formData.description : description} />
+                
+              <View>
+                <Text>{selectedFile ? `${selectedFile.name}` : "Upload your file"}</Text>
+              </View>
+              <Pressable style={[styles.button,{backgroundColor: Colors.bgViolet}]} onPress={pickDocument}>
+                <Text style={styles.buttonText}>Select File</Text>
+              </Pressable>
+              <View style={styles.buttonContainer}>
+                <Pressable style={[styles.button,{backgroundColor: "blue"}]} onPress={submitForm}>
+                  <Text style={styles.buttonText}>Submit</Text>
+                </Pressable>
+                <Pressable style={[styles.button,{backgroundColor: "red"}]} onPress={onPress}>
+                  <Text style={styles.buttonText}>Cancel</Text>
+                </Pressable>
+              </View>
+            </View>
+          </View>
+        </TouchableWithoutFeedback>
+      </Modal>
+    </KeyboardAvoidingView>
 
   )
 }
 
 const styles = StyleSheet.create({
   mainContainer: {
-    width: "100%",
     flex: 1,
     justifyContent: "center",
-    alignSelf: "center", 
     paddingHorizontal: 20,
     backgroundColor: "rgba(0,0,0,0.3)"
   },
@@ -64,11 +168,10 @@ const styles = StyleSheet.create({
     margin: 10,
   },
   inputcontainer: {
-    height: '30%', 
-    width: "100%", 
-    backgroundColor: 'blue',
+    height: '30%',
+    width: "100%",
     justifyContent: "center",
-    alignSelf: "center", 
+    alignItems: "center",
     padding: 15,
     borderRadius: 10,
     backgroundColor: Colors.bgYellow,
@@ -77,8 +180,22 @@ const styles = StyleSheet.create({
     height: "fit-content",
     gap: 10,
   },
-  textStyle: {
-    
+  textInput: {
+    width: "100%"
+  },
+  buttonContainer: {
+    flexDirection:"row",
+    gap: 5
+  },
+  button: {
+    justifyContent: "center",
+    alignItems: "center",
+    height: 35,
+    width: 100,
+    borderRadius: 10,
+  },
+  buttonText: {
+    color: "white"
   }
 })
 

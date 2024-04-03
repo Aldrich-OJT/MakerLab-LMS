@@ -42,7 +42,7 @@ export default function Learn() {
       //console.log(authContext.token)
       setContentLoading(true)
       const data = await axiosGet(getVideosURL, authContext.token)
-      setVideoData(data.videos)
+      setVideoData(data)
       setContentLoading(false)
     }
     fetchData()
@@ -59,7 +59,7 @@ export default function Learn() {
     <KeyboardAvoidingView behavior={Platform.OS === "ios" ? "padding" : "height"} style={styles.mainContainer}>
       <View style={styles.mainContainer}>
 
-        <ModalContent style={{backgroundColor:"green"}} visibility={modalVisible} onPress={() => setModalVisible(false)} />
+        <ModalContent style={{backgroundColor:"green"}} visibility={modalVisible} onPress={() => setModalVisible(false)} >Upload Document</ModalContent>
 
         <Header>
           <Searchbar

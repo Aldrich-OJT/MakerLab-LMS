@@ -1,43 +1,46 @@
 import axios from 'axios';
 
+const baseURL = 'http://192.168.1.208:5000';
 
-const baseURL = 'http://192.168.1.118:5000'; 
-
-export const axiosPost = async (URL, formdata) => {
+const axiosRequest = async (method, URL, token, data, contentType) => {
   try {
-    const response = await axios.post(`${baseURL}${URL}`, formdata, {
-      headers: { 'Content-Type': 'application/json' },
-      withCredentials: true, 
-    });
-    const data = response.data
-    return data;
-  } catch (error) {
-    console.error('Error fetching token:', error);
-    throw error;
-  }
-}
-export const axiosGet = async (URL, token) => {
-  try {
-    const response = await axios.get(`${baseURL}${URL}`,{
+    const config = {
+      method,
+      url: `${baseURL}${URL}`,
       headers: {
-        Authorization: `Bearer ${token}`
-      }
-    });
-    const data = response.data
-    return data;
+        'Content-Type': contentType,
+      },
+      withCredentials: true,
+    };
+
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`;
+    }
+
+    if (data) {
+      config.data = data;
+    }
+
+    const response = await axios(config);
+    return response.data;
   } catch (error) {
-    console.error('Error fetching token:', error);
-    console.error(error.response.status); 
-		console.error(error.response.data.message); 
+    console.error(`Error in ${method} request to ${URL}:`, error);
     throw error;
   }
-}
+};
 
-export function createUser(URL, data) {
-  return axiosPost(URL, data);
-}
-  
-export function login(URL, data) {
-  return axiosPost(URL, data);
-}
+export const axiosPost = async (URL, data, contentType, token) => {
+  return await axiosRequest('post', URL, token, data, contentType);
+};
 
+export const axiosGet = async (URL, token) => {
+  return await axiosRequest('get', URL, token);
+};
+
+export const axiosPut = async (URL, data, token) => {
+  return await axiosRequest('put', URL, token, data);
+};
+
+export const axiosDelete = async (URL, token) => {
+  return await axiosRequest('delete', URL, token);
+};

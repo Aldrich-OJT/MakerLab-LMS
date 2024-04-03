@@ -3,10 +3,14 @@ const mongoose = require('mongoose')
 
 const postSchema = new mongoose.Schema(
     {
-        videoPath: {
+        documentPath: {
             type: String,
         },
-        videoName:{
+        documentName:{
+            type: String,
+            required: [true, 'Please add a video name']
+        },
+        documentType:{
             type: String,
             required: [true, 'Please add a video name']
         },

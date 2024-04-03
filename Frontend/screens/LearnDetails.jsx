@@ -1,15 +1,21 @@
 import { useRoute } from "@react-navigation/native";
 import { useNavigation } from "@react-navigation/native";
-import { useLayoutEffect } from "react";
-import { View, Text, Image, StyleSheet } from "react-native";
+import { useLayoutEffect, useState } from "react";
+import { View, Text, Image, StyleSheet, Pressable } from "react-native";
+import Colors from "../constants/Colors";
+import { axiosPut } from "../utils/axios";
+import ModalContent from "../components/LearnComponent/ModalContent";
 
+const updateURL = "/update"
+const deleteURL = "/delete"
 
 export default function LearnDetails() {
+    const [modalVisible, setModalVisible] = useState(false);
     const router = useRoute()
     const navigation = useNavigation()
 
-    console.log(router.params)
-    useLayoutEffect(()=>{
+    //console.log(router.params)
+    useLayoutEffect(() => {
         navigation.setOptions({
             headerTitle: router.params.item.title,
             headerStyle: {
@@ -23,17 +29,47 @@ export default function LearnDetails() {
             headerTitleAlign: 'center', // Align the header title in the center
         })
     }, [])
+
+    const editData = () => {
+        const id = router.params.item._id
+        axiosPut(`${updateURL}${id}`,)
+    }
+    const deleteData = () => {
+
+    }
+    //console.log(router.params.item)
     return (
-        <View style={styles.textcontainer}>
-            <Text style={styles.text}>
-               {router.params.item.description}
-            </Text>
-            <Image/>
+
+        <View style={styles.mainContainer}>
+            <ModalContent
+                style={{ backgroundColor: "green" }}
+                title={router.params.item.title}
+                description={router.params.item.description}
+                id={router.params.item._id}
+                visibility={modalVisible}
+                onPress={() => setModalVisible(false)}>Edit Document</ModalContent>
+            <View style={styles.textcontainer}>
+                <Text style={styles.text}>
+                    {router.params.item.description}
+                </Text>
+                <Image />
+            </View>
+            <View style={styles.buttonContainer} >
+                <Pressable style={styles.add} onPress={()=>setModalVisible(true)}>
+                    <Text>edit</Text>
+                </Pressable>
+                <Pressable style={styles.delete}>
+                    <Text>delete</Text>
+                </Pressable>
+            </View>
         </View>
     )
 }
 
 const styles = StyleSheet.create({
+    mainContainer: {
+        flex: 1
+    },
     textcontainer: {
         justifyContent: "center",
         padding: 20
@@ -42,4 +78,21 @@ const styles = StyleSheet.create({
         fontSize: 17,
         textAlign: "justify"
     },
+    buttonContainer: {
+        position: "absolute",
+        bottom: 10,
+        right: 10
+    },
+    add: {
+        width: 50,
+        height: 50,
+        borderRadius: 10,
+        backgroundColor: Colors.bgDarkYellow
+    },
+    delete: {
+        width: 50,
+        height: 50,
+        borderRadius: 10,
+        backgroundColor: Colors.bgError
+    }
 })

@@ -3,7 +3,7 @@ import { Dimensions, StyleSheet, Text, View, KeyboardAvoidingView, Platform } fr
 import { TextInput } from 'react-native-paper';
 import { useNavigation } from '@react-navigation/native';
 import { TouchableWithoutFeedback, Keyboard } from 'react-native';
-import { createUser } from '../../utils/axios';
+import { axiosPost } from '../../utils/axios';
 import { AuthContext } from '../../context/AuthProvider';
 import Colors from '../../constants/Colors';
 import AuthButton from '../../components/auths/AuthButton';
@@ -15,6 +15,7 @@ import LinkContainer from '../../components/auths/LinkContainer';
 
 const width = Dimensions.get("window").width
 const signupURL = "/api/user/register";
+const contentType = "application/json"
 
 export default function Signup() {
 	const authContext = useContext(AuthContext);
@@ -103,7 +104,7 @@ export default function Signup() {
 
 		try {
 			// Make a POST request to the signup API endpoint with form data
-			const data = await createUser(signupURL, textInputs)
+			const data = await axiosPost(signupURL, textInputs, contentType)
 			console.log(data);
 			authContext.authenticate(data.token)
 			console.log(data.token);

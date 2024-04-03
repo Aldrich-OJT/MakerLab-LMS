@@ -2,7 +2,7 @@ import React, { useContext, useState } from 'react';
 import { StyleSheet, Text, View, TouchableWithoutFeedback, Keyboard, KeyboardAvoidingView, Platform, Dimensions } from 'react-native';
 import { TextInput } from 'react-native-paper';
 import { useNavigation } from '@react-navigation/native';
-import { login } from '../../utils/axios';
+import { axiosPost } from '../../utils/axios';
 import Colors from '../../constants/Colors';
 import Title from '../../components/auths/Title';
 import AuthButton from '../../components/auths/AuthButton';
@@ -13,6 +13,7 @@ import { AuthContext } from '../../context/AuthProvider';
 
 const width = Dimensions.get('screen').width;
 const loginURL = "/api/user/login"
+const contentType = "application/json"
 
 export default function Login() {
   const navigation = useNavigation()
@@ -48,7 +49,7 @@ export default function Login() {
     setInputInvalid(false) // Clear error message if validation passes
 
     try {
-      const data = await login(loginURL, textInputs)
+      const data = await axiosPost(loginURL, textInputs,contentType)
       console.log("login success")
       authContext.authenticate(data.token)
       console.log(data.token)

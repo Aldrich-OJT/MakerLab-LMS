@@ -9,7 +9,7 @@ router.post("/upload", [singleUpload, protect], postsingleVideo);
 // router.post("/upload-multiple", [multipleUpload, protect], postmultipleVideo);
 router.get("/videos", protect, getAllVideos);  
 router.get("/:id", protect, getVideo);        
-router.put("/update/:id", protect, updateVideo);
+router.put("/update/:id", [singleUpload, protect], updateVideo);
 router.delete("/delete/:id", protect, deleteVideo); 
 
 

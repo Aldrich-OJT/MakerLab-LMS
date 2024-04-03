@@ -11,17 +11,17 @@ const postsingleVideo = asyncHandler(async (req, res) => {
         throw new Error("Fill all data")
     }
 
-    const videoExist = await Post.findOne({ videoName: singleVideo.filename })
+    const videoExist = await Post.findOne({ documentName: singleVideo.filename })
 
     if (videoExist) {
-        console.log("Video was blocked")
         res.status(400).json({ message: 'Video Already Exist' })
         throw new Error('Video Already Exist')
     }
 
     const newPost = new Post({
-        videoPath: singleVideo.path,
-        videoName: singleVideo.filename,
+        documentPath: singleVideo.path,
+        documentName: singleVideo.filename,
+        documentType: singleVideo.mimetype,
         title: title,
         description: description
     });
@@ -83,12 +83,14 @@ const getAllVideos = asyncHandler(async (req, res) => {
         res.status(404).json({ message: "There are no videos" });
         throw new Error("There are no videos");
     }
-    res.json({ videos });
+    res.json(videos);
 
 });const updateVideo = asyncHandler(async (req, res) => {
     const currvideo = await Post.findById(req.params.id);
     const { title, description } = req.body;
-s
+    const document = req.file
+    
+
     if (!currvideo) {
         throw new Error(`Video with id ${req.params.id} not found`);
     }
@@ -101,11 +103,17 @@ s
     // Update the video document
     const updatedVideo = await Post.findByIdAndUpdate(
         req.params.id,
-        { title, description }, // Update only title and description fields
+        { 
+            documentName: document.filename,
+            documentPath: document.path,
+            documentType: document.mimetype,
+            title: title,
+            description:description
+        }, 
         { new: true } // Return the updated document
     );
 
-    res.status(200).json({ updatedVideo });
+    res.status(200).json(updatedVideo);
 });
 
 const deleteVideo = asyncHandler(async (req, res) => {
