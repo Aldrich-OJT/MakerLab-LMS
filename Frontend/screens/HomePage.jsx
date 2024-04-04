@@ -1,18 +1,10 @@
-import React, { useContext } from "react";
-import { View, Text, StyleSheet, Dimensions, Image } from "react-native";
+import { View, Text, StyleSheet} from "react-native";
 import CircularProgress from "react-native-circular-progress-indicator";
 import Header from "../components/Header";
 import Colors from "../constants/Colors";
 
-
-
-const dimensions = Dimensions.get('window')
-const deviceWidth = dimensions.width
-const deviceHeight = dimensions.height
-
 export default function HomePage() {
   //const authContext = useContext(AuthContext)
-
 
   //console.log(authContext)
   return (
@@ -27,19 +19,18 @@ export default function HomePage() {
             inActiveStrokeWidth={20}
             progressValueColor={'black'}
             maxValue={100}
-            activeStrokeSecondaryColor={'#B63FE9'}
-            activeStrokeColor={'#4E1D63'}
-            inActiveStrokeOpacity={0.2}
+            activeStrokeSecondaryColor={Colors.bgDarkViolet}
+            activeStrokeColor={Colors.bgViolet}
+            inActiveStrokeOpacity={0.3}
             valueSuffix={'%'}
           // onAnimationComplete={()=>}
           >
           </CircularProgress>
 
-          <View style={styles.progresstext}>
-            <Text style={styles.text1}>Hi User!</Text>
-            <Text style={styles.text2}>You have finished 69% of the course. Good Job!</Text>
+          <View style={styles.progresstextcontainer}>
+            <Text style={styles.greetingtext}>Hi User!</Text>
+            <Text style={styles.progresstext}>You have finished 69% of the course. Good Job!</Text>
           </View>
-
         </View>
 
         <View style={styles.coursecontainer}>
@@ -61,7 +52,7 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 25,
     gap: 20,
-    backgroundColor: 'white',
+    backgroundColor: Colors.bgOffWhite,
   },
   progresscontainer: {
     backgroundColor: Colors.bgYellow,
@@ -70,17 +61,17 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     gap: 20,
   },
-  progresstext: {
+  progresstextcontainer: {
     flex: 1,
     flexDirection: 'column',
     justifyContent: 'space-evenly',
   },
-  text1: {
+  greetingtext: {
     flexWrap: 'wrap',
     fontSize: 20,
     fontWeight: 'bold',
   },
-  text2: {
+  progresstext: {
     flexWrap: 'wrap',
     fontSize: 16
   },

@@ -32,9 +32,6 @@ export default function Welcome() {
             <Text style={styles.button}>Sign Up</Text>
           </Pressable>
           </View>
-
-      
-
         </ImageBackground>
       </View>
 
