@@ -13,6 +13,7 @@ import Learn from './screens/Learn';
 import Settings from './screens/Settings';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Assess from './screens/Assess';
+import Lessons from './screens/Lessons';
 import { Ionicons } from '@expo/vector-icons';
 import LearnDetails from './screens/LearnDetails';
 import Colors from './constants/Colors';
@@ -32,6 +33,16 @@ const LearnStackGroup = () => {
 
   )
 }
+
+const LessonStackGroup = () => {
+  return (
+    <LearnStack.Navigator>
+      <Tab.Screen options={{ headerShown: false }} name='Lessons' component={Lessons} />
+      <LearnStack.Screen options={{ headerShown: false }} name="Learn" component={Learn} />
+    </LearnStack.Navigator>
+  );
+};
+
 const TabGroup = () => {
   const { logout } = useContext(AuthContext)
   return (
@@ -39,7 +50,7 @@ const TabGroup = () => {
       screenOptions={({ route, navigation }) => ({
         tabBarIcon: ({ focused }) => {
           let iconName;
-          if (route.name !== 'Learn') {
+          if (route.name !== 'Lessons') {
             if (route.name === 'HomePage') {
               iconName = focused ? 'home' : 'home-outline';
             } else if (route.name === 'Assess') {
@@ -50,7 +61,7 @@ const TabGroup = () => {
 
             return <Ionicons name={iconName} size={23} color={'black'} />
           }
-          else if (route.name === 'Learn') {
+          else if (route.name === 'Lessons') {
             iconName = focused ? 'school' : 'school-outline';
             return <Ionicons name={iconName} size={25} color={'black'} />
           }
@@ -71,8 +82,8 @@ const TabGroup = () => {
       })}
     >
 
-      <Tab.Screen options={{ headerShown: false }} name='HomePage' component={HomePage} />
-      <Tab.Screen options={{ headerShown: false }} name='Learn' component={Learn} />
+      <Tab.Screen options={{ headerShown: false }} name='HomePage' component={HomePage} />  
+      <Tab.Screen options={{ headerShown: false }} name='Lessons' component={LessonStackGroup} />
       <Tab.Screen options={{ headerShown: false }} name='Assess' component={Assess} />
       <Tab.Screen options={{
         headerTitle: "Settings",

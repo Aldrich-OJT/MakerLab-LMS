@@ -8,6 +8,7 @@ import axios from "axios";
 import { AuthContext } from "../../context/AuthProvider";
 //import { SafeAreaView } from "react-native-safe-area-context";
 import { useNavigation } from '@react-navigation/native';
+import { AntDesign } from '@expo/vector-icons';
 
 const URL = "/api/video/upload"
 const contentType = "multipart/form-data"
@@ -134,14 +135,14 @@ export default function ModalContent({title, description, visibility, onPress,ch
               <View>
                 <Text>{selectedFile ? `${selectedFile.name}` : "Upload your file"}</Text>
               </View>
-              <Pressable style={[styles.button,{backgroundColor: Colors.bgViolet}]} onPress={pickDocument}>
-                <Text style={styles.buttonText}>Select File</Text>
+              <Pressable style={[styles.button]} onPress={pickDocument}>
+                <Text style={styles.selectButton}><AntDesign name="addfile" size={16} color="black" /> Select File</Text>
               </Pressable>
               <View style={styles.buttonContainer}>
-                <Pressable style={[styles.button,{backgroundColor: "blue"}]} onPress={submitForm}>
+                <Pressable style={[styles.button,{backgroundColor: "black"}]} onPress={submitForm}>
                   <Text style={styles.buttonText}>Submit</Text>
                 </Pressable>
-                <Pressable style={[styles.button,{backgroundColor: "red"}]} onPress={onPress}>
+                <Pressable style={[styles.button,{backgroundColor: Colors.bgRedInvalid}]} onPress={onPress}>
                   <Text style={styles.buttonText}>Cancel</Text>
                 </Pressable>
               </View>
@@ -162,10 +163,14 @@ const styles = StyleSheet.create({
     backgroundColor: "rgba(0,0,0,0.3)"
   },
   texttitle: {
-    alignSelf: "center",
     fontSize: 20,
-    fontWeight: "bold",
-    margin: 10,
+    fontWeight: 'bold',
+    borderBottomColor: 'black',
+    borderBottomWidth: 2,
+    marginBottom: 5,
+    width: '100%',
+    textAlign: 'center',
+    paddingBottom: 12,
   },
   inputcontainer: {
     height: '30%',
@@ -175,24 +180,30 @@ const styles = StyleSheet.create({
     padding: 15,
     borderRadius: 10,
     backgroundColor: Colors.bgYellow,
-    borderColor: "black",
-    borderWidth: 2,
     height: "fit-content",
     gap: 10,
   },
   textInput: {
-    width: "100%"
+    width: "100%",
   },
   buttonContainer: {
     flexDirection:"row",
-    gap: 5
+    gap: 30,
   },
   button: {
     justifyContent: "center",
     alignItems: "center",
-    height: 35,
+    height: 40,
     width: 100,
-    borderRadius: 10,
+    borderRadius: 6,
+  },
+  selectButton: {
+    backgroundColor: "#FFA800",
+    height: 35,
+    width: 150,
+    borderRadius: 6,
+    textAlign: 'center',
+    textAlignVertical: 'center',
   },
   buttonText: {
     color: "white"

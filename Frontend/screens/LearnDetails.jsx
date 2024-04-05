@@ -5,6 +5,7 @@ import { View, Text, Image, StyleSheet, Pressable } from "react-native";
 import Colors from "../constants/Colors";
 import { axiosPut } from "../utils/axios";
 import ModalContent from "../components/LearnComponent/ModalContent";
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 
 const updateURL = "/update"
 const deleteURL = "/delete"
@@ -55,11 +56,11 @@ export default function LearnDetails() {
                 <Image />
             </View>
             <View style={styles.buttonContainer} >
-                <Pressable style={styles.add} onPress={()=>setModalVisible(true)}>
-                    <Text>edit</Text>
+                <Pressable style={styles.button} onPress={()=>setModalVisible(true)}>
+                <MaterialCommunityIcons name="square-edit-outline" size={25} color={Colors.bgYellow} />
                 </Pressable>
-                <Pressable style={styles.delete}>
-                    <Text>delete</Text>
+                <Pressable style={styles.button}>
+                    <MaterialCommunityIcons name="delete" size={25} color={Colors.bgYellow} />
                 </Pressable>
             </View>
         </View>
@@ -81,18 +82,15 @@ const styles = StyleSheet.create({
     buttonContainer: {
         position: "absolute",
         bottom: 10,
-        right: 10
+        right: 10,
+        gap: 10,
     },
-    add: {
+    button: {
         width: 50,
         height: 50,
         borderRadius: 10,
-        backgroundColor: Colors.bgDarkYellow
+        backgroundColor: 'black',
+        justifyContent: 'center',
+        alignItems: 'center'
     },
-    delete: {
-        width: 50,
-        height: 50,
-        borderRadius: 10,
-        backgroundColor: Colors.bgError
-    }
 })

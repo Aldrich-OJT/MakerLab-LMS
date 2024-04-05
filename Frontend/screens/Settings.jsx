@@ -77,9 +77,6 @@ const avatarChoices = [
               </View>
           </View>
   
-          <View style={styles.courses}>
-            <View><Text>Finish course to unlock</Text></View>
-          </View>
         </View>
       </View>    
   );
@@ -139,11 +136,6 @@ const avatarChoices = [
       fontSize: 15,
       fontWeight: 'bold'
     },
-    courses: {
-      padding: 20,
-      backgroundColor: '#ffc42c',
-      borderRadius: 10,
-    },
     modalmaincontainer: {
       backgroundColor: 'rgba(0,0,0,0.3)',
       justifyContent: 'center',
@@ -161,9 +153,7 @@ const avatarChoices = [
       padding: 10,
       alignItems: 'center',
       justifyContent: 'center',
-      borderColor: 'black',
       borderRadius: 10,
-      borderWidth: 2,
     },
     imagecontainer: {
       gap: 10,
