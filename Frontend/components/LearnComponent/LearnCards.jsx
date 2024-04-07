@@ -19,8 +19,11 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.bgYellow,
     // borderTopWidth:5,
     // borderBottomWidth:5,
+<<<<<<< HEAD
     // borderWidth: 4,
     // borderColor: Colors.bgDarkViolet,
+=======
+>>>>>>> 9a73fe83ec4818520f87b4ff351f13067ced32d9
     borderRadius: 10,
     //flexDirection:"row",
     // alignItems: 'center',
@@ -28,7 +31,7 @@ const styles = StyleSheet.create({
     //height: "fit-content",
     paddingHorizontal: 20,
     paddingVertical:10,
-    marginBottom:5,
+    marginBottom:10,
   },
   // video: {
   //   width: '50%',
@@ -43,8 +46,9 @@ const styles = StyleSheet.create({
     //gap: 10
   },
   title: {
-    fontSize: 20,
+    fontSize: 18,
     fontWeight: 'bold',
+    color: Colors.bgViolet
   },
   description: {
     fontSize: 15,

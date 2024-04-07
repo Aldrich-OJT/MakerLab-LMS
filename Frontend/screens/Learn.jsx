@@ -33,7 +33,6 @@ export default function Learn() {
   const [modalVisible, setModalVisible] = useState(false);
 
   const authContext = useContext(AuthContext);
-  const [searchQuery, setSearchQuery] = useState("");
   const [videoData, setVideoData] = useState(null);
   const [contentLoading, setContentLoading] = useState(false)
   const [nocontent, setNoContent] = useState(false)
@@ -83,15 +82,13 @@ export default function Learn() {
     <KeyboardAvoidingView behavior={Platform.OS === "ios" ? "padding" : "height"} style={styles.mainContainer}>
       <View style={styles.mainContainer}>
 
+<<<<<<< HEAD
         <ModalContent style={{ backgroundColor: "green" }} setRefresh= {()=> setRefresh(true)} visibility={modalVisible} onPress={() => setModalVisible(false)} >Upload Document</ModalContent>
+=======
+        <ModalContent visibility={modalVisible} onPress={() => setModalVisible(false)} >Upload Document</ModalContent>
+>>>>>>> 9a73fe83ec4818520f87b4ff351f13067ced32d9
 
         <Header>
-          <Searchbar
-            style={styles.searchbar}
-            placeholder="Search"
-            onChangeText={setSearchQuery}
-            value={searchQuery}
-          />
         </Header>
         <View style={[styles.bottomsheet, { marginBottom: tabBarHeight }]}>
           <View >
@@ -140,23 +137,15 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.bgDarkViolet,
   },
 
-  searchbar: {
-    position: "absolute",
-    width: deviceWidth * 0.6,
-    top: 25,
-    left: 20,
-  },
   bottomsheet: {
     flex: 1,
     backgroundColor: Colors.bgOffWhite,
-
+    paddingHorizontal: 10,
   },
   titleContainer: {
     position: "relative",
     backgroundColor: Colors.bgYellow,
     borderRadius: 50,
-    borderColor: "black",
-    borderWidth: 2,
     justifyContent: "center",
     height: deviceheight * 0.07,
     width: deviceWidth * 0.5,
@@ -166,7 +155,6 @@ const styles = StyleSheet.create({
   },
   titleTextContainer: {
     borderRadius: 50,
-    borderColor: "black",
     backgroundColor: Colors.bgYellow,
     height: deviceheight * 0.07,
     width: deviceWidth * 0.5,
@@ -174,17 +162,19 @@ const styles = StyleSheet.create({
   titleText: {
     fontSize: 17,
     textAlign: "center",
+    color: Colors.bgViolet,
+    fontWeight: 'bold'
   },
-  titleShadow: {
-    position: "absolute",
-    backgroundColor: "black",
-    borderRadius: 100,
-    height: deviceheight * 0.07,
-    width: deviceWidth * 0.5,
-    bottom: 10,
-    zIndex: 1,
-    alignSelf: "center"
-  },
+   titleShadow: {
+     position: "absolute",
+     backgroundColor: "#494949",
+     borderRadius: 100,
+     height: deviceheight * 0.07,
+     width: deviceWidth * 0.5,
+     bottom: 10,
+     zIndex: 1,
+     alignSelf: "center"
+   },
 
   FlatListContainer: {
     flex: 1,
