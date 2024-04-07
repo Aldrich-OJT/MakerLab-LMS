@@ -3,25 +3,33 @@ import { View, Pressable, Text, StyleSheet, Modal, KeyboardAvoidingView, Touchab
 import { useContext, useState } from "react"
 import Colors from "../../constants/Colors";
 import * as DocumentPicker from 'expo-document-picker';
-import { axiosPost } from "../../utils/axios";
-import axios from "axios";
+import { axiosPost, axiosPut } from "../../utils/axios";
+
 import { AuthContext } from "../../context/AuthProvider";
 //import { SafeAreaView } from "react-native-safe-area-context";
 import { useNavigation } from '@react-navigation/native';
 
-const URL = "/api/video/upload"
+const POSTURL = "/api/post/upload/"
+const PUTURL = "/api/post/update/"
 const contentType = "multipart/form-data"
+const mimeTypes = [
+  "application/pdf",
+  "application/vnd.openxmlformats-officedocument.presentationml.presentation"
+]
 
-export default function ModalContent({title, description, visibility, onPress,children,id }) {
-  const [formData, setFormData] = useState({
-    title: null,
-    description: null,
-    document:null
-  })
-  const authContext = useContext(AuthContext)
-  const [selectedFile, setSelectedFile] = useState(null);
+//FIX ON DOCUMENT BLANK ERROR
+export default function ModalContent({documentName,title, description, visibility, onPress,children,id, setRefresh}) {
+  const {token} = useContext(AuthContext)
   const navigation = useNavigation()
+  const [errorMessage, setErrorMessage] = useState("");
+  
 
+  const formInitialData = {
+    title: title ?? "",
+    description: description ?? "",
+    document: null
+  }
+  const [formData, setFormData] = useState(formInitialData)
 
   const handleForm = (inputName, inputValue) => {
     setFormData(prevData => ({
@@ -30,19 +38,14 @@ export default function ModalContent({title, description, visibility, onPress,ch
     }))
 
   }
-
-
+//Function that lets you pick documents on your device
   const pickDocument = async () => {
-    const mimeTypes = [
-      "application/pdf",
-      "application/vnd.openxmlformats-officedocument.presentationml.presentation"
-    ]
     try {
       const result = await DocumentPicker.getDocumentAsync({
         type: mimeTypes
       });
       if (result) {
-        setSelectedFile(result.assets[0])
+        console.log(result.assets[0])
         handleForm("document", result.assets[0])
   
       }
@@ -52,57 +55,55 @@ export default function ModalContent({title, description, visibility, onPress,ch
 
     
   }
+  const cancelForm = ()=>{
+    onPress();
+    setFormData(formInitialData);
+    setErrorMessage("");
+  }
   const submitForm = async()=>{
     const formDataToSend = new FormData();
     formDataToSend.append('title', formData.title);
     formDataToSend.append('description', formData.description);
     formDataToSend.append('document', {
-      uri: selectedFile.uri,
-      type: selectedFile.mimeType, // You can adjust the MIME type if needed
-      name: selectedFile.name // You can adjust the filename if needed
+      uri: formData.document?.uri,
+      type: formData.document?.mimeType, 
+      name: formData.document?.name 
     });
 
-    // console.log(formDataToSend)
+    console.log(formDataToSend)
     if(children.split(" ")[0] === "Upload"){
       try {
-      
-        const response = await axios.post("http://192.168.1.208:5000/api/video/upload",formDataToSend,{
-          headers: {
-            "Content-Type":"multipart/form-data",
-            Authorization: `Bearer ${authContext.token}`
-            
-          }
-        })
-        if(response){
-          // console.log("poost suscuhscush",response)
-          navigation.navigate("TabGroup")
-        }
+        const data = await axiosPost(POSTURL,formDataToSend,contentType,token)
+
+      console.log(data)
+      onPress()
+      setRefresh(true)
+      console.log("working2")
+      setFormData(formInitialData)
+      setErrorMessage("");
       } catch (error) {
-        console.log(error.response.data)
-      } 
-    }else{
+        //console.log(error)
+        setErrorMessage(error?.data?.message)
+      }
+    }else if (children.split(" ")[0] === "Edit"){
       try {
-      
-        const response = await axios.put(`http://192.168.1.208:5000/api/video/update/${id}`,formDataToSend,{
-          headers: {
-            "Content-Type":"multipart/form-data",
-            Authorization: `Bearer ${authContext.token}`
-            
-          }
-          
-        })
-        console.log(response.data)
-        // if(response){
-        //   console.log("poost suscuhscush",response)
-        // }
+        const data = await axiosPut(`${PUTURL}${id}`,formDataToSend,contentType,token)
+        console.log(data)
+        onPress()
+        setRefresh(true)
+        setFormData(formInitialData)
+        setErrorMessage("");
       } catch (error) {
-        console.log(error.response.data)
-      } 
+        setErrorMessage(error?.data?.message)
+        
+      }
+     
     }
   }
+  //console.log(formDataToSend)
   // console.log(selectedFile)
   // console.log(formData)
-  console.log()
+  //console.log(formData.title)
   return (
     <KeyboardAvoidingView behavior="padding">
       <Modal
@@ -115,12 +116,13 @@ export default function ModalContent({title, description, visibility, onPress,ch
           <View style={styles.mainContainer} >
             <View style={styles.inputcontainer}>
               <Text style={styles.texttitle}>{children}</Text>
+
               <TextInput
                 label="Title"
                 style={styles.textInput}
                 onChangeText={(inputvalue) => handleForm("title", inputvalue)}
                 mode="flat" 
-                value={formData.title ? formData.title : title}
+                value={formData.title}
                 />
                 
               <TextInput
@@ -129,10 +131,11 @@ export default function ModalContent({title, description, visibility, onPress,ch
                 style={styles.textInput}
                 onChangeText={(inputvalue) => handleForm("description", inputvalue)}
                 mode="flat"
-                value={formData.description ? formData.description : description} />
+                value={formData.description} />
                 
               <View>
-                <Text>{selectedFile ? `${selectedFile.name}` : "Upload your file"}</Text>
+                <Text>{formData.document ? `${formData.document.name}` : "Upload your file"}</Text>
+                {errorMessage && <Text style={styles.errorMessage}>{errorMessage}</Text>}
               </View>
               <Pressable style={[styles.button,{backgroundColor: Colors.bgViolet}]} onPress={pickDocument}>
                 <Text style={styles.buttonText}>Select File</Text>
@@ -141,7 +144,7 @@ export default function ModalContent({title, description, visibility, onPress,ch
                 <Pressable style={[styles.button,{backgroundColor: "blue"}]} onPress={submitForm}>
                   <Text style={styles.buttonText}>Submit</Text>
                 </Pressable>
-                <Pressable style={[styles.button,{backgroundColor: "red"}]} onPress={onPress}>
+                <Pressable style={[styles.button,{backgroundColor: "red"}]} onPress={cancelForm}>
                   <Text style={styles.buttonText}>Cancel</Text>
                 </Pressable>
               </View>
@@ -159,7 +162,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     paddingHorizontal: 20,
-    backgroundColor: "rgba(0,0,0,0.3)"
+    backgroundColor: "rgba(0,0,0,0.4)"
   },
   texttitle: {
     alignSelf: "center",
@@ -175,8 +178,8 @@ const styles = StyleSheet.create({
     padding: 15,
     borderRadius: 10,
     backgroundColor: Colors.bgYellow,
-    borderColor: "black",
-    borderWidth: 2,
+    // borderColor: "black",
+    // borderWidth: 2,
     height: "fit-content",
     gap: 10,
   },
@@ -196,7 +199,11 @@ const styles = StyleSheet.create({
   },
   buttonText: {
     color: "white"
+  },
+  errorMessage:{
+    alignSelf:"center",
+    color: Colors.bgError
   }
-})
+});
 
 

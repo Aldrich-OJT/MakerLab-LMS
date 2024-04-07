@@ -126,6 +126,7 @@ const Root = () => {
     const fetchToken = async () => {
       try {
         const token = await AsyncStorage.getItem('token');
+
         if (token) {
           authContext.authenticate(token);
           console.log(authContext.token)

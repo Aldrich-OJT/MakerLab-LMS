@@ -1,4 +1,4 @@
-import { useState, useEffect, useContext } from "react";
+import { useState, useEffect, useContext, useCallback } from "react";
 import {
   View,
   Text,
@@ -16,7 +16,7 @@ import Colors from "../constants/Colors";
 import LearnCards from "../components/LearnComponent/LearnCards";
 import { axiosGet } from ".././utils/axios";
 import { AuthContext } from "../context/AuthProvider";
-import { useNavigation } from '@react-navigation/native';
+import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs';
 import ModalContent from "../components/LearnComponent/ModalContent";
 
@@ -25,7 +25,7 @@ const deviceWidth = dimensions.width;
 const deviceheight = dimensions.height;
 
 
-const getVideosURL = "/api/video/videos";
+const getVideosURL = "/api/post/videos";
 
 export default function Learn() {
   const tabBarHeight = useBottomTabBarHeight()
@@ -36,30 +36,54 @@ export default function Learn() {
   const [searchQuery, setSearchQuery] = useState("");
   const [videoData, setVideoData] = useState(null);
   const [contentLoading, setContentLoading] = useState(false)
+  const [nocontent, setNoContent] = useState(false)
+  const [refresh, setRefresh] = useState(false)
 
   useEffect(() => {
     const fetchData = async () => {
-      //console.log(authContext.token)
-      setContentLoading(true)
-      const data = await axiosGet(getVideosURL, authContext.token)
-      setVideoData(data)
-      setContentLoading(false)
-    }
-    fetchData()
-  }, [])
+      try {
+        setContentLoading(true);
+        
+        const data = await axiosGet(getVideosURL, authContext.token);
+        console.log("i am trying to get something")
+        setVideoData(data);
+        if(data){
+          setNoContent(false)
+        }
+      } catch (error) {
+        // Handle the error here, you can log it or show an error message to the user
+        console.log(error.status)
+        if (error.status === 404) {
+          setNoContent(true)
+          console.error(nocontent);
+        }
 
-  const addVideo = () => { }
+      } finally {
+        setRefresh(false)
+        setContentLoading(false);
+      }
+    };
+    console.log("effect")
+    fetchData()
+  }, [refresh])
+  
+  //refresh the page when focus goes back on this tab
+  useFocusEffect(
+    useCallback(() => {
+      setRefresh(true) 
+    }, [])
+  );
 
   const showSingleItem = (item) => {
     navigate("LearnDetails", { item })
   };
 
-
+  //console.log(refresh)
   return (
     <KeyboardAvoidingView behavior={Platform.OS === "ios" ? "padding" : "height"} style={styles.mainContainer}>
       <View style={styles.mainContainer}>
 
-        <ModalContent style={{backgroundColor:"green"}} visibility={modalVisible} onPress={() => setModalVisible(false)} >Upload Document</ModalContent>
+        <ModalContent style={{ backgroundColor: "green" }} setRefresh= {()=> setRefresh(true)} visibility={modalVisible} onPress={() => setModalVisible(false)} >Upload Document</ModalContent>
 
         <Header>
           <Searchbar
@@ -79,21 +103,23 @@ export default function Learn() {
           </View>
 
           <View style={styles.FlatListContainer}>
-            {contentLoading ?
-              <Text>Loading...</Text> :
-              <FlatList
-                showsVerticalScrollIndicator={false}
-                style={styles.videoFlatList}
-                keyExtractor={(item) => item._id}
-                data={videoData}
-                renderItem={({ item }) => (
-                  <LearnCards
-                    title={item.title}
-                    description={item.description}
-                    onPress={() => showSingleItem(item)}
-                  />
-                )}
-              />}
+            {contentLoading ? (<Text>Loading...</Text>)
+              : (nocontent ? (<Text>No contents found</Text>) : (
+                <FlatList
+                  showsVerticalScrollIndicator={false}
+                  style={styles.videoFlatList}
+                  keyExtractor={(item) => item._id}
+                  data={videoData}
+                  renderItem={({ item }) => (
+                    <LearnCards
+                      title={item.title}
+                      description={item.description}
+                      onPress={() => showSingleItem(item)}
+                    />
+                  )}
+                />
+              )
+              )}
           </View>
 
           <Pressable style={styles.addButton} onPress={() => setModalVisible(true)}>
@@ -111,7 +137,7 @@ export default function Learn() {
 const styles = StyleSheet.create({
   mainContainer: {
     flex: 1,
-    backgroundColor: Colors.bgOffWhite,
+    backgroundColor: Colors.bgDarkViolet,
   },
 
   searchbar: {

@@ -89,6 +89,7 @@ const getAllVideos = asyncHandler(async (req, res) => {
     const currvideo = await Post.findById(req.params.id);
     const { title, description } = req.body;
     const document = req.file
+    const filePath = currvideo.videoPath;
     
 
     if (!currvideo) {
@@ -99,7 +100,14 @@ const getAllVideos = asyncHandler(async (req, res) => {
     if (!title || !description) {
         throw new Error("Please provide title and description to update");
     }
-
+    
+    fs.unlink(filePath, (err) => {
+        if (err) {
+            throw new Error(`Error deleting video file${err}`);
+        } else {
+            console.log(`Video file ${filePath} deleted successfully`);
+        }
+    });
     // Update the video document
     const updatedVideo = await Post.findByIdAndUpdate(
         req.params.id,
@@ -118,24 +126,27 @@ const getAllVideos = asyncHandler(async (req, res) => {
 
 const deleteVideo = asyncHandler(async (req, res) => {
     const video = await Post.findById(req.params.id);
-    const filePath = video.videoPath;
+    const filePath = video.documentPath;
+    
 
     if (!video) {
         res.status(404).json({ message: `Video with id ${req.params.id} not found` });
         throw new Error("Video not found");
     }
 
-    await Post.findByIdAndDelete(req.params.id);
-
-    // Delete the associated video file from the filesystem
-    
     fs.unlink(filePath, (err) => {
         if (err) {
             throw new Error(`Error deleting video file${err}`);
         } else {
-            console.log(`Video file ${filePath} deleted successfully`);
+            console.log(`${filePath} deleted successfully`);
         }
     });
+    const {_id} = await Post.findByIdAndDelete(req.params.id);
+
+    res.status(200).json(_id)
+    // Delete the associated video file from the filesystem
+    
+   
 })
 
 module.exports = {

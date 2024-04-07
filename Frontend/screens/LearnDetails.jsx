@@ -1,17 +1,19 @@
 import { useRoute } from "@react-navigation/native";
 import { useNavigation } from "@react-navigation/native";
-import { useLayoutEffect, useState } from "react";
-import { View, Text, Image, StyleSheet, Pressable } from "react-native";
+import { useContext, useLayoutEffect, useState } from "react";
+import { View, Text, Image, StyleSheet, Pressable, Alert } from "react-native";
 import Colors from "../constants/Colors";
-import { axiosPut } from "../utils/axios";
+import { axiosDelete, axiosPut } from "../utils/axios";
 import ModalContent from "../components/LearnComponent/ModalContent";
-
-const updateURL = "/update"
-const deleteURL = "/delete"
+import * as FileSystem from 'expo-file-system';
+import { AuthContext } from "../context/AuthProvider";
+const deleteURL = "/api/post/delete/"
 
 export default function LearnDetails() {
+    const {token} = useContext(AuthContext)
     const [modalVisible, setModalVisible] = useState(false);
     const router = useRoute()
+    const { item } = router.params;
     const navigation = useNavigation()
 
     //console.log(router.params)
@@ -22,35 +24,50 @@ export default function LearnDetails() {
                 backgroundColor: "black",
             },
             headerTitleStyle: {
-                fontWeight: 'bold', // Change the font weight of the header title
-                color: 'white', // Change the color of the header title
+                fontWeight: 'bold', 
+                color: 'white', 
             },
-            headerTintColor: 'white', // Change the color of the back button
-            headerTitleAlign: 'center', // Align the header title in the center
+            headerTintColor: 'white', 
+            headerTitleAlign: 'center', 
         })
     }, [])
 
-    const editData = () => {
-        const id = router.params.item._id
-        axiosPut(`${updateURL}${id}`,)
-    }
-    const deleteData = () => {
+    const createTwoButtonAlert = () =>
+    Alert.alert('Warning', 'Do you really want to delete this file?', [
+      {
+        text: 'Cancel',
+        onPress: () => console.log('Cancel Pressed'),
+        style: 'cancel',
+      },
+      {text: 'YES', onPress: () => deleteData},
+    ]);
 
+    const deleteData = async() => {
+        try {
+        console.log("trying to delete something")
+        const id = item._id
+        const data = await axiosDelete(`${deleteURL}${id}`,token)
+        navigation.goBack()
+        } catch (error) {
+            console.log(error)
+        }
     }
-    //console.log(router.params.item)
+    console.log(item)
     return (
 
         <View style={styles.mainContainer}>
             <ModalContent
                 style={{ backgroundColor: "green" }}
-                title={router.params.item.title}
-                description={router.params.item.description}
-                id={router.params.item._id}
+                documentName={item.documentName}
+                title={item.title}
+                description={item.description}
+                id={item._id}
                 visibility={modalVisible}
                 onPress={() => setModalVisible(false)}>Edit Document</ModalContent>
             <View style={styles.textcontainer}>
+               
                 <Text style={styles.text}>
-                    {router.params.item.description}
+                    {item.description}
                 </Text>
                 <Image />
             </View>
@@ -58,7 +75,7 @@ export default function LearnDetails() {
                 <Pressable style={styles.add} onPress={()=>setModalVisible(true)}>
                     <Text>edit</Text>
                 </Pressable>
-                <Pressable style={styles.delete}>
+                <Pressable style={styles.delete}  onPress={createTwoButtonAlert}>
                     <Text>delete</Text>
                 </Pressable>
             </View>
