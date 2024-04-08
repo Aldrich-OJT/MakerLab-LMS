@@ -82,11 +82,7 @@ export default function Learn() {
     <KeyboardAvoidingView behavior={Platform.OS === "ios" ? "padding" : "height"} style={styles.mainContainer}>
       <View style={styles.mainContainer}>
 
-<<<<<<< HEAD
-        <ModalContent style={{ backgroundColor: "green" }} setRefresh= {()=> setRefresh(true)} visibility={modalVisible} onPress={() => setModalVisible(false)} >Upload Document</ModalContent>
-=======
-        <ModalContent visibility={modalVisible} onPress={() => setModalVisible(false)} >Upload Document</ModalContent>
->>>>>>> 9a73fe83ec4818520f87b4ff351f13067ced32d9
+        <ModalContent setRefresh= {()=> setRefresh(true)} visibility={modalVisible} onPress={() => setModalVisible(false)} >Upload Document</ModalContent>
 
         <Header>
         </Header>

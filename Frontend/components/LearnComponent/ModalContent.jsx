@@ -145,11 +145,7 @@ export default function ModalContent({documentName,title, description, visibilit
                 <Pressable style={[styles.button,{backgroundColor: "black"}]} onPress={submitForm}>
                   <Text style={styles.buttonText}>Submit</Text>
                 </Pressable>
-<<<<<<< HEAD
-                <Pressable style={[styles.button,{backgroundColor: "red"}]} onPress={cancelForm}>
-=======
-                <Pressable style={[styles.button,{backgroundColor: Colors.bgRedInvalid}]} onPress={onPress}>
->>>>>>> 9a73fe83ec4818520f87b4ff351f13067ced32d9
+                <Pressable style={[styles.button,{backgroundColor: Colors.bgRedInvalid}]} onPress={cancelForm}>
                   <Text style={styles.buttonText}>Cancel</Text>
                 </Pressable>
               </View>
@@ -187,11 +183,8 @@ const styles = StyleSheet.create({
     padding: 15,
     borderRadius: 10,
     backgroundColor: Colors.bgYellow,
-<<<<<<< HEAD
     // borderColor: "black",
     // borderWidth: 2,
-=======
->>>>>>> 9a73fe83ec4818520f87b4ff351f13067ced32d9
     height: "fit-content",
     gap: 10,
   },

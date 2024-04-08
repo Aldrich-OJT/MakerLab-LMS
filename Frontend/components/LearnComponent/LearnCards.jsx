@@ -19,11 +19,8 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.bgYellow,
     // borderTopWidth:5,
     // borderBottomWidth:5,
-<<<<<<< HEAD
     // borderWidth: 4,
     // borderColor: Colors.bgDarkViolet,
-=======
->>>>>>> 9a73fe83ec4818520f87b4ff351f13067ced32d9
     borderRadius: 10,
     //flexDirection:"row",
     // alignItems: 'center',

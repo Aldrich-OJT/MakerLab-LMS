@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const baseURL = 'http://192.168.100.145:5000';
+const baseURL = 'http://192.168.1.208:5000';
 
 const axiosRequest = async (method, URL, token, data, contentType) => {
   try {
@@ -42,6 +42,6 @@ export const axiosPut = async (URL, data, contentType, token) => {
   return await axiosRequest('put', URL, token, data, contentType,);
 };
 
-export const axiosDelete = async (URL, token) => {
+export const axiosDelete = async (URL,token) => {
   return await axiosRequest('delete', URL, token);
 };
