@@ -30,8 +30,10 @@ const Tab = createBottomTabNavigator()
 const LearnStackGroup = () => {
   return (
     <LearnStack.Navigator>
-      <LearnStack.Screen options={{ headerShown: false }} name="TabGroup" component={TabGroup} />
+      {/* <LearnStack.Screen options={{ headerShown: false }} name="TabGroup" component={TabGroup} /> */}
+      <LearnStack.Screen options={{ headerShown: false }} name='Lessons' component={Lessons} />
       <LearnStack.Screen options={{ presentation: "modal" }} name="LearnDetails" component={LearnDetails} />
+      <LearnStack.Screen options={{ headerShown: false }} name="Learn" component={Learn} />
     </LearnStack.Navigator>
 
   )
@@ -46,14 +48,14 @@ const LearnStackGroup = () => {
 //   )
 // }
 
-const LessonStackGroup = () => {
-  return (
-    <LearnStack.Navigator>
-      <LearnStack.Screen options={{ headerShown: false }} name='Lessons' component={Lessons} />
-      <LearnStack.Screen options={{ headerShown: false }} name="Learn" component={Learn} />
-    </LearnStack.Navigator>
-  );
-};
+// const LessonStackGroup = () => {
+//   return (
+//     <LearnStack.Navigator>
+      
+
+//     </LearnStack.Navigator>
+//   );
+// };
 
 const TabGroup = () => {
   const { logout } = useContext(AuthContext)
@@ -95,7 +97,7 @@ const TabGroup = () => {
     >
 
       <Tab.Screen options={{ headerShown: false }} name='HomePage' component={HomePage} />  
-      <Tab.Screen options={{ headerShown: false }} name='Lessons' component={LessonStackGroup} />
+      <Tab.Screen options={{ headerShown: false }} name='Lessons' component={LearnStackGroup} />
       {/* <Tab.Screen options={{ headerShown: false }} name='AssesStackGroup' component={AssesStackGroup} /> */}
       <Tab.Screen options={{
         headerTitle: "Settings",
@@ -132,7 +134,7 @@ const Navigation = () => {
   return (
     <NavigationContainer>
       {!authContext.isAuthenticated && <AuthStack />}
-      {authContext.isAuthenticated && <LearnStackGroup />}
+      {authContext.isAuthenticated && <TabGroup />}
     </NavigationContainer>
   )
 }
