@@ -1,20 +1,25 @@
 const mongoose = require("mongoose")
-const questionModel = require("./questionModel")
+
 
 
 const quizSchema = new mongoose.Schema(
     {
-        name:{
+        name: {
             type: String,
             required: true
         },
-        category:{
+        category: {
             type: mongoose.Schema.Types.ObjectId,
             ref: "Category",
+            required: true
         },
+        questions: [{
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "Question",
+        }]
     },
     {
-        timestamps:true
+        timestamps: true
     }
 )
 

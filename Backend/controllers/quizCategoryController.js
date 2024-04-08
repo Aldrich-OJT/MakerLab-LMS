@@ -38,7 +38,7 @@ const addcategory = asyncHandler(async(req,res)=>{
 
     const newCategory = await Category.create({
         title,
-        description
+        description,
     })
 
     if(!newCategory){

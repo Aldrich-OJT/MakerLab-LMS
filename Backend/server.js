@@ -7,6 +7,7 @@ const videoRoute = require('./routes/videoRoute')
 const categoryRoute = require("./routes/categoryRoutes")
 const { errorHandler } = require('./middleware/errorMiddleware')
 const questionRoute = require("./routes/questionRoute")
+const quizRoute = require("./routes/quizRoute")
 
 
 
@@ -19,6 +20,7 @@ app.use(express.json())
 app.use(express.urlencoded({ extended: false }))
 
 app.use('/api/user',userRoute)
+app.use('/api/quiz', quizRoute)
 app.use('/api/question', questionRoute)
 app.use('/api/categories',categoryRoute)
 app.use('/api/post',videoRoute)
