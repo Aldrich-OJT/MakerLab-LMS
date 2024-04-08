@@ -11,14 +11,14 @@ import {
   Platform,
 } from "react-native";
 import { Searchbar, TextInput } from "react-native-paper";
-import Header from "../components/Header";
-import Colors from "../constants/Colors";
-import LearnCards from "../components/LearnComponent/LearnCards";
-import { axiosGet } from ".././utils/axios";
-import { AuthContext } from "../context/AuthProvider";
+import Header from "../../components/Header";
+import Colors from "../../constants/Colors";
+import LearnCards from "../../components/LearnComponent/LearnCards";
+import { axiosGet } from "../../utils/axios";
+import { AuthContext } from "../../context/AuthProvider";
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs';
-import ModalContent from "../components/LearnComponent/ModalContent";
+import ModalContent from "../../components/LearnComponent/ModalContent";
 
 const dimensions = Dimensions.get("window");
 const deviceWidth = dimensions.width;

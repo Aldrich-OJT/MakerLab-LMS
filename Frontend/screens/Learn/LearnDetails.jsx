@@ -2,11 +2,11 @@ import { useRoute } from "@react-navigation/native";
 import { useNavigation } from "@react-navigation/native";
 import { useContext, useLayoutEffect, useState } from "react";
 import { View, Text, Image, StyleSheet, Pressable, Alert } from "react-native";
-import Colors from "../constants/Colors";
-import { axiosDelete, axiosPut } from "../utils/axios";
-import ModalContent from "../components/LearnComponent/ModalContent";
+import Colors from "../../constants/Colors";
+import { axiosDelete, axiosPut } from "../../utils/axios";
+import ModalContent from "../../components/LearnComponent/ModalContent";
 import * as FileSystem from 'expo-file-system';
-import { AuthContext } from "../context/AuthProvider";
+import { AuthContext } from "../../context/AuthProvider";
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 
 const deleteURL = "/delete"

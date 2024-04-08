@@ -1,8 +1,8 @@
 import { View, StyleSheet, Text, Dimensions, Pressable } from "react-native";
-import Colors from "../constants/Colors";
-import QuizItem from "../components/QuizItem";
+import Colors from "../../constants/Colors";
+import QuizItem from "../../components/QuizItem";
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-import Header from "../components/Header";
+import Header from "../../components/Header";
 import { useState } from "react";
 import { FlatList } from "react-native";
 import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs';

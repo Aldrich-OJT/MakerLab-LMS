@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import { StyleSheet, View, FlatList, Pressable } from "react-native";
-import Header from "../components/Header";
-import Colors from "../constants/Colors";
-import LessonCards from "../components/LearnComponent/LessonCards";
+import Header from "../../components/Header";
+import Colors from "../../constants/Colors";
+import LessonCards from "../../components/LearnComponent/LessonCards";
 import Learn from "./Learn";
 import { useNavigation } from '@react-navigation/native';
 

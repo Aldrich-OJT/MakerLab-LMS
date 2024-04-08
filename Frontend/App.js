@@ -9,20 +9,23 @@ import { PaperProvider } from 'react-native-paper';
 import AuthProvider, { AuthContext } from './context/AuthProvider';
 import { Pressable, Text, } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import Learn from './screens/Learn';
+import Learn from './screens/Learn/Learn';
 import Settings from './screens/Settings';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import Assess from './screens/Assess';
-import Lessons from './screens/Lessons';
+import Lessons from './screens/Learn/Lessons';
 import { Ionicons } from '@expo/vector-icons';
-import LearnDetails from './screens/LearnDetails';
+import LearnDetails from './screens/Learn/LearnDetails';
 import Colors from './constants/Colors';
 import LoadingScreen from './screens/LoadingScreen';
 import { useFonts } from 'expo-font';
+// import QuizCategory from './screens/Assess/QuizCategory';
+// import Quizzes from './screens/Assess/Quizzes';
+// import Questions from './screens/Assess/Questions'
 
 const Stack = createNativeStackNavigator()
 const LearnStack = createNativeStackNavigator()
 const Tab = createBottomTabNavigator()
+//const AssessStack = createNativeStackNavigator()
 
 const LearnStackGroup = () => {
   return (
@@ -33,11 +36,20 @@ const LearnStackGroup = () => {
 
   )
 }
+// const AssessStack = ()=>{
+//   return(
+//     <AssesStack.Navigator>
+//       <AssesStack.Group options={{ headerShown: false }} name="Questions" component={Questions}  />
+//       <AssesStack.Group options={{ headerShown: false }} name="QuizCategory" component={QuizCategory}/>
+//       <AssesStack.Group options={{ headerShown: false }} name="Quizzses" component={Quizzes}  />
+//     </AssesStack.Navigator>
+//   )
+// }
 
 const LessonStackGroup = () => {
   return (
     <LearnStack.Navigator>
-      <Tab.Screen options={{ headerShown: false }} name='Lessons' component={Lessons} />
+      <LearnStack.Screen options={{ headerShown: false }} name='Lessons' component={Lessons} />
       <LearnStack.Screen options={{ headerShown: false }} name="Learn" component={Learn} />
     </LearnStack.Navigator>
   );
@@ -53,7 +65,7 @@ const TabGroup = () => {
           if (route.name !== 'Lessons') {
             if (route.name === 'HomePage') {
               iconName = focused ? 'home' : 'home-outline';
-            } else if (route.name === 'Assess') {
+            } else if (route.name === 'AssesStackGroup') {
               iconName = focused ? 'book' : 'book-outline';
             } else if (route.name === 'Settings') {
               iconName = focused ? 'settings' : 'settings-outline';
@@ -84,7 +96,7 @@ const TabGroup = () => {
 
       <Tab.Screen options={{ headerShown: false }} name='HomePage' component={HomePage} />  
       <Tab.Screen options={{ headerShown: false }} name='Lessons' component={LessonStackGroup} />
-      <Tab.Screen options={{ headerShown: false }} name='Assess' component={Assess} />
+      {/* <Tab.Screen options={{ headerShown: false }} name='AssesStackGroup' component={AssesStackGroup} /> */}
       <Tab.Screen options={{
         headerTitle: "Settings",
         headerRight: () => (
