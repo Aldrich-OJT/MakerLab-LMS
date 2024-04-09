@@ -1,14 +1,16 @@
 import { TextInput } from "react-native-paper"
-import { View, Pressable, Text, StyleSheet, Modal, KeyboardAvoidingView, TouchableWithoutFeedback, Keyboard } from "react-native"
+import { View, Pressable, Text, StyleSheet, Modal, KeyboardAvoidingView, TouchableWithoutFeedback, Keyboard, Dimensions } from "react-native"
 import { useContext, useState } from "react"
 import Colors from "../../constants/Colors";
 import * as DocumentPicker from 'expo-document-picker';
 import { axiosPost, axiosPut } from "../../utils/axios";
-
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { AuthContext } from "../../context/AuthProvider";
 //import { SafeAreaView } from "react-native-safe-area-context";
 import { useNavigation } from '@react-navigation/native';
-import { AntDesign } from '@expo/vector-icons';
+
+const dimensions = Dimensions.get("window");
+const deviceWidth = dimensions.width;
 
 const POSTURL = "/api/post/upload/"
 const PUTURL = "/api/post/update/"
@@ -115,8 +117,15 @@ export default function ModalContent({documentName,title, description, visibilit
       >
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
           <View style={styles.mainContainer} >
-            <View style={styles.inputcontainer}>
-              <Text style={styles.texttitle}>{children}</Text>
+            <View style={styles.inputContainer}>
+              <View style={styles.titleContainer}>
+                <Text style={styles.textTitle}>{children}</Text>
+                
+                <Pressable style={styles.closeButton} onPress={cancelForm}>
+                <Text><MaterialCommunityIcons name="close" size={30} color={Colors.bgRedInvalid} /></Text>
+                </Pressable>
+                
+              </View>
 
               <TextInput
                 label="Title"
@@ -133,20 +142,17 @@ export default function ModalContent({documentName,title, description, visibilit
                 onChangeText={(inputvalue) => handleForm("description", inputvalue)}
                 mode="flat"
                 value={formData.description} />
-                
-              <View>
-                <Text>{formData.document ? `${formData.document.name}` : "Upload your file"}</Text>
-                {errorMessage && <Text style={styles.errorMessage}>{errorMessage}</Text>}
-              </View>
-              <Pressable style={[styles.button]} onPress={pickDocument}>
-                <Text style={styles.selectButton}><AntDesign name="addfile" size={16} color="black" /> Select File</Text>
+  
+              <Pressable onPress={pickDocument}>
+                <Text style={styles.selectButton}><Text><MaterialCommunityIcons name="paperclip" size={20} color="black" />{formData.document ? `${formData.document.name}` : "Upload File"}</Text>
+                {errorMessage && <Text style={styles.errorMessage}>{errorMessage}</Text>}</Text>
               </Pressable>
+    
               <View style={styles.buttonContainer}>
-                <Pressable style={[styles.button,{backgroundColor: "black"}]} onPress={submitForm}>
-                  <Text style={styles.buttonText}>Submit</Text>
-                </Pressable>
-                <Pressable style={[styles.button,{backgroundColor: Colors.bgRedInvalid}]} onPress={cancelForm}>
-                  <Text style={styles.buttonText}>Cancel</Text>
+                <Pressable style={[styles.submitButton]} onPress={submitForm}>
+                  <Text style={styles.SubmitText}>
+                    Submit
+                  </Text>
                 </Pressable>
               </View>
             </View>
@@ -162,56 +168,85 @@ const styles = StyleSheet.create({
   mainContainer: {
     flex: 1,
     justifyContent: "center",
+    alignItems: "center",
     paddingHorizontal: 20,
     backgroundColor: "rgba(0,0,0,0.4)"
   },
-  texttitle: {
-    fontSize: 20,
-    fontWeight: 'bold',
-    borderBottomColor: 'black',
-    borderBottomWidth: 2,
-    marginBottom: 5,
-    width: '100%',
-    textAlign: 'center',
-    paddingBottom: 12,
-  },
-  inputcontainer: {
+  inputContainer: {
     height: '30%',
-    width: "100%",
+    width: deviceWidth * .9,
     justifyContent: "center",
     alignItems: "center",
     padding: 15,
-    borderRadius: 10,
+    borderRadius: 30,
     backgroundColor: Colors.bgYellow,
     // borderColor: "black",
     // borderWidth: 2,
     height: "fit-content",
     gap: 10,
   },
+  titleContainer: {
+    flexDirection: 'row',
+    padding: 5,
+    width: '100%',
+    justifyContent: 'space-evenly',
+  },
+  textTitle: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    backgroundColor: Colors.bgGray,
+    color: Colors.bgYellow,
+    borderTopLeftRadius: 30,
+    borderTopRightRadius: 30,
+    borderBottomRightRadius: 15,
+    borderBottomLeftRadius: 15,
+    width: deviceWidth * .64,
+    textAlign: 'center',
+    height: deviceWidth * .13,
+    paddingVertical: (deviceWidth * .13)/4,
+    marginBottom: 5,
+  },
+  closeButton: {
+    backgroundColor: Colors.bgGray,
+    borderRadius: 50,
+    paddingHorizontal: 10,
+    height: deviceWidth * .13,
+    justifyContent: 'center',
+    borderTopLeftRadius: 30,
+    borderTopRightRadius: 30,
+    borderBottomRightRadius: 30,
+    borderBottomLeftRadius: 15,
+  },
   textInput: {
-    width: "100%",
+    width: "92%",
   },
   buttonContainer: {
     flexDirection:"row",
     gap: 30,
+    paddingBottom: 5,
   },
-  button: {
+  submitButton: {
+    backgroundColor: Colors.bgViolet,
     justifyContent: "center",
     alignItems: "center",
-    height: 40,
-    width: 100,
-    borderRadius: 6,
+    height: deviceWidth * .13,
+    width: deviceWidth * .75,
+    borderRadius: 50,
+    paddingVertical: 10,
+    marginTop: 10,
   },
   selectButton: {
     backgroundColor: "#FFA800",
-    height: 35,
-    width: 150,
+    height: deviceWidth * .10,
+    width: deviceWidth * .75,
     borderRadius: 6,
     textAlign: 'center',
     textAlignVertical: 'center',
   },
-  buttonText: {
-    color: "white"
+  SubmitText:{
+    color: 'white',
+    fontWeight: 'bold',
+    fontSize: 16,
   },
   errorMessage:{
     alignSelf:"center",
