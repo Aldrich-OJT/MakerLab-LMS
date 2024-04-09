@@ -6,8 +6,8 @@ import Colors from "../constants/Colors";
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 
 const dimensions = Dimensions.get('window');   
-const maxWidth = dimensions.width;
-const maxHeight = dimensions.height;
+const deviceWidth = dimensions.width;
+const deviceHeight = dimensions.height;
 
 export default function Settings () {
 const [avatarModalVisible, setAvatarModalVisible] = useState(false);
@@ -26,7 +26,7 @@ const avatarChoices = [
         <MaterialCommunityIcons 
                 name="square-edit-outline" 
                 size={26}
-                style={styles.editbutton}  
+                style={styles.editButton}  
                 color="black" 
                 onPress={() => setAvatarModalVisible(true)}/>
       {/* {------------------------------MODAL------------------------- */} 
@@ -36,34 +36,38 @@ const avatarChoices = [
           visible={avatarModalVisible}
           onRequestClose={() => setAvatarModalVisible(false)}
         >
-          <View style={styles.modalmaincontainer}>
-            <View style={styles.modalcontentcontainer}>
-              <Text style={styles.modaltext}>Select Avatar</Text>
-              <View style={styles.imagecontainer}>
-                <View style={styles.modalrowimage}>
-                  <Pressable onPress={()=>{setAvatar(0); setAvatarModalVisible(false)}}><Image source={require('../assets/avatar1.png')} style={styles.avatar}></Image></Pressable>
-                  <Pressable onPress={()=>{setAvatar(1); setAvatarModalVisible(false)}}><Image source={require('../assets/avatar2.png')} style={styles.avatar}></Image></Pressable>
+          <View style={styles.modalMainContainer}>
+            <View style={styles.modalContentContainer}>
+              <View style={styles.titleContainer}>
+              <Text style={styles.modalText}>Select Avatar</Text>
+              <Pressable style={styles.closeButton} onPress={() => setAvatarModalVisible(false)}>
+                <Text><MaterialCommunityIcons name="close" size={30} color={Colors.bgRedInvalid} /></Text>
+              </Pressable>
+              </View>
+
+              <View style={styles.imageContainer}>
+                <View style={styles.modalRowImage}>
+                  <Pressable onPress={()=>{setAvatar(0); setAvatarModalVisible(false)}}><Image source={require('../assets/avatar1.png')} style={styles.choices}></Image></Pressable>
+                  <Pressable onPress={()=>{setAvatar(1); setAvatarModalVisible(false)}}><Image source={require('../assets/avatar2.png')} style={styles.choices}></Image></Pressable>
                 </View>
-                <View style={styles.modalrowimage}>
-                  <Pressable onPress={()=>{setAvatar(2); setAvatarModalVisible(false)}}><Image source={require('../assets/avatar3.png')} style={styles.avatar}></Image></Pressable>
-                  <Pressable onPress={()=>{setAvatar(3); setAvatarModalVisible(false)}}><Image source={require('../assets/avatar4.png')} style={styles.avatar}></Image></Pressable>
+                <View style={styles.modalRowImage}>
+                  <Pressable onPress={()=>{setAvatar(2); setAvatarModalVisible(false)}}><Image source={require('../assets/avatar3.png')} style={styles.choices}></Image></Pressable>
+                  <Pressable onPress={()=>{setAvatar(3); setAvatarModalVisible(false)}}><Image source={require('../assets/avatar4.png')} style={styles.choices}></Image></Pressable>
                 </View>
               </View>
-              <Pressable style={styles.closebutton} onPress={() => setAvatarModalVisible(false)}>
-                <Text style={styles.closetext}>Cancel</Text>
-              </Pressable>
+
             </View>
           </View>
         </Modal> 
 
-        <View style={styles.avatarcontainer}>
+        <View style={styles.avatarContainer}>
               <Image source={avatarChoices[avatar]} style={styles.avatar}></Image>
         </View>
-        <View style={styles.bottomsheet}>
-        <Text style={styles.nametext}>Full Name ko</Text>
-          <View style={styles.progresscontainer}>
+        <View style={styles.bottomSheet}>
+        <Text style={styles.nameText}>Full Name ko</Text>
+          <View style={styles.progressContainer}>
             <Text style={styles.text}>Progress: 69%</Text>
-            <View style={styles.progressbar}>
+            <View style={styles.progressBar}>
               <ProgressBar 
               animated={true}
               progress={.69} 
@@ -86,92 +90,121 @@ const avatarChoices = [
     container: {
       backgroundColor: Colors.bgOffWhite
     },
-    editbutton: {
+    editButton: {
       alignSelf: "flex-end",
-      margin: 5,
+      margin: 10,
     },
-    nametext:{
+    nameText:{
       fontSize: 20,
       fontWeight: "bold",
       alignSelf: "center",
     },
-    avatarcontainer: { 
+    avatarContainer: { 
       justifyContent: 'center',
       alignItems: 'center',
       borderRadius: 150,
       backgroundColor: 'black',
-      height: maxWidth * .4,
-      width: maxWidth * .4,
+      height: deviceWidth * .4,
+      width: deviceWidth * .4,
       position: 'absolute',
       alignSelf: 'center',
-      top: maxWidth*0.08,
+      top: deviceWidth*0.08,
       zIndex: 1,
     },
     avatar: {
-      height: (maxWidth * .40) -13,
-      width: (maxWidth * .40) -13,
+      height: (deviceWidth * .40) -13,
+      width: (deviceWidth * .40) -13,
       borderRadius: 150,
       borderColor: Colors.bgYellow,
       borderWidth: 4,
     },
-    bottomsheet: {
-      height: maxHeight * 1,
-      width: maxWidth * 1,
+    bottomSheet: {
+      height: deviceHeight * 1,
+      width: deviceWidth * 1,
       paddingHorizontal: 20,
       gap: 20,
       backgroundColor: Colors.bgOffWhite,
-      top: maxWidth * 0.12,
+      top: deviceWidth * 0.12,
     },
-    progresscontainer: {
+    progressContainer: {
       backgroundColor: '#ffc42c',
       padding: 20,
       borderRadius: 10,
       gap: 5,
     },
-    progressbar: {
+    progressBar: {
       flexDirection: 'row',
       gap: 10,
     },
-    progresstext: {
+    progressText: {
       fontSize: 15,
       fontWeight: 'bold'
     },
-    modalmaincontainer: {
+    modalMainContainer: {
       backgroundColor: 'rgba(0,0,0,0.3)',
       justifyContent: 'center',
       alignContent: 'center',
       flex: 1,
     },
-    modalrowimage: {
+    modalRowImage: {
       flexDirection: 'row',
       gap: 10,
     },
-    modalcontentcontainer:{
+    choices:{
+      height: (deviceWidth * .30),
+      width: (deviceWidth * .30),
+      borderRadius: 150,
+      borderColor: Colors.bgYellow,
+      borderWidth: 3,
+    },
+    modalContentContainer:{
       gap: 10,
       backgroundColor: Colors.bgYellow,
       margin: 20,
       padding: 10,
       alignItems: 'center',
       justifyContent: 'center',
-      borderRadius: 10,
+      borderRadius: 30,
     },
-    imagecontainer: {
+    titleContainer:{
+      flexDirection: 'row',
+      padding: 5,
+      width: '100%',
+      justifyContent: 'space-evenly',
+    },
+    imageContainer: {
       gap: 10,
       flexDirection: 'column',
+      backgroundColor: Colors.bgGray,
+      borderRadius: 30,
+      paddingHorizontal: 30,
+      paddingVertical: 20,
+      marginBottom: 8,
     },
-    modaltext: {
-      fontSize: 20,
+    modalText: {
+      fontSize: 16,
       fontWeight: 'bold',
-      borderBottomColor: 'black',
-      borderBottomWidth: 2,
-      width: '100%',
+      backgroundColor: Colors.bgGray,
+      color: Colors.bgYellow,
+      borderTopLeftRadius: 30,
+      borderTopRightRadius: 30,
+      borderBottomRightRadius: 15,
+      borderBottomLeftRadius: 15,
+      width: deviceWidth * .64,
       textAlign: 'center',
-      paddingBottom: 12,
+      height: deviceWidth * .13,
+      paddingVertical: (deviceWidth * .13)/4,
     },
-    closebutton: {
-      backgroundColor:'black',
-      borderRadius: 6,
-      padding: 15,
+    closeButton: {
+      backgroundColor: Colors.bgGray,
+      borderRadius: 50,
+      paddingHorizontal: 10,
+      height: deviceWidth * .13,
+      justifyContent: 'center',
+      borderTopLeftRadius: 30,
+      borderTopRightRadius: 30,
+      borderBottomRightRadius: 30,
+      borderBottomLeftRadius: 15,
     },
     closetext: {
       fontSize: 17,

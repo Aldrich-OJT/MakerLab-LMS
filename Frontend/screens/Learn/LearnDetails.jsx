@@ -59,7 +59,6 @@ export default function LearnDetails() {
 
         <View style={styles.mainContainer}>
             <ModalContent
-                style={{ backgroundColor: "green" }}
                 documentName={item.documentName}
                 title={item.title}
                 description={item.description}

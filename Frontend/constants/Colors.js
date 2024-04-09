@@ -8,6 +8,7 @@ const Colors = {
     bgGray: "#898989",
     bgRedInvalid: "#Be254b",
     bgVioletDisable: "#B99CE8",
+    bgGray: "#292929",
 }
 
 
