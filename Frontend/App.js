@@ -20,8 +20,7 @@ import LoadingScreen from './screens/LoadingScreen';
 import { useFonts } from 'expo-font';
 // import QuizCategory from './screens/Assess/QuizCategory';
 // import Quizzes from './screens/Assess/Quizzes';
-// import Questions from './screens/Assess/Questions'
-
+import Questions from './screens/Assess/Questions'
 const Stack = createNativeStackNavigator()
 const LearnStack = createNativeStackNavigator()
 const Tab = createBottomTabNavigator()
@@ -34,6 +33,7 @@ const LearnStackGroup = () => {
       <LearnStack.Screen options={{ headerShown: false }} name='Lessons' component={Lessons} />
       <LearnStack.Screen options={{ presentation: "modal" }} name="LearnDetails" component={LearnDetails} />
       <LearnStack.Screen options={{ headerShown: false }} name="Learn" component={Learn} />
+      <LearnStack.Screen options={{ headerShown: false }} name="Questions" component={Questions}  />
     </LearnStack.Navigator>
 
   )
@@ -41,9 +41,9 @@ const LearnStackGroup = () => {
 // const AssessStack = ()=>{
 //   return(
 //     <AssesStack.Navigator>
-//       <AssesStack.Group options={{ headerShown: false }} name="Questions" component={Questions}  />
-//       <AssesStack.Group options={{ headerShown: false }} name="QuizCategory" component={QuizCategory}/>
-//       <AssesStack.Group options={{ headerShown: false }} name="Quizzses" component={Quizzes}  />
+//       
+//       <AssesStack.Screen options={{ headerShown: false }} name="QuizCategory" component={QuizCategory}/>
+//       <AssesStack.Screen options={{ headerShown: false }} name="Quizzses" component={Quizzes}  />
 //     </AssesStack.Navigator>
 //   )
 // }
@@ -97,7 +97,7 @@ const TabGroup = () => {
     >
 
       <Tab.Screen options={{ headerShown: false }} name='HomePage' component={HomePage} />  
-      <Tab.Screen options={{ headerShown: false }} name='Lessons' component={LearnStackGroup} />
+      <Tab.Screen options={{ headerShown: false }} name='LeanStackGroup' component={LearnStackGroup} />
       {/* <Tab.Screen options={{ headerShown: false }} name='AssesStackGroup' component={AssesStackGroup} /> */}
       <Tab.Screen options={{
         headerTitle: "Settings",

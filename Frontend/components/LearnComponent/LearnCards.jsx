@@ -1,15 +1,18 @@
 import {View, Text, StyleSheet, Image, Pressable} from "react-native"
 import Colors from "../../constants/Colors"
 
-export default function LearnCards({title, description, onPress}){
+export default function LearnCards({title, description, pressQuiz,pressLearn}){
 
     return(
-      <Pressable style={styles.container} onPress={onPress}>
+      <Pressable style={styles.container} onPress={pressLearn}>
         {/* <Image source={require('../../assets/video.png')} style={styles.video}></Image> */}
         <View style={styles.textcontainer}>
           <Text style={styles.title}>{title}</Text>
           <Text style={styles.description} numberOfLines={1}>{description}</Text>
         </View>
+        <Pressable style={{backgroundColor: "red"}}onPress={pressQuiz}>
+          <Text>Assess</Text>
+        </Pressable>
       </Pressable>
     )
 }

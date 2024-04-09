@@ -52,17 +52,23 @@ const updatecategory = asyncHandler(async(req,res)=>{
     const id = req.params.id
     const {title, description} = req.body
 
-    const category = await Category.findByIdAndUpdate(id,{
-        title,
-        description
+    if(!title || !description){
+        throw new Error("fill all description!")
+    }
+    const categoryExist = await Category.findById(id)
+    if(!categoryExist){
+        throw new Error("category not found")
+    }
+
+    const upatedCategory = await Category.findByIdAndUpdate(id,{
+        title:title,
+        description: description
     },
     {
         new:true
     })
-    if(!category){
-        throw new Error(`category with ${id} doesnt exist `)
-    }
-    res.status(200).json(category)
+
+    res.status(200).json(upatedCategory)
 })
 const deleteategory = asyncHandler(async(req,res)=>{
     const id = req.params.id

@@ -16,22 +16,25 @@ import Colors from "../../constants/Colors";
 import LearnCards from "../../components/LearnComponent/LearnCards";
 import { axiosGet } from "../../utils/axios";
 import { AuthContext } from "../../context/AuthProvider";
-import { useFocusEffect, useNavigation } from '@react-navigation/native';
+import { useFocusEffect, useNavigation,useRoute } from '@react-navigation/native';
 import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs';
 import ModalContent from "../../components/LearnComponent/ModalContent";
+
 
 const dimensions = Dimensions.get("window");
 const deviceWidth = dimensions.width;
 const deviceheight = dimensions.height;
 
 
-const getVideosURL = "/api/post/videos";
+const getVideosURL = "/api/quiz/category/";
 
-export default function Learn() {
+export default function Learn( { route, navigation } ) {
   const tabBarHeight = useBottomTabBarHeight()
-  const { navigate } = useNavigation()
   const [modalVisible, setModalVisible] = useState(false);
+  const router = useRoute()
+  const { param } = route.params;
 
+  
   const authContext = useContext(AuthContext);
   const [videoData, setVideoData] = useState(null);
   const [contentLoading, setContentLoading] = useState(false)
@@ -40,44 +43,51 @@ export default function Learn() {
 
   useEffect(() => {
     const fetchData = async () => {
+      console.log(param);
       try {
         setContentLoading(true);
         
-        const data = await axiosGet(getVideosURL, authContext.token);
+        const data = await axiosGet(`${getVideosURL}${param._id}`, authContext.token);
         console.log("i am trying to get something")
         setVideoData(data);
         if(data){
           setNoContent(false)
         }
+        
       } catch (error) {
         // Handle the error here, you can log it or show an error message to the user
-        console.log(error.status)
+        console.log(error.response.data)
         if (error.status === 404) {
           setNoContent(true)
           console.error(nocontent);
         }
 
       } finally {
-        setRefresh(false)
+        //setRefresh(false)
         setContentLoading(false);
       }
     };
-    console.log("effect")
     fetchData()
   }, [refresh])
   
   //refresh the page when focus goes back on this tab
-  useFocusEffect(
-    useCallback(() => {
-      setRefresh(true) 
-    }, [])
-  );
+  // useFocusEffect(
+  //   useCallback(() => {
+  //     setRefresh(true) 
+  //   }, [])
+  // );
 
-  const showSingleItem = (item) => {
-    navigate("LearnDetails", { item })
+  const showLearnDetail = (item) => {
+    //console.log(item)
+    navigation.navigate("LearnDetails", { item })
   };
+  const showQuestion = (item) => {
+    //console.log(item)
+    navigation.navigate("Questions", { item })
+  };
+  console.log("hello")
+  //console.log(videoData)
 
-  //console.log(refresh)
   return (
     <KeyboardAvoidingView behavior={Platform.OS === "ios" ? "padding" : "height"} style={styles.mainContainer}>
       <View style={styles.mainContainer}>
@@ -89,7 +99,7 @@ export default function Learn() {
         <View style={[styles.bottomsheet, { marginBottom: tabBarHeight }]}>
           <View >
             <View style={styles.titleContainer}>
-              <Text style={styles.titleText}>Maker Lab</Text>
+              <Text style={styles.titleText}>{param.title}</Text>
 
             </View>
             <View style={styles.titleShadow}></View>
@@ -105,9 +115,10 @@ export default function Learn() {
                   data={videoData}
                   renderItem={({ item }) => (
                     <LearnCards
-                      title={item.title}
+                      title={item.name}
                       description={item.description}
-                      onPress={() => showSingleItem(item)}
+                      pressLearn={()=> showLearnDetail(item)}
+                      pressQuiz={() => showQuestion(item)}
                     />
                   )}
                 />
@@ -130,7 +141,7 @@ export default function Learn() {
 const styles = StyleSheet.create({
   mainContainer: {
     flex: 1,
-    backgroundColor: Colors.bgDarkViolet,
+    backgroundColor: Colors.bgOffWhite,
   },
 
   bottomsheet: {

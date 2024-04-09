@@ -12,8 +12,10 @@ const dimensions = Dimensions.get('window');
 const devicewidth = dimensions.width;
 const deviceheight = dimensions.height;
 
-export default function Assess() {
+export default function Assess({ route }) {
   const tabBarHeight = useBottomTabBarHeight()
+  const { item } = route.params
+  console.log(item)
   // let [fontsLoaded] = useFonts({
   //   Dongle_400Regular,
   // });
@@ -55,7 +57,7 @@ export default function Assess() {
       <Header />
       <View style={[styles.quizContainer,{marginBottom: tabBarHeight}]}>
         <View style={styles.quizEditContainer}>
-          <Text style={styles.quizName}>Quiz Name:</Text>
+          <Text style={styles.quizName}>{item.name}:</Text>
           <MaterialCommunityIcons
             name="square-edit-outline"
             size={25}
@@ -87,10 +89,10 @@ const styles = StyleSheet.create({
   mainContainer: {
     flex: 1,
     alignItems: "center",
-    backgroundColor: Colors.bgError,
+    backgroundColor: Colors.bgOffWhite,
   },
   quizContainer: {
-    backgroundColor: "white",
+    backgroundColor: Colors.bgOffWhite,
     flex: 1,
   },
   quizName: {

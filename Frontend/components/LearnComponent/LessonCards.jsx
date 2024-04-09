@@ -21,7 +21,7 @@ export default function LessonCards ({title, progress, description, assessScore}
         </Text>
   
         <View style={styles.assessContainer}>
-          <View style={styles.assessProgress}>
+          {/* <View style={styles.assessProgress}>
             <Text style={[styles.assessText, 
                 {color: isCompleted ? 'white' : Colors.bgVioletDisable}]}>
                 Assessment {' '}
@@ -35,15 +35,15 @@ export default function LessonCards ({title, progress, description, assessScore}
                 {isCompleted ? assessScore : '   ?'}
                 {isCompleted ? '/20' : '/?'}
             </Text>
-          </View>
+          </View> */}
   
-          <View>
+          {/* <View>
             <FontAwesome5 
               style={{ top: 6 }} 
               name="chevron-right" 
               size={13} 
               color={Colors.bgDarkViolet} />
-          </View>
+          </View> */}
         </View>
       </View>
     );
@@ -89,31 +89,31 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-between',
     },
-    assessProgress:{
-        flexDirection: 'row',
-        borderColor: Colors.bgViolet,
-        borderWidth: 2,
-        borderRadius: 50,
-        minWidth: '50%',
-    },
-    assessText:{
-        backgroundColor: Colors.bgViolet,
-        color: Colors.bgOffWhite,
-        borderRadius: 50,
-        borderWidth: 2,
-        fontSize: 12,
-        fontWeight: 'bold',
-        borderColor: Colors.bgViolet,
-        paddingHorizontal: 10,
-        paddingVertical: 7,
-        margin: -2,
-    },
-    assessScore:{
-        color: Colors.bgViolet,
-        fontSize: 12,
-        fontWeight: 'bold',
-        paddingHorizontal: 5,
-        paddingVertical: 6,
-    },
+    // assessProgress:{
+    //     flexDirection: 'row',
+    //     borderColor: Colors.bgViolet,
+    //     borderWidth: 2,
+    //     borderRadius: 50,
+    //     minWidth: '50%',
+    // },
+    // assessText:{
+    //     backgroundColor: Colors.bgViolet,
+    //     color: Colors.bgOffWhite,
+    //     borderRadius: 50,
+    //     borderWidth: 2,
+    //     fontSize: 12,
+    //     fontWeight: 'bold',
+    //     borderColor: Colors.bgViolet,
+    //     paddingHorizontal: 10,
+    //     paddingVertical: 7,
+    //     margin: -2,
+    // },
+    // assessScore:{
+    //     color: Colors.bgViolet,
+    //     fontSize: 12,
+    //     fontWeight: 'bold',
+    //     paddingHorizontal: 5,
+    //     paddingVertical: 6,
+    // },
 
 })
