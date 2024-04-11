@@ -21,9 +21,8 @@ export default function Lessons({ navigation }) {
     const fetchLessonData = async () => {
       try {
         const data = await axiosGet(getCategoryURL, authcontext.token);
-        console.log(data)
+        //console.log(data)
         setLessonData(data);
-        
       } catch (error) {
         console.log(error.status)
         if (error.status == 401) {
@@ -39,7 +38,6 @@ export default function Lessons({ navigation }) {
   const handleNavigation = (param) => {
     navigation.navigate('templearn', { param });
   };
-  console.log("ako ito")
   return (
     <View style={[styles.mainContainer,{marginBottom:tabBarHeight}]}>
       <Header />

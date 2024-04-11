@@ -21,30 +21,33 @@ export default function Assess() {
   const [quizData, setQuizData] = useState([])
 
   useEffect(() => {
-    console.log(param)
+    //console.log(param)
 
     const fetchData = async () => {
       const data = await axiosGet(`${getQuizzesURL}${param._id}`, token)
       setQuizData(data)
-      console.log("QUIZDATA", data)
+      //console.log("QUIZDATA", data)
     }
 
     fetchData()
   }, [])
   const renderQuizItem = ({ item }) => (
     <QuizItem
+      key={item._id}
       question={item.question}
       options={item.options}
       answer = {item.answer}
+      setScore ={setScore}
+      score ={score}
     />
   );
-
+  console.log(score)
   return (
     <View style={styles.mainContainer}>
       <Header />
       <View style={styles.quizContainer}>
         <View style={styles.quizEditContainer}>
-          <Text style={styles.quizName}>{param.name}:</Text>
+          <Text style={styles.quizName}>{param.title}:</Text>
           <Text style={styles.quizDescription}>Choose the correct answer.</Text>
         </View>
 

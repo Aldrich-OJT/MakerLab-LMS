@@ -25,6 +25,7 @@ const axiosRequest = async (method, URL, token, data, contentType) => {
     return response.data;
   } catch (error) {
     console.error(error);
+    console.error(error.status);
     console.error(`Error in ${method} request to ${URL}:`, error?.response?.data);
     
     throw error?.response;

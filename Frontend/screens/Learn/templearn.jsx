@@ -20,7 +20,7 @@ import ModalContent from "../../components/LearnComponent/ModalContent";
 import { FontAwesome5 } from '@expo/vector-icons';
 
 
-const getVideosURL = "/api/quiz/category/";
+const getPostURL = "/api/post/category/";
 
 export default function Templearn({ route, navigation }) {
   //const tabBarHeight = useBottomTabBarHeight()
@@ -40,23 +40,24 @@ export default function Templearn({ route, navigation }) {
       try {
         setContentLoading(true);
 
-        const data = await axiosGet(`${getVideosURL}${param._id}`, authContext.token);
+        const data = await axiosGet(`${getPostURL}${param._id}`, authContext.token);
         console.log("i am trying to get something")
         setVideoData(data);
 
         if (data) {
           setNoContent(false)
-        } else {
-          setNoContent(true)
         }
+        // else {
+        //   setNoContent(true)
+        // }
         console.log(videoData)
       } catch (error) {
+        setNoContent(true)
         // Handle the error here, you can log it or show an error message to the user
-        console.log(error.response.data)
-        if (error.status === 404) {
-          setNoContent(true)
-          console.error(nocontent);
-        }
+        // console.log(error.message)
+        // if (error.status === 404) {
+        //   setNoContent(true)
+        // }
 
       } finally {
         //setRefresh(false)
@@ -82,11 +83,11 @@ export default function Templearn({ route, navigation }) {
     navigation.navigate("Questions", { item })
   };
 
-
+  console.log(nocontent)
   //console.log(refresh)
   return (
     <View style={styles.maincontainer}>
-      <ModalContent setRefresh={() => setRefresh(true)} visibility={modalVisible} onPress={() => setModalVisible(false)} >Upload Document</ModalContent>
+      <ModalContent setRefresh={() => setRefresh(true)} visibility={modalVisible} onPress={() => setModalVisible(false)} >Upload Lesson</ModalContent>
 
       <View style={styles.headercontainer}>
         <View>
@@ -116,7 +117,7 @@ export default function Templearn({ route, navigation }) {
                 data={videoData}
                 renderItem={({ item, index }) => (
                   <Templearncards
-                    title={item.name}
+                    title={item.title}
                     description={item.description}
                     pressLearn={() => showLearnDetail(item)}
                     pressQuiz={() => showQuestion(item)}

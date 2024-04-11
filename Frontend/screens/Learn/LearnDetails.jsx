@@ -9,7 +9,7 @@ import * as FileSystem from 'expo-file-system';
 import { AuthContext } from "../../context/AuthProvider";
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 
-const deleteURL = "/delete"
+const deleteURL = "/api/post/delete"
 
 export default function LearnDetails({route}) {
     const {token} = useContext(AuthContext)
@@ -20,7 +20,7 @@ export default function LearnDetails({route}) {
     console.log(item)
     useLayoutEffect(() => {
         navigation.setOptions({
-            headerTitle: item.name,
+            headerTitle: item.title,
             headerStyle: {
                 backgroundColor: "black",
             },
@@ -47,7 +47,8 @@ export default function LearnDetails({route}) {
         try {
         console.log("trying to delete something")
         const id = item._id
-        const data = await axiosDelete(`${deleteURL}${id}`,token)
+        const deleteddata = await axiosDelete(`${deleteURL}${id}`,token)
+        console.log(`${deleteData}, deleted`)
         navigation.goBack()
         } catch (error) {
             console.log(error)
@@ -68,7 +69,7 @@ export default function LearnDetails({route}) {
             <View style={styles.textcontainer}>
                
                 <Text style={styles.text}>
-                    {item.description}
+                    {item.content}
                 </Text>
                 <Image />
             </View>

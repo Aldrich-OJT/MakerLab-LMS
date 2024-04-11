@@ -1,16 +1,40 @@
 import { Text, Pressable, StyleSheet, View, Image, Dimensions } from "react-native";
 import Colors from "../constants/Colors";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 const dimensions = Dimensions.get('window');
 
 export default function QuizItem(props) {
   const [selected, setSelected] = useState(null);
-
+  const [singleScore, setSingleScore] = useState(0)
   const handleChoiceSelection = (choice) => {
-    setSelected(choice === selected ? null : choice);
+    setSelected(choice);
+    
+    //prevent multiple selection if user clicks the selected option again
+    if (selected === choice) {
+      return
+    }
+    //adds 1 to singleScore state if choice is equal to answer else reset to  0
+    if (props.options[choice] === props.answer) {
+      setSingleScore(prevState=>prevState+1)
+    }else{
+      setSingleScore(0)
+    }
   };
-
+  //only checks if state changes from 0 to 1 or vice versa, do not check if already 0
+  useEffect(()=>{
+    //initial value of score is zero, so this code prevents from subtracting at the inital value
+    if (singleScore === 0 && props.score !=0) {
+      console.log("chgange")
+      console.log(singleScore)
+      props.setScore(prevState => prevState - 1)
+    }else{
+      props.setScore(prevState => prevState + singleScore)
+    }
+   
+   
+  },[singleScore])
+ //console.log(props)
   return (
     <View style={styles.itemcontainer}>
       <View style={styles.questioncontainer}>
@@ -21,7 +45,7 @@ export default function QuizItem(props) {
         <View style={styles.choicesrow}>
           {props.options.map((option, index) => (
             <Pressable
-              key={index}
+             key={index}
               style={[
                 styles.choices,
                 selected === index && styles.selectedchoices
@@ -42,7 +66,7 @@ export default function QuizItem(props) {
       </View>
     </View>
   );
-}
+};
 
 
 

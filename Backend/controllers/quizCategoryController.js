@@ -1,5 +1,5 @@
 const asyncHandler = require("express-async-handler")
-const Category = require("../models/quizCategoryModel")
+const Category = require("../models/postCategoryModel")
 
 
 const getcategories = asyncHandler(async(req,res)=>{

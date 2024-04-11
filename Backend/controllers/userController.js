@@ -18,7 +18,7 @@ const userLogin = asyncHandler(async (req, res) => {
             role: user.role
         });
     } else {
-        res.status(400).json({ message: 'Invalid user Data' });
+        res.status(400)
         throw new Error("Invalid user Data")
     }
 });
@@ -29,12 +29,13 @@ const userRegister = asyncHandler(async (req, res) => {
     const userExist = await User.findOne({ email });
 
     if (userExist) {
-        res.status(400).json({ message: 'User already exists' });
+        res.status(400)
+        throw new Error("User already exist")
         return;
     }
 
     if (!name || !email || !password) {
-        res.status(400).json({ message: "Please fill out all input" });
+        res.status(400)
         throw new Error("Please fill out all input")
     }
 
@@ -56,7 +57,7 @@ const userRegister = asyncHandler(async (req, res) => {
             role: newUser.role
         });
     } else {
-        res.status(400).json({ message: "Please fill out all input" });
+        res.status(400)
         throw new Error("Invalid user Data")
     }
 });

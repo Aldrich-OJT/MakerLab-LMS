@@ -5,7 +5,7 @@ const { protect } = require("../middleware/authMiddleware")
 
 router.post('/add',protect,addQuestion)
 router.get('/',protect,getAllQuestion)
-router.get('/:id',protect,getQuestions)
+router.get('/:postID',protect,getQuestions)
 router.put('/update/:id',protect,editQuestion)
 router.delete('/delete/:id',protect,deleteQuestion)
 

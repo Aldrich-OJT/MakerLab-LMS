@@ -15,10 +15,10 @@ const questionSchema = new mongoose.Schema(
             type:String,
             required:[true,"Please add an answer"]
         },
-        quiz: {
+        post: {
             type: mongoose.Schema.Types.ObjectId,
-            ref: "Quiz", 
-            required: [true, "Please specify a quiz"],
+            ref: "Post", 
+            required: [true, "Please specify a post"],
         },
     },
     {
