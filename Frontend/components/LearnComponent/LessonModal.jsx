@@ -12,25 +12,19 @@ import { useNavigation } from '@react-navigation/native';
 const dimensions = Dimensions.get("window");
 const deviceWidth = dimensions.width;
 
-const POSTURL = "/api/post/upload/"
-const PUTURL = "/api/post/update/"
+const POSTURL = "/api/categories/add"
 const contentType = "multipart/form-data"
-const mimeTypes = [
-  "application/pdf",
-  "application/vnd.openxmlformats-officedocument.presentationml.presentation"
-]
+
 
 //FIX ON DOCUMENT BLANK ERROR
-export default function ModalContent({documentName,title, description, visibility, onPress,children,id, setRefresh}) {
+export default function LessonModal({title, description, visibility, onPress,children, setRefresh}) {
   const {token} = useContext(AuthContext)
   const navigation = useNavigation()
   const [errorMessage, setErrorMessage] = useState("");
   
-
   const formInitialData = {
     title: title ?? "",
     description: description ?? "",
-    document: null
   }
   const [formData, setFormData] = useState(formInitialData)
 
@@ -41,40 +35,19 @@ export default function ModalContent({documentName,title, description, visibilit
     }))
 
   }
-//Function that lets you pick documents on your device
-  const pickDocument = async () => {
-    try {
-      const result = await DocumentPicker.getDocumentAsync({
-        type: mimeTypes
-      });
-      if (result) {
-        console.log(result.assets[0])
-        handleForm("document", result.assets[0])
-  
-      }
-    } catch (err) {
-      console.log("error getting document", err);
-    }
 
-    
-  }
   const cancelForm = ()=>{
     onPress();
     setFormData(formInitialData);
     setErrorMessage("");
   }
+
   const submitForm = async()=>{
     const formDataToSend = new FormData();
     formDataToSend.append('title', formData.title);
     formDataToSend.append('description', formData.description);
-    formDataToSend.append('document', {
-      uri: formData.document?.uri,
-      type: formData.document?.mimeType, 
-      name: formData.document?.name 
-    });
 
     console.log(formDataToSend)
-    if(children.split(" ")[0] === "Upload"){
       try {
         const data = await axiosPost(POSTURL,formDataToSend,contentType,token)
 
@@ -85,28 +58,10 @@ export default function ModalContent({documentName,title, description, visibilit
       setFormData(formInitialData)
       setErrorMessage("");
       } catch (error) {
-        //console.log(error)
         setErrorMessage(error?.data?.message)
       }
-    }else if (children.split(" ")[0] === "Edit"){
-      try {
-        const data = await axiosPut(`${PUTURL}${id}`,formDataToSend,contentType,token)
-        console.log(data)
-        onPress()
-        setRefresh(true)
-        setFormData(formInitialData)
-        setErrorMessage("");
-      } catch (error) {
-        setErrorMessage(error?.data?.message)
-        
-      }
-     
-    }
   }
-  //console.log(formDataToSend)
-  // console.log(selectedFile)
-  // console.log(formData)
-  //console.log(formData.title)
+ 
   return (
     <KeyboardAvoidingView behavior="padding">
       <Modal
@@ -143,14 +98,6 @@ export default function ModalContent({documentName,title, description, visibilit
                 mode="flat"
                 value={formData.description} />
   
-              <Pressable onPress={pickDocument}>
-                <Text style={styles.selectButton}>
-                  <Text style={{fontFamily: 'PTSans-Regular'}}>
-                  <MaterialCommunityIcons name="paperclip" size={20} color="black" />{formData.document ? `${formData.document.name}` : "Upload File"}
-                  </Text>
-                {errorMessage && <Text style={styles.errorMessage}>{errorMessage}</Text>}</Text>
-              </Pressable>
-    
               <View style={styles.buttonContainer}>
                 <Pressable style={[styles.submitButton]} onPress={submitForm}>
                   <Text style={styles.SubmitText}>
@@ -183,16 +130,12 @@ const styles = StyleSheet.create({
     padding: 15,
     borderRadius: 10,
     backgroundColor: Colors.bgYellow,
-    // borderColor: "black",
-    // borderWidth: 2,
     height: "fit-content",
     gap: 10,
   },
   titleContainer: {
     flexDirection: 'row',
     width: '100%',
-    //justifyContent:"space-between",
-    //alignItems:"center"
   },
   textTitle: {
     fontSize: 18,

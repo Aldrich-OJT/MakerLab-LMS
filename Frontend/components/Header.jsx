@@ -6,7 +6,7 @@ const deviceWidth = dimensions.width;
 export default function Header({children}) {
   return (
     <View style={styles.container}>
-      <View style={{backgroundColor: 'black', height: deviceWidth * 0.09}}></View>
+      <View style={{backgroundColor: 'black', height: deviceWidth * 0.04}}></View>
         <Image source={require('.././assets/top-home.png')} style={styles.bgimage}></Image>
         {children}
         <Image source={require('.././assets/logo-light.png')} style={styles.logo}></Image>
@@ -19,14 +19,14 @@ const styles = StyleSheet.create({
       position: 'relative'
     },
     bgimage: {
-        height: deviceWidth * 0.3,
+        height: deviceWidth * 0.26,
         width: deviceWidth * 1,
         resizeMode: 'stretch'
       },
       logo: {
         position: 'absolute',
-        right: 10,
-        top: deviceWidth * 0.19,
+        left: 10,
+        top: deviceWidth * 0.14,
         height: 30,
         width: 100,
       },

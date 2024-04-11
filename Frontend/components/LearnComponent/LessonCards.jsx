@@ -58,7 +58,7 @@ const styles = StyleSheet.create({
         minwidth: '100%',
         padding: 20,
         marginHorizontal: 20,
-        marginVertical: 10
+        marginTop: 20
     },
     titleContainer: {
         flexDirection: 'row',
@@ -67,7 +67,7 @@ const styles = StyleSheet.create({
     title:{
         color: Colors.bgViolet,
         fontSize: 22,
-        fontWeight: 'bold'
+        fontFamily: 'PTSans-Bold'
     },
     titleProgress:{
         color: Colors.bgViolet,
@@ -83,8 +83,9 @@ const styles = StyleSheet.create({
     },
     lessonDescription:{
         marginVertical: 10,
-        fontSize: 13,
+        fontSize: 15,
         minWidth: "100%",
+        fontFamily: 'PTSans-Regular'
     },
     assessContainer:{
         flexDirection: 'row',

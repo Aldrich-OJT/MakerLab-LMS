@@ -7,10 +7,11 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { PaperProvider } from 'react-native-paper';
 import AuthProvider, { AuthContext } from './context/AuthProvider';
-import { Pressable, Text, } from 'react-native';
+import { Pressable, Text} from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Learn from './screens/Learn/Learn';
 import Settings from './screens/Settings';
+import Header from "./components/Header";
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Lessons from './screens/Learn/Lessons';
 import { Ionicons } from '@expo/vector-icons';
@@ -20,8 +21,9 @@ import LoadingScreen from './screens/LoadingScreen';
 import { useFonts } from 'expo-font';
 // import QuizCategory from './screens/Assess/QuizCategory';
 // import Quizzes from './screens/Assess/Quizzes';
-import Questions from './screens/Assess/Questions'
-import Templearn from './screens/Learn/Templearn';
+import Questions from './screens/Assess/Questions';
+import Templearn from './screens/Learn/templearn';
+
 const Stack = createNativeStackNavigator()
 const LearnStack = createNativeStackNavigator()
 const Tab = createBottomTabNavigator()
@@ -97,15 +99,17 @@ const TabGroup = () => {
         },
       })}
     >
-
-      <Tab.Screen options={{ headerShown: false }} name='HomePage' component={HomePage} />  
-      <Tab.Screen options={{ headerShown: false }} name='Lessons' component={Lessons} />
+      <Tab.Screen options={{ headerStyle: {height: 120,}, headerShown: true, headerTitle: '', headerBackground: ()=> (<Header/>) }} name='HomePage' component={HomePage} />  
+      <Tab.Screen options={{ headerStyle: {height: 120,}, headerShown: true, headerTitle: '', headerBackground: ()=> (<Header/>) }} name='Lessons' component={Lessons} />
       {/* <Tab.Screen options={{ headerShown: false }} name='AssesStackGroup' component={AssesStackGroup} /> */}
-      <Tab.Screen options={{
-        headerTitle: "Settings",
+      <Tab.Screen options={{ 
+        headerStyle: {height: 120,},
+        headerShown: true, 
+        headerTitle: '', 
+        headerBackground: ()=> (<Header/>),
         headerRight: () => (
           <Pressable onPress={logout}>
-            <Text>Logout</Text>
+            <Text style={{color: 'white',fontFamily: 'PTSans-Bold', fontSize: 20}}>Logout</Text>
           </Pressable>)
       }} name='Settings' component={Settings} />
     </Tab.Navigator>
@@ -145,6 +149,8 @@ const Root = () => {
   const [loading, setLoading] = useState(false);
   const [fontsLoaded, fontError] = useFonts({
     'Dongle-Regular': require('./assets/fonts/Dongle-Regular.ttf'),
+    'PTSans-Regular': require('./assets/fonts/PTSans-Regular.ttf'),
+    'PTSans-Bold': require('./assets/fonts/PTSans-Bold.ttf'),
   });
 
   useEffect(() => {

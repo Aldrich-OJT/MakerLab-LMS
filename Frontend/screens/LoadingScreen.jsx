@@ -1,7 +1,7 @@
 import React from "react";
 import { StyleSheet, View, Image, ImageBackground } from "react-native";
 import Colors from "../constants/Colors";
-import ProgressBar from 'react-native-progress/Bar';
+import { ActivityIndicator} from 'react-native-paper';
 
 export default function LoadingScreen() {
   return (
@@ -11,16 +11,10 @@ export default function LoadingScreen() {
         <View style={styles.centerContainer}>
           <Image source={require('../assets/logo-dark.png')} style={styles.logo} />
           <Image source={require('../assets/splash-icon.png')} style={styles.icon} />
-          <ProgressBar
-            animated={true}
-            progress={.1}
-            width={270}
-            height={10}
-            borderRadius={10}
-            unfilledColor={Colors.bgYellow}
-            borderWidth={0}
-            color={Colors.bgViolet}
-            indeterminate={true}
+          <ActivityIndicator 
+          animating={true} 
+          //color={Colors.bgViolet}
+          size={70}
           />
         </View>
 

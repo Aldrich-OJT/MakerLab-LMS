@@ -106,7 +106,12 @@ export default function Learn( { route, navigation } ) {
           </View>
 
           <View style={styles.FlatListContainer}>
-            {contentLoading ? (<Text>Loading...</Text>)
+            {contentLoading ? (
+            <ActivityIndicator 
+              animating={true} 
+              style={{top:20}}
+              size={60}
+              />)
               : (nocontent ? (<Text>No contents found</Text>) : (
                 <FlatList
                   showsVerticalScrollIndicator={false}

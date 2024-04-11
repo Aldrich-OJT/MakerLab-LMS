@@ -18,7 +18,7 @@ import { useFocusEffect, useNavigation } from '@react-navigation/native';
 // import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs';
 import ModalContent from "../../components/LearnComponent/ModalContent";
 import { FontAwesome5 } from '@expo/vector-icons';
-
+import { ActivityIndicator} from 'react-native-paper';
 
 const getPostURL = "/api/post/category/";
 
@@ -109,8 +109,13 @@ export default function Templearn({ route, navigation }) {
       <View style={styles.bottomsheet}>
 
         <View style={styles.FlatListContainer}>
-          {contentLoading ? (<Text>Loading...</Text>)
-            : (nocontent ? (<Text>No contents found</Text>) : (
+          {contentLoading ? (
+          <ActivityIndicator 
+          animating={true} 
+          style={{top:20}}
+          size={60}
+          />)
+            : (nocontent ? (<Text style={{fontFamily: 'PTSans-Bold'}}>No contents found</Text>) : (
               <FlatList
                 showsVerticalScrollIndicator={false}
                 keyExtractor={(item) => item._id}
@@ -183,7 +188,6 @@ const styles = StyleSheet.create({
     borderRadius: 50,
     backgroundColor: Colors.bgGray,
     justifyContent: "center"
-
   },
   bottomsheet: {
     backgroundColor: Colors.bgOffWhite,
