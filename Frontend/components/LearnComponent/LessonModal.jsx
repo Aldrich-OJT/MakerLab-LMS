@@ -13,8 +13,7 @@ const dimensions = Dimensions.get("window");
 const deviceWidth = dimensions.width;
 
 const POSTURL = "/api/categories/add"
-const contentType = "multipart/form-data"
-
+const contentType = "application/x-www-form-urlencoded"
 
 //FIX ON DOCUMENT BLANK ERROR
 export default function LessonModal({title, description, visibility, onPress,children, setRefresh}) {
