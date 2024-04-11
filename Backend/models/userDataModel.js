@@ -1,27 +1,35 @@
 const mongoose = require("mongoose");
 
 const quizScoreSchema = new mongoose.Schema({
-    quizId: {
+    postId: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'Quiz', 
-        required: true
+        ref: 'Post', 
     },
     score: {
         type: Number,
         default: 0 
+    },
+    passed:{
+        type: Boolean,
+        default: false
     }
 });
 
 const userDataSchema = new mongoose.Schema({
+    user: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User',
+        required: true
+    },
     avatar: {
         type: String,
-        required: true
     },
     progress: {
         type: Number,
         default: 0
     },
     quizScores: [quizScoreSchema]
+
 });
 
 const UserData = mongoose.model("UserData", userDataSchema);
