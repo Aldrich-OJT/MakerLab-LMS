@@ -31,7 +31,7 @@ const getVideosURL = "/api/quiz/category/";
 export default function Learn( { route, navigation } ) {
   const tabBarHeight = useBottomTabBarHeight()
   const [modalVisible, setModalVisible] = useState(false);
-  const router = useRoute()
+  //const router = useRoute()
   const { param } = route.params;
 
   

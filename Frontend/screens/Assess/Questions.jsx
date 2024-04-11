@@ -1,84 +1,67 @@
-import { View, StyleSheet, Text, Dimensions, Pressable } from "react-native";
+import { View, StyleSheet, Text, Pressable } from "react-native";
 import Colors from "../../constants/Colors";
 import QuizItem from "../../components/QuizItem";
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import Header from "../../components/Header";
-import { useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { FlatList } from "react-native";
-import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs';
-// import { useFonts, Dongle_400Regular } from '@expo-google-fonts/dongle';
+import { axiosGet } from "../../utils/axios";
+import { useRoute } from '@react-navigation/native';
+import { AuthContext } from "../../context/AuthProvider";
 
-const dimensions = Dimensions.get('window');
-const devicewidth = dimensions.width;
-const deviceheight = dimensions.height;
+const getQuizzesURL = "/api/question/"
 
-export default function Assess({ route }) {
-  const tabBarHeight = useBottomTabBarHeight()
-  const { item } = route.params
-  console.log(item)
-  // let [fontsLoaded] = useFonts({
-  //   Dongle_400Regular,
-  // });
-  const [quizData, setQuizData] = useState([
-    {
-      id: '1',
-      question: 'Musta araw mo?',
-      choices: ['Gutom', 'YIPPEEEE', 'Antok na ako', 'COFFEEEEEEE']
-    },
-    {
-      id: '2',
-      question: 'Ano gusto mo?',
-      choices: ['Siya', 'Pera', 'Baon', 'Uwi']
-    },
-    {
-      id: '3',
-      question: 'Kumain kana ba?',
-      choices: ['Oo', 'Hindi', 'Pake mo', 'Who u']
-    },
-    {
-      id: '4',
-      question: 'Ano ulam mo?',
-      choices: ['Chicken Fillet', 'Chicken Fillet', 'Chicken Fillet', 'Chicken Fillet']
+export default function Assess() {
+  const { token } = useContext(AuthContext)
+  const [score, setScore] = useState(0)
+  const route = useRoute()
+  const param = route.params.item
+
+
+  const [quizData, setQuizData] = useState([])
+
+  useEffect(() => {
+    console.log(param)
+
+    const fetchData = async () => {
+      const data = await axiosGet(`${getQuizzesURL}${param._id}`, token)
+      setQuizData(data)
+      console.log("QUIZDATA", data)
     }
-  ]);
 
+    fetchData()
+  }, [])
   const renderQuizItem = ({ item }) => (
     <QuizItem
       question={item.question}
-      choice1={item.choices[0]}
-      choice2={item.choices[1]}
-      choice3={item.choices[2]}
-      choice4={item.choices[3]}
+      options={item.options}
+      answer = {item.answer}
     />
   );
 
   return (
     <View style={styles.mainContainer}>
       <Header />
-      <View style={[styles.quizContainer,{marginBottom: tabBarHeight}]}>
+      <View style={styles.quizContainer}>
         <View style={styles.quizEditContainer}>
-          <Text style={styles.quizName}>{item.name}:</Text>
-          <MaterialCommunityIcons
-            name="square-edit-outline"
-            size={25}
-            style={{ marginTop: 20 }}
-            color="black" />
+          <Text style={styles.quizName}>{param.name}:</Text>
+          <Text style={styles.quizDescription}>Choose the correct answer.</Text>
         </View>
 
-        <Text style={styles.quizDescription}>Choose the correct answer.</Text>
         <View style={styles.flatlist}>
-          <FlatList
+          {quizData.length>0 ? (<FlatList
 
             showsVerticalScrollIndicator={false}
             data={quizData}
             renderItem={renderQuizItem}
-            keyExtractor={item => item.id}
+            keyExtractor={item => item._id}
             ListFooterComponent={
               <Pressable style={styles.submitbutton}>
                 <Text style={styles.submittext}>Submit</Text>
               </Pressable>
             }
-          />
+          />) : <Text style={{alignSelf:"center"}}> No questions found</Text>}
+
         </View>
       </View>
     </View>
@@ -88,12 +71,12 @@ export default function Assess({ route }) {
 const styles = StyleSheet.create({
   mainContainer: {
     flex: 1,
-    alignItems: "center",
     backgroundColor: Colors.bgOffWhite,
   },
   quizContainer: {
     backgroundColor: Colors.bgOffWhite,
     flex: 1,
+    // width:"100%"
   },
   quizName: {
     fontSize: 50,
@@ -105,11 +88,14 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
   quizEditContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between'
+    backgroundColor: Colors.bgOffWhite,
+    marginHorizontal: 10,
+    marginBottom: 5,
+    gap: 5
+
   },
   submitbutton: {
-    alignSelf: 'center',
+    //alignSelf: 'center',
     backgroundColor: Colors.bgYellow,
     borderRadius: 6,
     margin: 10,
@@ -121,7 +107,9 @@ const styles = StyleSheet.create({
     color: 'black',
     alignSelf: 'center',
   },
-  flatlist:{
-    flex:1
+  flatlist: {
+    justifyContent:"center",
+    //alignItems:"center",
+    flex: 1
   }
 })

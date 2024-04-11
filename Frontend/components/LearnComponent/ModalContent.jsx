@@ -144,7 +144,10 @@ export default function ModalContent({documentName,title, description, visibilit
                 value={formData.description} />
   
               <Pressable onPress={pickDocument}>
-                <Text style={styles.selectButton}><Text><MaterialCommunityIcons name="paperclip" size={20} color="black" />{formData.document ? `${formData.document.name}` : "Upload File"}</Text>
+                <Text style={styles.selectButton}>
+                  <Text>
+                  <MaterialCommunityIcons name="paperclip" size={20} color="black" />{formData.document ? `${formData.document.name}` : "Upload File"}
+                  </Text>
                 {errorMessage && <Text style={styles.errorMessage}>{errorMessage}</Text>}</Text>
               </Pressable>
     
@@ -178,7 +181,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     padding: 15,
-    borderRadius: 30,
+    borderRadius: 10,
     backgroundColor: Colors.bgYellow,
     // borderColor: "black",
     // borderWidth: 2,
@@ -187,35 +190,34 @@ const styles = StyleSheet.create({
   },
   titleContainer: {
     flexDirection: 'row',
-    padding: 5,
     width: '100%',
-    justifyContent: 'space-evenly',
+    //justifyContent:"space-between",
+    //alignItems:"center"
   },
   textTitle: {
     fontSize: 16,
     fontWeight: 'bold',
-    backgroundColor: Colors.bgGray,
-    color: Colors.bgYellow,
-    borderTopLeftRadius: 30,
-    borderTopRightRadius: 30,
-    borderBottomRightRadius: 15,
-    borderBottomLeftRadius: 15,
+    flex:5,
+    //backgroundColor: Colors.bgGray,
+    //color: Colors.bgYellow,
+    // borderTopLeftRadius: 30,
+    // borderTopRightRadius: 30,
+    // borderBottomRightRadius: 15,
+    // borderBottomLeftRadius: 15,
     width: deviceWidth * .64,
-    textAlign: 'center',
     height: deviceWidth * .13,
-    paddingVertical: (deviceWidth * .13)/4,
-    marginBottom: 5,
+    //paddingVertical: (deviceWidth * .13)/4,
+    //marginBottom: 5,
   },
   closeButton: {
-    backgroundColor: Colors.bgGray,
-    borderRadius: 50,
-    paddingHorizontal: 10,
+    //backgroundColor: Colors.bgGray,
+    // borderRadius: 50,
+    //paddingHorizontal: 10,
     height: deviceWidth * .13,
-    justifyContent: 'center',
-    borderTopLeftRadius: 30,
-    borderTopRightRadius: 30,
-    borderBottomRightRadius: 30,
-    borderBottomLeftRadius: 15,
+    // borderTopLeftRadius: 30,
+    // borderTopRightRadius: 30,
+    // borderBottomRightRadius: 30,
+    // borderBottomLeftRadius: 15,
   },
   textInput: {
     width: "92%",

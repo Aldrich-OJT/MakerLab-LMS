@@ -31,7 +31,7 @@ const getquiz = asyncHandler(async(req,res)=>{
     res.status(200).json(quiz)
 })
 const addquiz = asyncHandler(async(req,res)=>{
-    const { name, categoryID } = req.body
+    const { name, categoryID,description } = req.body
     
     if (!name || !categoryID) {
         throw new Error("Please fill all fields: name, categoryID")
@@ -40,7 +40,9 @@ const addquiz = asyncHandler(async(req,res)=>{
 
     const newQuiz = await Quiz.create({
         name: name,
-        category: categoryID
+        description: description,
+        category: categoryID,
+        
     })
 
     if (!newQuiz) {

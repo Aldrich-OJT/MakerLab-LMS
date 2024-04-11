@@ -18,8 +18,8 @@ const questionSchema = new mongoose.Schema(
         quiz: {
             type: mongoose.Schema.Types.ObjectId,
             ref: "Quiz", 
-            required: [true, "Please specify a category"],
-          },
+            required: [true, "Please specify a quiz"],
+        },
     },
     {
         timestamps: true

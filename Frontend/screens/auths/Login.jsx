@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import { StyleSheet, Text, View, TouchableWithoutFeedback, Keyboard, KeyboardAvoidingView, Platform, Dimensions } from 'react-native';
 import { TextInput } from 'react-native-paper';
 import { useNavigation } from '@react-navigation/native';
@@ -15,7 +15,7 @@ const contentType = "application/json"
 export default function Login() {
   const navigation = useNavigation()
   const authContext = useContext(AuthContext)
-  const [inputInvalid, setInputInvalid] = useState(null)
+  const [inputInvalid, setInputInvalid] = useState(false)
   const initialtextInput = {
     email: "",
     password: ""
@@ -35,30 +35,27 @@ export default function Login() {
   }
 
   const submitForm = async () => {
-    // Function handles form submission
-    if (!textInputs.email || !textInputs.password) {
-      setInputInvalid(true) // Set error message if email or password is empty
-      return
-    }
-    setInputInvalid(false) // Clear error message if validation passes
 
     try {
       const data = await axiosPost(loginURL, textInputs,contentType)
-      console.log("login success")
-      authContext.authenticate(data.token)
-      console.log(data.token)
-    } catch (error) {
-      console.error(error)
-      if (error.response.status === 400) {
-        console.error(error.response.status)
-        console.error(error.response.data.message)
-        setInputInvalid(true)
+      if (data) {
+        console.log("login success")
+        authContext.authenticate(data.token)
+        console.log(data.token)
       }
+    } catch (error) {
+      
+      setInputInvalid(true)
+      console.log(error.response.data.message)
 
     }
   };
-
-  console.log(textInputs)
+  useEffect(() => {
+    if (!textInputs.email || !textInputs.password) {
+      setInputInvalid(false) 
+		}
+	}, [textInputs]);
+  console.log("hi")
   return (
     <KeyboardAvoidingView style={styles.container} behavior={Platform.OS === "ios" ? "padding" : "height"}>
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>

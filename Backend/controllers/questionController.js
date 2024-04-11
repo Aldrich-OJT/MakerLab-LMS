@@ -84,6 +84,21 @@ const getAllQuestion = asyncHandler(async (req, res) => {
     }
 })
 
+const getQuestions = asyncHandler(async (req, res) => {
+    const id = req.params.id
+    console.log(id)
+    const questions = await Question.find({quiz: id})
+
+    if(!questions){
+        console.log("fasdfas")
+        throw new Error(`no quiz found`)
+    }else{
+        res.status(200).json(questions)
+    }
+
+    
+})
+
 const editQuestion = asyncHandler(async (req, res) => {
     const { question, options, answer } = req.body
     const id = req.params.id
@@ -143,6 +158,7 @@ const deleteQuestion = asyncHandler(async (req, res) => {
 
 module.exports = {
     addQuestion,
+    getQuestions,
     getAllQuestion,
     editQuestion,
     deleteQuestion

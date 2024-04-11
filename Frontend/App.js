@@ -21,6 +21,7 @@ import { useFonts } from 'expo-font';
 // import QuizCategory from './screens/Assess/QuizCategory';
 // import Quizzes from './screens/Assess/Quizzes';
 import Questions from './screens/Assess/Questions'
+import Templearn from './screens/Learn/Templearn';
 const Stack = createNativeStackNavigator()
 const LearnStack = createNativeStackNavigator()
 const Tab = createBottomTabNavigator()
@@ -29,10 +30,11 @@ const Tab = createBottomTabNavigator()
 const LearnStackGroup = () => {
   return (
     <LearnStack.Navigator>
-      {/* <LearnStack.Screen options={{ headerShown: false }} name="TabGroup" component={TabGroup} /> */}
+      
+      <LearnStack.Screen options={{ headerShown: false }} name="TabGroup" component={TabGroup} />
       <LearnStack.Screen options={{ headerShown: false }} name='Lessons' component={Lessons} />
       <LearnStack.Screen options={{ presentation: "modal" }} name="LearnDetails" component={LearnDetails} />
-      <LearnStack.Screen options={{ headerShown: false }} name="Learn" component={Learn} />
+      <LearnStack.Screen options={{ headerShown: false }} name="templearn" component={Templearn} />
       <LearnStack.Screen options={{ headerShown: false }} name="Questions" component={Questions}  />
     </LearnStack.Navigator>
 
@@ -97,7 +99,7 @@ const TabGroup = () => {
     >
 
       <Tab.Screen options={{ headerShown: false }} name='HomePage' component={HomePage} />  
-      <Tab.Screen options={{ headerShown: false }} name='LeanStackGroup' component={LearnStackGroup} />
+      <Tab.Screen options={{ headerShown: false }} name='Lessons' component={Lessons} />
       {/* <Tab.Screen options={{ headerShown: false }} name='AssesStackGroup' component={AssesStackGroup} /> */}
       <Tab.Screen options={{
         headerTitle: "Settings",
@@ -134,7 +136,7 @@ const Navigation = () => {
   return (
     <NavigationContainer>
       {!authContext.isAuthenticated && <AuthStack />}
-      {authContext.isAuthenticated && <TabGroup />}
+      {authContext.isAuthenticated && <LearnStackGroup />}
     </NavigationContainer>
   )
 }
@@ -154,7 +156,6 @@ const Root = () => {
 
         if (token) {
           authContext.authenticate(token);
-          console.log(authContext.token)
         } else {
           console.log("no token found");
         }

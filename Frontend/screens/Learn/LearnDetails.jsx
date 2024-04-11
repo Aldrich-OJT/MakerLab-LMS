@@ -11,17 +11,16 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 
 const deleteURL = "/delete"
 
-export default function LearnDetails() {
+export default function LearnDetails({route}) {
     const {token} = useContext(AuthContext)
     const [modalVisible, setModalVisible] = useState(false);
-    const router = useRoute()
-    const { item } = router.params;
+    const { item } = route.params;
     const navigation = useNavigation()
 
-    //console.log(router.params)
+    console.log(item)
     useLayoutEffect(() => {
         navigation.setOptions({
-            headerTitle: router.params.item.title,
+            headerTitle: item.name,
             headerStyle: {
                 backgroundColor: "black",
             },
@@ -59,6 +58,7 @@ export default function LearnDetails() {
 
         <View style={styles.mainContainer}>
             <ModalContent
+                
                 documentName={item.documentName}
                 title={item.title}
                 description={item.description}

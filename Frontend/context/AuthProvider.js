@@ -21,6 +21,7 @@ const AuthProvider = ({children})=>{
         AsyncStorage.setItem('token',token)
     }
     const logout = ()=>{
+        console.log("logout called")
         setAuthToken(null)
         AsyncStorage.removeItem('token')
         console.log("logout success")

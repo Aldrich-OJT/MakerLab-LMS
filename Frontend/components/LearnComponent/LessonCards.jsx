@@ -1,14 +1,14 @@
 import React, { useState } from "react";
-import { StyleSheet, View, Text } from "react-native";
+import { StyleSheet, View, Text, Pressable } from "react-native";
 import Colors from "../../constants/Colors";
 import { FontAwesome5 } from '@expo/vector-icons';
 
 
-export default function LessonCards ({title, progress, description, assessScore}) {
+export default function LessonCards ({title, progress, description, onPress}) {
     const isCompleted = progress === '100%';
     
     return (
-      <View style={styles.lessonContainer}>
+      <Pressable style={styles.lessonContainer} onPress={onPress}>
         <View style={styles.titleContainer}>
           <Text style={styles.title}>
             <FontAwesome5 name="book" size={20} color={Colors.bgViolet} /> {title}
@@ -45,7 +45,7 @@ export default function LessonCards ({title, progress, description, assessScore}
               color={Colors.bgDarkViolet} />
           </View> */}
         </View>
-      </View>
+      </Pressable>
     );
   };
 
@@ -57,7 +57,8 @@ const styles = StyleSheet.create({
         height: 'fit-content',
         minwidth: '100%',
         padding: 20,
-        marginTop: 20,
+        marginHorizontal: 20,
+        marginVertical: 10
     },
     titleContainer: {
         flexDirection: 'row',
