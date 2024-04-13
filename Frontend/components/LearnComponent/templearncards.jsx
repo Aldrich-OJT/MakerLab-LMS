@@ -16,7 +16,7 @@ export default function Templearncards({ id, title, description, onPress, lesson
 
   return (
     <Pressable style={styles.container} onPress={pressLearn}>
-      <View style={styles.lessonNumberTitle}>
+      <View style={styles.lessonNumberContainer}>
         <Text style={styles.lessonNumberText}>
           Lesson {lessoncount}
         </Text>
@@ -55,7 +55,7 @@ export default function Templearncards({ id, title, description, onPress, lesson
                   name={showDescription ? "chevron-up" : "chevron-down"} 
                   size={26} 
                   color={Colors.bgViolet}
-                  style={{alignSelf:'flex-end', marginRight:5,}}
+                  style={{alignSelf:'flex-end', marginRight:5,marginTop:10}}
                />
             </Pressable>
           )}
@@ -73,7 +73,7 @@ const styles = StyleSheet.create({
     minwidth: '100%',
     padding: 20,
     marginHorizontal: 20,
-    marginVertical:10
+    marginVertical:15
   },
   // video: {
   //   width: '50%',
@@ -81,10 +81,10 @@ const styles = StyleSheet.create({
   //   resizeMode:"contain",
   //   alignSelf:"center"
   // },
-  lessonNumberTitle: {
+  lessonNumberContainer: {
     flexDirection: 'row',
     justifyContent: 'center',
-    marginTop: -30,
+    marginTop: -35,
   },
   lessonNumberText: {
     backgroundColor: 'black',
@@ -96,18 +96,8 @@ const styles = StyleSheet.create({
     paddingVertical: 5,
     textAlign: 'center',
   },
-  edit: {
-    position: 'absolute',
-    right: 0,
-    backgroundColor: Colors.bgViolet,
-    width: deviceWidth * .12,
-    paddingVertical: 8,
-    alignSelf: 'center',
-    textAlign: 'center',
-    borderRadius: 50,
-  },
   titleContainer: {
-    marginTop:10,
+    marginTop:4,
     flexDirection: 'row',
     gap: 5,
   },
@@ -115,8 +105,6 @@ const styles = StyleSheet.create({
     color: Colors.bgViolet,
     fontSize: 20,
     fontFamily: 'PTSans-Bold',
-    //marginBottom: -8,
-    //marginTop: 20,
   },
   description: {
     marginBottom: 15,
@@ -129,18 +117,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
   },
-  //assessEditText: {
-  //  backgroundColor: Colors.bgViolet,
-  //  color: 'white',
-  //  borderRadius: 50,
-  //  borderWidth: 2,
-  //  fontSize: 16,
-  //  fontFamily: 'PTSans-Bold',
-  //  borderColor: Colors.bgViolet,
-  //  paddingHorizontal: 10,
-  //  paddingVertical: 7,
-  //  marginHorizontal: -2,
-  //},
   assessAddText: {
     fontSize: 14,
     color: Colors.bgViolet,

@@ -5,9 +5,6 @@ import {
   StyleSheet,
   FlatList,
   Pressable,
-  Modal,
-  KeyboardAvoidingView,
-  Platform,
 } from "react-native";
 import Colors from "../../constants/Colors";
 import LearnHeader from "../../components/LearnComponent/LearnHeader";

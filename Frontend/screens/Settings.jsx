@@ -1,5 +1,5 @@
 import React, { useState, useContext } from "react";
-import { View, Text, StyleSheet, Dimensions,Image,Modal, Pressable, ScrollView} from "react-native";
+import { View, Text, StyleSheet, Dimensions,Image,Modal, Pressable } from "react-native";
 import ProgressBar from 'react-native-progress/Bar';
 import Colors from "../constants/Colors";
 import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs';

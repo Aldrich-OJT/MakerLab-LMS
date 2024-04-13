@@ -4,7 +4,7 @@ import { TextInput, RadioButton } from "react-native-paper"
 import Colors from "../constants/Colors";
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 
-export default function QuizModal({ visibility, onPress, children }) {
+export default function QuizModal({ setRefresh, visibility, onPress, children }) {
     const [checked, setChecked] = React.useState('');
     const choices = ['A', 'B', 'C', 'D'];
 
@@ -15,67 +15,66 @@ export default function QuizModal({ visibility, onPress, children }) {
       }
 
     return (
-        <KeyboardAvoidingView behavior="padding">
-          <Modal
-            animationType="fade"
-            visible={visibility}
-            onRequestClose={onPress}
-            transparent={true}
-          >
-            <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-              <View style={styles.mainContainer} >
-                <View style={styles.inputContainer}>
-                  <View style={styles.titleContainer}>
-                    <Text style={styles.textTitle}>{children}</Text>
-                    
-                    <Pressable style={styles.closeButton} onPress={cancelForm}>
-                    <Text><MaterialCommunityIcons name="close" size={30} color={Colors.bgRedInvalid} /></Text>
-                    </Pressable>
-                  </View>
+      <KeyboardAvoidingView behavior="padding">
+        <Modal
+          animationType="fade"
+          visible={visibility}
+          onRequestClose={onPress}
+          transparent={true}
+        >
+          <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+            <View style={styles.mainContainer} >
+              <View style={styles.inputContainer}>
+                <View style={styles.titleContainer}>
+                  <Text style={styles.textTitle}>{children}</Text>
+                  <Pressable style={styles.closeButton} onPress={cancelForm}>
+                    <Text>
+                      <MaterialCommunityIcons name="close" size={30} color={Colors.bgRedInvalid} />
+                    </Text>
+                  </Pressable>
+                </View>
 
                 <View style={styles.inputText}>
-                <TextInput
-                    label="Question"
-                    multiline={true}
-                    mode="flat" 
-                    />
+                  <TextInput
+                      label="Question"
+                      multiline={true}
+                      mode="flat" 
+                      />
                 </View>   
 
                 <Text style={{fontFamily: 'PTSans-Bold'}}>Input choices and select the correct answer.</Text>
 
                 <View style={styles.inputChoicesContainer}>
-                    {choices.map((option, index) => (
+                  {choices.map((option, index) => (
                     <View key={index} style={{flexDirection: 'row'}}>
-                        <RadioButton
-                            style={styles.radioButtons}
-                            value={option}
-                            status={checked === option ? 'checked' : 'unchecked'}
-                            onPress={() => setChecked(option)}
-                        />
-                        <TextInput
-                            style={styles.inputText}
-                            multiline={true}
-                            label={`Option ${option}`}
-                            mode="flat"
-                        />
-                        </View>
-                    ))}
+                      <RadioButton
+                        //style={styles.radioButtons}
+                        value={option}
+                        status={checked === option ? 'checked' : 'unchecked'}
+                        onPress={() => setChecked(option)}
+                      />
+                      <TextInput
+                         style={styles.inputText}
+                         multiline={true}
+                         label={`Option ${option}`}
+                         mode="flat"
+                      />
+                    </View>
+                  ))}
                 </View>
-      
 
-                  <View style={styles.buttonContainer}>
-                    <Pressable style={[styles.submitButton]}>
-                      <Text style={styles.SubmitText}>
-                        Submit
-                      </Text>
-                    </Pressable>
-                  </View>
+                <View style={styles.buttonContainer}>
+                  <Pressable style={[styles.submitButton]}>
+                    <Text style={styles.SubmitText}>
+                      Submit
+                    </Text>
+                  </Pressable>
                 </View>
               </View>
-            </TouchableWithoutFeedback>
-          </Modal>
-        </KeyboardAvoidingView>
-    
+            </View>
+          </TouchableWithoutFeedback>
+        </Modal>
+      </KeyboardAvoidingView>
       )
     }
     
@@ -103,8 +102,7 @@ export default function QuizModal({ visibility, onPress, children }) {
         fontFamily: 'PTSans-Bold',
         flex:5,
         textAlign: 'center',
-        alignSelf: 'center',
-        padding: 10,
+        paddingVertical: 5,
       },
       closeButton: {
         position: 'absolute',
@@ -119,9 +117,9 @@ export default function QuizModal({ visibility, onPress, children }) {
       inputText:{
         width: '90%',
       },
-      radioButtons:{
-        marginTop:20,
-      },
+      //radioButtons:{
+      //  textSelf:'center'
+      //},
       buttonContainer: {
         flexDirection:"row",
         paddingBottom: 5,

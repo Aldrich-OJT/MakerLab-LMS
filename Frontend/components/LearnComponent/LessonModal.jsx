@@ -2,11 +2,9 @@ import { TextInput } from "react-native-paper"
 import { View, Pressable, Text, StyleSheet, Modal, KeyboardAvoidingView, TouchableWithoutFeedback, Keyboard, Dimensions } from "react-native"
 import { useContext, useState } from "react"
 import Colors from "../../constants/Colors";
-import * as DocumentPicker from 'expo-document-picker';
 import { axiosPost, axiosPut } from "../../utils/axios";
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { AuthContext } from "../../context/AuthProvider";
-//import { SafeAreaView } from "react-native-safe-area-context";
 import { useNavigation } from '@react-navigation/native';
 
 const POSTURL = "/api/categories/add"

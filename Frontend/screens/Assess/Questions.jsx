@@ -68,16 +68,13 @@ export default function Assess() {
   console.log(score)
   return (
     <View style={styles.mainContainer}>
-      {modalVisible && (
-        <QuizModal visibility={modalVisible} onPress={() => setModalVisible(false)}>
+        <QuizModal setRefresh={() => setRefresh(true)} visibility={modalVisible} onPress={() => setModalVisible(false)}>
           Enter question
         </QuizModal>
-      )}
       <LearnHeader title={param.title} navigation={navigation}/>
       <View style={styles.quizContainer}>
-        <View style={styles.quizDescriptionContainer}>
-          <Text style={styles.quizDescription}>Choose the correct answer.</Text>
-        </View>
+        <Text style={styles.quizDescription}>Choose the correct answer.</Text>
+
         <View style={styles.flatlist}>
           {quizData.length>0 ? (<FlatList
 
@@ -113,20 +110,12 @@ const styles = StyleSheet.create({
   quizContainer: {
     backgroundColor: Colors.bgOffWhite,
     flex: 1,
-    // width:"100%"
   },
   quizDescription: {
     marginVertical: 5,
-    marginLeft: 6,
+    marginLeft: 20,
     fontSize: 16,
     fontFamily: 'PTSans-Regular'
-  },
-  quizDescriptionContainer: {
-    backgroundColor: Colors.bgOffWhite,
-    marginHorizontal: 10,
-    marginBottom: 5,
-    gap: 5
-
   },
   submitbutton: {
     backgroundColor: Colors.bgViolet,
@@ -143,8 +132,6 @@ const styles = StyleSheet.create({
     fontFamily: 'PTSans-Bold'
   },
   flatlist: {
-    justifyContent:"center",
-    //alignItems:"center",
     flex: 1
   },
   addButton: {

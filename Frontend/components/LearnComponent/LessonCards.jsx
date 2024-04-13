@@ -55,7 +55,7 @@ export default function LessonCards ({title, description, onPress}) {
                   name={showDescription ? "chevron-up" : "chevron-down"} 
                   size={26} 
                   color={Colors.bgViolet}
-                  style={{alignSelf:'flex-end', marginRight:5,}}
+                  style={{alignSelf:'flex-end', marginRight:5 }}
                />
             </Pressable>
           )}

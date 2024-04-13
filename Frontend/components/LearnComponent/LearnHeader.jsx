@@ -40,16 +40,12 @@ const styles = StyleSheet.create({
     borderRadius: 25,
     overflow: "hidden"
   },
-  backbutton: {
-    height: "100%",
-    width: "100%",
-  },
   title: {
     color: Colors.bgYellow,
     padding: 10,
     fontSize: 20,
     paddingHorizontal: 30,
-    fontWeight: 'bold'
+    fontFamily: 'PTSans-Bold'
   },
   titlecontainer: {
     width: "80%",

@@ -2,7 +2,6 @@ import { View, Text, StyleSheet} from "react-native";
 import CircularProgress from "react-native-circular-progress-indicator";
 import Colors from "../constants/Colors";
 import { FontAwesome5 } from '@expo/vector-icons';
-import { Ionicons } from '@expo/vector-icons';
 
 export default function HomePage() {
   //const authContext = useContext(AuthContext)
