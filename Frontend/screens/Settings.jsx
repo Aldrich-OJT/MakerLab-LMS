@@ -1,8 +1,10 @@
-import React, { useState } from "react";
-import { View, Text, StyleSheet, Dimensions,Image,Modal, Pressable} from "react-native";
+import React, { useState, useContext } from "react";
+import { View, Text, StyleSheet, Dimensions,Image,Modal, Pressable, ScrollView} from "react-native";
 import ProgressBar from 'react-native-progress/Bar';
 import Colors from "../constants/Colors";
+import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { AuthContext } from '../context/AuthProvider';
 
 const dimensions = Dimensions.get('window');   
 const deviceWidth = dimensions.width;
@@ -11,6 +13,7 @@ const deviceHeight = dimensions.height;
 export default function Settings () {
 const [avatarModalVisible, setAvatarModalVisible] = useState(false);
 const [avatar,setAvatar] = useState(0);
+const { logout } = useContext(AuthContext);
 
 const avatarChoices = [
   require('../assets/avatar1.png'),
@@ -19,10 +22,17 @@ const avatarChoices = [
   require('../assets/avatar4.png'),
 ]
 
-const badges = ['badge1', 'badge2', 'badge3', '',
-                '', '', '', ''];
+const badges = [
+  require('../assets/badge-makerlab.png'), 
+  require('../assets/badge-coding.png'), 
+  require('../assets/badge-3dprinting.png'), '',
+  '', '', '', ''
+];
+
+const  tabBarHeight  = useBottomTabBarHeight();
+
   return (
-    <View style={styles.mainContainer}>
+    <View style={[styles.mainContainer,{marginBottom:tabBarHeight}]}>
       <Modal
           animationType="slide"
           transparent={true}
@@ -52,7 +62,6 @@ const badges = ['badge1', 'badge2', 'badge3', '',
             </View>
           </View>
         </Modal> 
-
 
       <View style={styles.innerContainer}>
         <MaterialCommunityIcons 
@@ -85,18 +94,22 @@ const badges = ['badge1', 'badge2', 'badge3', '',
         <View style={styles.badgesContainer}>
           {badges.map((badge, index) => (
             <View key={index} style={styles.badge}>
-              {/* You can put your badge image or icon here */}
-              <Text>{badge}</Text>
+              {badge ? (
+              <Image
+                source={badge}
+                style={{ width: '100%', height: '100%', resizeMode: 'contain' }}
+              />
+              ) : null}
             </View>
           ))}
         </View>
       </View>
-      <View>
-        <Pressable style={styles.logoutButton}>
+
+        <Pressable style={[styles.logoutButton,{bottom:tabBarHeight}]} onPress={logout}>
           <Text style={styles.logoutText}> 
-          <MaterialCommunityIcons name="logout" size={19} color='white'/>Logout</Text>
+          <MaterialCommunityIcons name="logout" size={18} color='white'/>Logout</Text>
         </Pressable>
-      </View>
+
     </View>
   );
   }
@@ -104,7 +117,7 @@ const badges = ['badge1', 'badge2', 'badge3', '',
   const styles = StyleSheet.create({
     mainContainer: {
       backgroundColor: Colors.bgOffWhite,
-      flex: 1,
+      height: deviceHeight - (deviceWidth * 0.27), //Header height
     },
     innerContainer: {
       backgroundColor: Colors.bgYellow,
@@ -114,7 +127,7 @@ const badges = ['badge1', 'badge2', 'badge3', '',
       marginTop: 20,
       borderRadius: 10,
       gap: 5,
-      height: '33%',
+      height: '34%',
     },
     editButton:{
       position: 'absolute',
@@ -122,11 +135,11 @@ const badges = ['badge1', 'badge2', 'badge3', '',
       right: 15,
     },
     avatar:{
-      height: deviceWidth * .28,
-      width: deviceWidth * .28,
-      borderRadius: 150,
+      height: deviceWidth * .26,
+      width: deviceWidth * .26,
+      borderRadius: 50,
       borderColor: Colors.bgGray,
-      borderWidth: 3,
+      borderWidth: 5,
     },
     nameText:{
       fontFamily: 'PTSans-Bold',
@@ -136,9 +149,8 @@ const badges = ['badge1', 'badge2', 'badge3', '',
       backgroundColor: Colors.bgGray,
       borderRadius: 10,
       justifyContent:'center',
-      width: '90%',
-      height: '27%',
-      padding: 20,
+      minWidth: '90%',
+      padding: 15,
       gap: 6,
     },
     progressText:{
@@ -148,29 +160,27 @@ const badges = ['badge1', 'badge2', 'badge3', '',
     badgesContainer:{
       backgroundColor: Colors.bgOffWhite,
       borderRadius: 10,
-      height: '70%',
       width: '90%',
+      height: 'fit-content',
       flexDirection: 'row',
       flexWrap: 'wrap',
       justifyContent: 'center',
     },
     badge: {
-      width: deviceWidth * .15,
-      height: deviceWidth * .15,
+      width: deviceHeight * .07, 
+      height: deviceHeight * .07,
       borderRadius: 50,
       backgroundColor: '#C4C4C4',
-      justifyContent: 'center',
-      alignItems: 'center',
       margin: 10,
     },
     logoutButton:{
       backgroundColor: Colors.bgViolet,
       alignSelf:'center',
       justifyContent:'center',
-      width: '35%',
-      height: '20%',
+      width: '30%',
+      height: '5%',
       borderRadius: 10,
-      top: '80%',
+      position: 'absolute',
     },
     logoutText:{
       color: 'white',
@@ -178,6 +188,8 @@ const badges = ['badge1', 'badge2', 'badge3', '',
       fontSize: 16,
       textAlign:'center',
     },
+
+    //vv Modal styling vv
     modalMainContainer: {
       backgroundColor: 'rgba(0,0,0,0.3)',
       justifyContent: 'center',
@@ -194,28 +206,22 @@ const badges = ['badge1', 'badge2', 'badge3', '',
       margin: 20,
       padding: 10,
       alignItems: 'center',
-      justifyContent: 'center',
       borderRadius: 10,
     },
     titleContainer:{
       flexDirection: 'row',
       padding: 5,
-      width: '100%',
-      justifyContent: 'space-evenly',
     },
     imageContainer: {
       gap: 10,
       flexDirection: 'column',
-      borderRadius: 10,
       marginBottom: 8,
     },
     modalText: {
-      fontSize: 18,
+      fontSize: 20,
       fontFamily: 'PTSans-Bold',
       flex:5,
       textAlign: 'center',
-      alignSelf: 'center',
-      padding: 5,
     },
     closeButton: {
       position: 'absolute',

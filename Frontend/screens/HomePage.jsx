@@ -62,7 +62,6 @@ const styles = StyleSheet.create({
   },
   bottomSheet: {
     flex: 1,
-    padding: 20,
     gap: 20,
     backgroundColor: Colors.bgOffWhite,
   },
@@ -72,6 +71,8 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     flexDirection: 'row',
     gap: 20,
+    marginHorizontal: 20,
+    marginTop: 20,
   },
   progressTextContainer: {
     flex: 1,
@@ -92,6 +93,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     borderRadius: 10,
     gap: 20,
+    marginHorizontal: 20,
   },
   shortcuts: {
     flex: 1,
@@ -106,5 +108,6 @@ const styles = StyleSheet.create({
   },
   shortcutText:{
     fontFamily: 'PTSans-Bold',
+    fontSize: 16,
   }
 })

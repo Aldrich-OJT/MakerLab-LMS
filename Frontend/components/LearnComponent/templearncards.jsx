@@ -2,13 +2,17 @@ import { Dimensions, View, Text, StyleSheet, Image, Pressable } from "react-nati
 import Colors from "../../constants/Colors"
 import { useState } from "react";
 import { FontAwesome5 } from '@expo/vector-icons';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 
 const dimensions = Dimensions.get("window");
 const deviceWidth = dimensions.width;
 
 export default function Templearncards({ id, title, description, onPress, lessoncount,pressQuiz,pressLearn }) {
-  //const [isPressed, setIsPressed] = useState(false);
-  //const [hasAssessment, setHasAssessment] = useState(false);
+  const [showDescription, setShowDescription] = useState(false);
+
+  const showDescriptionHandler = () => {
+      setShowDescription(!showDescription);
+  };
 
   return (
     <Pressable style={styles.container} onPress={pressLearn}>
@@ -28,7 +32,9 @@ export default function Templearncards({ id, title, description, onPress, lesson
       </View>
 
       <View>
-        <Text style={styles.description} numberOfLines={1}>{description}</Text>
+        <Text numberOfLines={showDescription ? undefined : 1} 
+        style={styles.description}
+        >{description}</Text>
       </View>
 
       <View style={styles.assessContainer}>
@@ -42,14 +48,17 @@ export default function Templearncards({ id, title, description, onPress, lesson
               size={10}
               color={Colors.bgViolet} />
         </Pressable>
-
-        <View>
-          <FontAwesome5
-            style={{ top: 6 }}
-            name="chevron-right"
-            size={13}
-            color={'black'} />
-        </View>
+        
+        {description.length > 50 && (
+            <Pressable onPress={showDescriptionHandler}>
+               <MaterialCommunityIcons 
+                  name={showDescription ? "chevron-up" : "chevron-down"} 
+                  size={26} 
+                  color={Colors.bgViolet}
+                  style={{alignSelf:'flex-end', marginRight:5,}}
+               />
+            </Pressable>
+          )}
       </View>
     </Pressable>
   )
@@ -78,10 +87,10 @@ const styles = StyleSheet.create({
     marginTop: -30,
   },
   lessonNumberText: {
-    backgroundColor: Colors.bgGray,
+    backgroundColor: 'black',
     fontSize: 16,
     color: 'white',
-    fontWeight: 'bold',
+    fontFamily: 'PTSans-Bold',
     borderRadius: 50,
     width: deviceWidth * .3,
     paddingVertical: 5,
@@ -100,56 +109,55 @@ const styles = StyleSheet.create({
   titleContainer: {
     marginTop:10,
     flexDirection: 'row',
-    gap: 5
+    gap: 5,
   },
   title: {
     color: Colors.bgViolet,
-    fontSize: 22,
-    fontWeight: 'bold',
+    fontSize: 20,
+    fontFamily: 'PTSans-Bold',
     //marginBottom: -8,
     //marginTop: 20,
   },
   description: {
-    marginVertical: 15,
-    fontSize: 13,
+    marginBottom: 15,
+    marginTop: 5,
+    fontSize: 14,
     minWidth: "100%",
+    fontFamily: 'PTSans-Regular',
   },
   assessContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
   },
-  assessEditText: {
-    backgroundColor: Colors.bgViolet,
-    color: 'white',
-    borderRadius: 50,
-    borderWidth: 2,
-    fontSize: 14,
-    fontWeight: 'bold',
-    borderColor: Colors.bgViolet,
-    paddingHorizontal: 10,
-    paddingVertical: 7,
-    marginHorizontal: -2,
-  },
+  //assessEditText: {
+  //  backgroundColor: Colors.bgViolet,
+  //  color: 'white',
+  //  borderRadius: 50,
+  //  borderWidth: 2,
+  //  fontSize: 16,
+  //  fontFamily: 'PTSans-Bold',
+  //  borderColor: Colors.bgViolet,
+  //  paddingHorizontal: 10,
+  //  paddingVertical: 7,
+  //  marginHorizontal: -2,
+  //},
   assessAddText: {
     fontSize: 14,
-    fontWeight: 'bold',
     color: Colors.bgViolet,
+    fontFamily: 'PTSans-Bold',
   },
   title: {
     color: Colors.bgViolet,
     fontSize: 22,
     fontWeight: 'bold',
-
   },
   assessmentButton:{
     flexDirection:"row",
     alignItems:"center",
     gap: 5,
     backgroundColor: 'white',
-   
     borderRadius: 50,
     borderWidth: 2,
-  
     borderColor: 'white',
     paddingHorizontal: 10,
     paddingVertical: 7,

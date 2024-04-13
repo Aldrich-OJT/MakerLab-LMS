@@ -19,7 +19,7 @@ const styles = StyleSheet.create({
       position: 'relative'
     },
     bgimage: {
-        height: deviceWidth * 0.26,
+        height: deviceWidth * 0.27,
         width: deviceWidth * 1,
         resizeMode: 'stretch'
       },

@@ -62,7 +62,6 @@ const LearnStackGroup = () => {
 // };
 
 const TabGroup = () => {
-  const { logout } = useContext(AuthContext)
   return (
     <Tab.Navigator
       screenOptions={({ route, navigation }) => ({
@@ -107,10 +106,6 @@ const TabGroup = () => {
         headerShown: true, 
         headerTitle: '', 
         headerBackground: ()=> (<Header/>),
-        headerRight: () => (
-          <Pressable onPress={logout}>
-            <Text style={{color: 'white',fontFamily: 'PTSans-Bold', fontSize: 20}}>Logout</Text>
-          </Pressable>)
       }} name='Settings' component={Settings} />
     </Tab.Navigator>
   )
