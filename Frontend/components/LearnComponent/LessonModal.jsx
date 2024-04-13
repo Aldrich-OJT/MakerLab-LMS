@@ -13,17 +13,17 @@ const dimensions = Dimensions.get("window");
 const deviceWidth = dimensions.width;
 
 const POSTURL = "/api/categories/add"
-const contentType = "application/x-www-form-urlencoded"
+const contentType = "application/json"
 
 //FIX ON DOCUMENT BLANK ERROR
-export default function LessonModal({title, description, visibility, onPress,children, setRefresh}) {
-  const {token} = useContext(AuthContext)
-  const navigation = useNavigation()
+export default function LessonModal({ visibility, onPress, children, setRefresh }) {
+  const { token } = useContext(AuthContext)
+  //const navigation = useNavigation()
   const [errorMessage, setErrorMessage] = useState("");
-  
+
   const formInitialData = {
-    title: title ?? "",
-    description: description ?? "",
+    title: "",
+    description: "",
   }
   const [formData, setFormData] = useState(formInitialData)
 
@@ -35,32 +35,27 @@ export default function LessonModal({title, description, visibility, onPress,chi
 
   }
 
-  const cancelForm = ()=>{
+  const cancelForm = () => {
     onPress();
     setFormData(formInitialData);
     setErrorMessage("");
   }
 
-  const submitForm = async()=>{
-    const formDataToSend = new FormData();
-    formDataToSend.append('title', formData.title);
-    formDataToSend.append('description', formData.description);
-
-    console.log(formDataToSend)
-      try {
-        const data = await axiosPost(POSTURL,formDataToSend,contentType,token)
-
+  const submitForm = async () => {
+    console.log(formData)
+    try {
+      const data = await axiosPost(POSTURL, formData, contentType, token)
       console.log(data)
       onPress()
       setRefresh(true)
       console.log("working2")
       setFormData(formInitialData)
       setErrorMessage("");
-      } catch (error) {
-        setErrorMessage(error?.data?.message)
-      }
+    } catch (error) {
+      setErrorMessage(error?.data?.message)
+    }
   }
- 
+
   return (
     <KeyboardAvoidingView behavior="padding">
       <Modal
@@ -74,21 +69,21 @@ export default function LessonModal({title, description, visibility, onPress,chi
             <View style={styles.inputContainer}>
               <View style={styles.titleContainer}>
                 <Text style={styles.textTitle}>{children}</Text>
-                
+
                 <Pressable style={styles.closeButton} onPress={cancelForm}>
-                <Text><MaterialCommunityIcons name="close" size={30} color={Colors.bgRedInvalid} /></Text>
+                  <Text><MaterialCommunityIcons name="close" size={30} color={Colors.bgRedInvalid} /></Text>
                 </Pressable>
-                
+
               </View>
 
               <TextInput
                 label="Title"
                 style={styles.textInput}
                 onChangeText={(inputvalue) => handleForm("title", inputvalue)}
-                mode="flat" 
+                mode="flat"
                 value={formData.title}
-                />
-                
+              />
+
               <TextInput
                 multiline={true}
                 label="Description"
@@ -96,7 +91,7 @@ export default function LessonModal({title, description, visibility, onPress,chi
                 onChangeText={(inputvalue) => handleForm("description", inputvalue)}
                 mode="flat"
                 value={formData.description} />
-  
+                {errorMessage && <Text style={styles.errorMessage}>{errorMessage}</Text>}
               <View style={styles.buttonContainer}>
                 <Pressable style={[styles.submitButton]} onPress={submitForm}>
                   <Text style={styles.SubmitText}>
@@ -139,7 +134,7 @@ const styles = StyleSheet.create({
   textTitle: {
     fontSize: 18,
     fontFamily: 'PTSans-Bold',
-    flex:5,
+    flex: 5,
     textAlign: 'center',
     alignSelf: 'center',
     padding: 10,
@@ -148,13 +143,13 @@ const styles = StyleSheet.create({
     height: deviceWidth * .13,
     position: 'absolute',
     right: 0,
-    top:0,
+    top: 0,
   },
   textInput: {
     width: "92%",
   },
   buttonContainer: {
-    flexDirection:"row",
+    flexDirection: "row",
     gap: 30,
     paddingBottom: 5,
   },
@@ -176,13 +171,13 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     textAlignVertical: 'center',
   },
-  SubmitText:{
+  SubmitText: {
     color: 'white',
     fontSize: 16,
     fontFamily: 'PTSans-Bold',
   },
-  errorMessage:{
-    alignSelf:"center",
+  errorMessage: {
+    alignSelf: "center",
     color: Colors.bgError,
     fontFamily: 'PTSans-Bold',
   }

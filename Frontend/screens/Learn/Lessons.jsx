@@ -17,7 +17,7 @@ export default function Lessons({ navigation }) {
   const authcontext = useContext(AuthContext);
   const  tabBarHeight  = useBottomTabBarHeight();
   const [lessonData, setLessonData] = useState([]);
-
+  const [refresh, setRefresh] = useState(false);
 
   useEffect(() => {
     const fetchLessonData = async () => {
@@ -25,6 +25,7 @@ export default function Lessons({ navigation }) {
         const data = await axiosGet(getCategoryURL, authcontext.token);
         //console.log(data)
         setLessonData(data);
+        setRefresh(false)
       } catch (error) {
         console.log(error.status)
         if (error.status == 401) {
@@ -34,7 +35,7 @@ export default function Lessons({ navigation }) {
     };
 
     fetchLessonData();
-  }, []);
+  }, [refresh]);
 
 
   const handleNavigation = (param) => {

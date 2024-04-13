@@ -25,7 +25,7 @@ app.use('/api/question', questionRoute)
 app.use('/api/categories',categoryRoute)
 //app.use('/api/post',videoRoute)
 
-app.use(errorHandler)
+//app.use(errorHandler)
 connectToMongoDB()
     .then(app.listen(PORT,()=>{ //connection to port
         console.log(`Server is listening to port ${PORT}`)

@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const baseURL = 'http://192.168.1.7:5000';
+const baseURL = 'http://192.168.68.119:5000';
 
 const axiosRequest = async (method, URL, token, data, contentType) => {
   try {
@@ -25,8 +25,8 @@ const axiosRequest = async (method, URL, token, data, contentType) => {
     return response.data;
   } catch (error) {
     console.error(error);
-    console.error(error.status);
-    console.error(`Error in ${method} request to ${URL}:`, error?.response?.data);
+    console.error(error?.status);
+    console.error(`Error in ${method} request to ${URL}:`, error?.response?.data?.message);
     
     throw error?.response;
   

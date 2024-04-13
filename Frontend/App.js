@@ -156,6 +156,13 @@ const Root = () => {
   useEffect(() => {
     setLoading(true);
 
+    const loadFonts = async ()=>{
+      try {
+
+      } catch (error) {
+        console.error(error)
+      }
+    }
     const fetchToken = async () => {
       try {
         const token = await AsyncStorage.getItem('token');
@@ -174,14 +181,15 @@ const Root = () => {
         } else if (fontError) {
           console.error("Error loading fonts:", fontError);
           setLoading(false); 
-        } else {
-          setLoading(false); 
         }
+        // } else {
+        //   setLoading(false); 
+        // }
       }
     };
 
     fetchToken();
-  }, []);
+  }, [fontsLoaded,fontError]);
 
   return loading ? <LoadingScreen /> : <Navigation />;
 };

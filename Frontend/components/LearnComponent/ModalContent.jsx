@@ -1,6 +1,6 @@
 import { TextInput } from "react-native-paper"
 import { View, Pressable, Text, StyleSheet, Modal, KeyboardAvoidingView, TouchableWithoutFeedback, Keyboard, Dimensions } from "react-native"
-import { useContext, useState } from "react"
+import { useContext, useEffect, useState } from "react"
 import Colors from "../../constants/Colors";
 import * as DocumentPicker from 'expo-document-picker';
 import { axiosPost, axiosPut } from "../../utils/axios";
@@ -12,7 +12,7 @@ import { useNavigation } from '@react-navigation/native';
 const dimensions = Dimensions.get("window");
 const deviceWidth = dimensions.width;
 
-const POSTURL = "/api/post/upload/"
+const POSTURL = "/api/post/add"
 const PUTURL = "/api/post/update/"
 const contentType = "multipart/form-data"
 const mimeTypes = [
@@ -30,7 +30,7 @@ export default function ModalContent({documentName,title, description, visibilit
   const formInitialData = {
     title: title ?? "",
     description: description ?? "",
-    document: null
+    document:null
   }
   const [formData, setFormData] = useState(formInitialData)
 
@@ -41,72 +41,83 @@ export default function ModalContent({documentName,title, description, visibilit
     }))
 
   }
+  // useEffect(() => {
+  //   console.log(title,description)
+  //   formInitialData ={
+  //     title: title,
+  //     description: description,
+  //     document:documentName ?? ""
+  //   }
+  // }, []);
 //Function that lets you pick documents on your device
-  const pickDocument = async () => {
-    try {
-      const result = await DocumentPicker.getDocumentAsync({
-        type: mimeTypes
-      });
-      if (result) {
-        console.log(result.assets[0])
-        handleForm("document", result.assets[0])
-  
-      }
-    } catch (err) {
-      console.log("error getting document", err);
+const pickDocument = async () => {
+  try {
+    const result = await DocumentPicker.getDocumentAsync({
+      type: mimeTypes
+    });
+    if (result) {
+      console.log(result.assets[0]);
+      handleForm("document", result.assets[0]);
+    } else {
+      handleForm("document", null);
     }
-
-    
+  } catch (err) {
+    console.log("error getting document", err);
   }
+}
   const cancelForm = ()=>{
     onPress();
     setFormData(formInitialData);
     setErrorMessage("");
   }
-  const submitForm = async()=>{
-    const formDataToSend = new FormData();
-    formDataToSend.append('title', formData.title);
-    formDataToSend.append('description', formData.description);
-    formDataToSend.append('document', {
-      uri: formData.document?.uri,
-      type: formData.document?.mimeType, 
-      name: formData.document?.name 
-    });
 
-    console.log(formDataToSend)
+  const submitForm = async()=>{
+    
+    const formDataToSend = new FormData()
+    formDataToSend.append('title', formData?.title)
+    formDataToSend.append('description', formData?.description)
+    
+    if(formData.document != null){
+      formDataToSend.append('document', {
+      uri: formData.document.uri,
+      type: formData.document.mimeType, 
+      name: formData.document.name 
+    })}
+
+   
     if(children.split(" ")[0] === "Upload"){
+      formDataToSend.append('categoryID', id)
+      console.log(formDataToSend._parts)
       try {
         const data = await axiosPost(POSTURL,formDataToSend,contentType,token)
-
-      console.log(data)
-      onPress()
-      setRefresh(true)
-      console.log("working2")
-      setFormData(formInitialData)
-      setErrorMessage("");
+        console.log(data)
       } catch (error) {
-        //console.log(error)
+        console.log(error.data.message)
         setErrorMessage(error?.data?.message)
+        console.log(errorMessage)
+        return
       }
     }else if (children.split(" ")[0] === "Edit"){
       try {
         const data = await axiosPut(`${PUTURL}${id}`,formDataToSend,contentType,token)
         console.log(data)
-        onPress()
-        setRefresh(true)
-        setFormData(formInitialData)
-        setErrorMessage("");
+        
       } catch (error) {
         setErrorMessage(error?.data?.message)
-        
+        return
       }
-     
+      console.log("done adding now will close modal")
     }
+    onPress()
+    setRefresh(true)
+    setFormData(formInitialData)
+    setErrorMessage("");
   }
   //console.log(formDataToSend)
   // console.log(selectedFile)
   // console.log(formData)
   //console.log(formData.title)
+  console.log(formData.title,formData.description)
   return (
     <KeyboardAvoidingView behavior="padding">
       <Modal
@@ -132,7 +143,7 @@ export default function ModalContent({documentName,title, description, visibilit
                 style={styles.textInput}
                 onChangeText={(inputvalue) => handleForm("title", inputvalue)}
                 mode="flat" 
-                value={formData.title}
+                value={formData.title ?? title}
                 />
                 
               <TextInput
@@ -141,15 +152,18 @@ export default function ModalContent({documentName,title, description, visibilit
                 style={styles.textInput}
                 onChangeText={(inputvalue) => handleForm("description", inputvalue)}
                 mode="flat"
-                value={formData.description} />
+                value={formData.description ?? description} />
   
               <Pressable onPress={pickDocument}>
                 <Text style={styles.selectButton}>
                   <Text style={{fontFamily: 'PTSans-Regular'}}>
-                  <MaterialCommunityIcons name="paperclip" size={20} color="black" />{formData.document ? `${formData.document.name}` : "Upload File"}
+                  <MaterialCommunityIcons name="paperclip" size={20} color="black" />{"Upload File"}
+                  {/* formData.document ? `${formData.document.name}` :  */}
                   </Text>
-                {errorMessage && <Text style={styles.errorMessage}>{errorMessage}</Text>}</Text>
+                
+                </Text>
               </Pressable>
+              {errorMessage && <Text style={styles.errorMessage}>{errorMessage}</Text>}
     
               <View style={styles.buttonContainer}>
                 <Pressable style={[styles.submitButton]} onPress={submitForm}>

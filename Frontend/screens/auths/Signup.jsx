@@ -11,6 +11,7 @@ import Title from '../../components/auths/Title';
 import LinkContainer from '../../components/auths/LinkContainer';
 
 const signupURL = "/api/user/register";
+const adduserdataURL = "/api/user/data/add/";
 const contentType = "application/json"
 
 export default function Signup() {
@@ -99,13 +100,15 @@ export default function Signup() {
 
 		try {
 			// Make a POST request to the signup API endpoint with form data
-			const data = await axiosPost(signupURL, textInputs, contentType)
-			console.log(data);
-			authContext.authenticate(data.token)
-			console.log(data.token);
+			const user = await axiosPost(signupURL, textInputs, contentType)
+			const userdata = await axiosPost(`${adduserdataURL}${user._id}`, textInputs, contentType)
+			console.log(user);
+			console.log(userdata); 
+			authContext.authenticate(user.token)
+			console.log(user.token);
 		} catch (error) {
-			console.error(error.response.status);
-			console.error(error.response.data.message);
+			console.error(error.status);
+			console.error(error);
 		}
 	}
 

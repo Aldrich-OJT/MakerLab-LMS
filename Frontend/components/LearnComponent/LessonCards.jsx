@@ -58,7 +58,7 @@ const styles = StyleSheet.create({
         minwidth: '100%',
         padding: 20,
         marginHorizontal: 20,
-        marginTop: 20
+        margin: 10
     },
     titleContainer: {
         flexDirection: 'row',

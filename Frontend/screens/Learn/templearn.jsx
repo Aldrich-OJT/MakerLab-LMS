@@ -36,12 +36,12 @@ export default function Templearn({ route, navigation }) {
 
   useEffect(() => {
     const fetchData = async () => {
-      console.log(param);
+      //console.log(param);
       try {
         setContentLoading(true);
 
         const data = await axiosGet(`${getPostURL}${param._id}`, authContext.token);
-        console.log("i am trying to get something")
+        //console.log("i am trying to get something")
         setVideoData(data);
 
         if (data) {
@@ -50,7 +50,7 @@ export default function Templearn({ route, navigation }) {
         // else {
         //   setNoContent(true)
         // }
-        console.log(videoData)
+        //console.log(videoData)
       } catch (error) {
         setNoContent(true)
         // Handle the error here, you can log it or show an error message to the user
@@ -60,7 +60,7 @@ export default function Templearn({ route, navigation }) {
         // }
 
       } finally {
-        //setRefresh(false)
+        setRefresh(false)
         setContentLoading(false);
       }
     };
@@ -68,11 +68,11 @@ export default function Templearn({ route, navigation }) {
   }, [refresh])
 
   //refresh the page when focus goes back on this tab
-  // useFocusEffect(
-  //   useCallback(() => {
-  //     setRefresh(true)
-  //   }, [])
-  // );
+  useFocusEffect(
+    useCallback(() => {
+      setRefresh(true)
+    }, [])
+  );
 
   const showLearnDetail = (item) => {
     //console.log(item)
@@ -83,11 +83,15 @@ export default function Templearn({ route, navigation }) {
     navigation.navigate("Questions", { item })
   };
 
-  console.log(nocontent)
+  //console.log(nocontent)
   //console.log(refresh)
   return (
     <View style={styles.maincontainer}>
-      <ModalContent setRefresh={() => setRefresh(true)} visibility={modalVisible} onPress={() => setModalVisible(false)} >Upload Lesson</ModalContent>
+      <ModalContent 
+      id={param._id}
+      setRefresh={() => setRefresh(true)} 
+      visibility={modalVisible} 
+      onPress={() => setModalVisible(false)} >Upload Lesson</ModalContent>
 
       <View style={styles.headercontainer}>
         <View>

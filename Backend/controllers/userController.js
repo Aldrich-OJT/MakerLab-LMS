@@ -18,8 +18,8 @@ const userLogin = asyncHandler(async (req, res) => {
             role: user.role
         });
     } else {
-        res.status(400)
-        throw new Error("Invalid user Data")
+        res.status(400).json({ message: "Invalid user Data" });
+        return;
     }
 });
 
@@ -29,14 +29,15 @@ const userRegister = asyncHandler(async (req, res) => {
     const userExist = await User.findOne({ email });
 
     if (userExist) {
-        res.status(400)
-        throw new Error("User already exist")
+        res.status(400).json({ message: "User already exist" });
         return;
+        
     }
 
     if (!name || !email || !password) {
-        res.status(400)
-        throw new Error("Please fill out all input")
+        res.status(400).json({ message: "Please fill out all input" });
+        return;
+        
     }
 
     const salt = await bcrypt.genSalt(10);
@@ -57,13 +58,13 @@ const userRegister = asyncHandler(async (req, res) => {
             role: newUser.role
         });
     } else {
-        res.status(400)
-        throw new Error("Invalid user Data")
+        res.status(400).json({ message: "Invalid user Data" });
+        return;
     }
 });
 
 const getUser = asyncHandler(async (req, res) => {
-    const {id, name, email, role} =  await User.findById(req.user.id)
+    const { id, name, email, role } = await User.findById(req.user.id)
 
     res.status(200).json({
         id: id,
@@ -74,7 +75,7 @@ const getUser = asyncHandler(async (req, res) => {
 });
 
 const generateToken = (id) => {
-    return jwt.sign({ id }, process.env.JWT_SECRET, {
+    jwt.sign({ id }, process.env.JWT_SECRET, {
         expiresIn: '1d'
     });
 }
