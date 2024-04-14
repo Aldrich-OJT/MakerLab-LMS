@@ -41,6 +41,7 @@ export default function Lessons({ navigation }) {
   const handleNavigation = (param) => {
     navigation.navigate('templearn', { param });
   };
+ 
   const [modalVisible, setModalVisible] = useState(false);
   return (
     <View style={[styles.mainContainer,{marginBottom:tabBarHeight}]}>

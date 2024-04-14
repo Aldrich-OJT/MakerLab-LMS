@@ -157,7 +157,8 @@ const pickDocument = async () => {
               <Pressable onPress={pickDocument}>
                 <Text style={styles.selectButton}>
                   <Text style={{fontFamily: 'PTSans-Regular'}}>
-                  <MaterialCommunityIcons name="paperclip" size={20} color="black" />{"Upload File"}
+                  <MaterialCommunityIcons name="paperclip" size={20} color="black" />
+                  {formData.document ? `${formData.document.name}` : "Upload File"}
                   {/* formData.document ? `${formData.document.name}` :  */}
                   </Text>
                 
@@ -186,30 +187,22 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    paddingHorizontal: 20,
     backgroundColor: "rgba(0,0,0,0.4)"
   },
   inputContainer: {
-    height: '30%',
-    width: deviceWidth * .9,
-    justifyContent: "center",
+    width: '90%',
     alignItems: "center",
     padding: 15,
     borderRadius: 10,
     backgroundColor: Colors.bgYellow,
-    // borderColor: "black",
-    // borderWidth: 2,
     height: "fit-content",
     gap: 10,
   },
   titleContainer: {
     flexDirection: 'row',
-    width: '100%',
-    //justifyContent:"space-between",
-    //alignItems:"center"
   },
   textTitle: {
-    fontSize: 18,
+    fontSize: 20,
     fontFamily: 'PTSans-Bold',
     flex:5,
     textAlign: 'center',
@@ -217,7 +210,6 @@ const styles = StyleSheet.create({
     padding: 10,
   },
   closeButton: {
-    height: deviceWidth * .13,
     position: 'absolute',
     right: 0,
     top:0,
@@ -227,22 +219,20 @@ const styles = StyleSheet.create({
   },
   buttonContainer: {
     flexDirection:"row",
-    gap: 30,
     paddingBottom: 5,
   },
   submitButton: {
     backgroundColor: Colors.bgViolet,
     justifyContent: "center",
     alignItems: "center",
-    height: deviceWidth * .13,
-    width: deviceWidth * .75,
-    borderRadius: 50,
-    paddingVertical: 10,
+    width: '60%',
+    borderRadius: 10,
+    paddingVertical: 15,
     marginTop: 10,
   },
   selectButton: {
     backgroundColor: "#FFA800",
-    height: deviceWidth * .10,
+    paddingVertical: 10,
     width: deviceWidth * .75,
     borderRadius: 6,
     textAlign: 'center',

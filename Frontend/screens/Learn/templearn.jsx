@@ -5,19 +5,15 @@ import {
   StyleSheet,
   FlatList,
   Pressable,
-  Modal,
-  KeyboardAvoidingView,
-  Platform,
 } from "react-native";
-import { Searchbar, TextInput } from "react-native-paper";
 import Colors from "../../constants/Colors";
+import LearnHeader from "../../components/LearnComponent/LearnHeader";
 import Templearncards from "../../components/LearnComponent/templearncards";
 import { axiosGet } from "../../utils/axios";
 import { AuthContext } from "../../context/AuthProvider";
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
 // import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs';
 import ModalContent from "../../components/LearnComponent/ModalContent";
-import { FontAwesome5 } from '@expo/vector-icons';
 import { ActivityIndicator} from 'react-native-paper';
 
 const getPostURL = "/api/post/category/";
@@ -92,23 +88,7 @@ export default function Templearn({ route, navigation }) {
       setRefresh={() => setRefresh(true)} 
       visibility={modalVisible} 
       onPress={() => setModalVisible(false)} >Upload Lesson</ModalContent>
-
-      <View style={styles.headercontainer}>
-        <View>
-          <Pressable style={styles.backButtonContainer} onPress={() => (navigation.goBack())} >
-            <FontAwesome5
-              //style={styles.backbutton}
-              name="chevron-left"
-              size={20}
-              color={Colors.bgYellow}
-            />
-
-          </Pressable>
-        </View>
-        <View style={styles.titlecontainer}>
-          <Text style={styles.title} numberOfLines={1}><FontAwesome5 name="book" size={24} color={Colors.bgYellow} /> {param.title}</Text>
-        </View>
-      </View>
+    <LearnHeader title={param.title} navigation={navigation}/>
 
       <View style={styles.bottomsheet}>
 
@@ -155,49 +135,9 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     backgroundColor: 'black',
   },
-  headercontainer: {
-    justifyContent: 'space-evenly',
-    alignItems: "center",
-    width: "100%",
-    height: "10%",
-    flexDirection: 'row',
-    marginTop: "10%",
-  },
-  backButtonContainer: {
-    backgroundColor: '#292929',
-    height: 50,
-    width: 50,
-    justifyContent: "center",
-    alignItems: "center",
-    borderRadius: 25,
-    overflow: "hidden"
-  },
-  backbutton: {
-
-    height: "100%",
-    width: "100%",
-    // justifyContent: 'center',
-    // alignItems: 'center',
-  },
-  title: {
-    color: Colors.bgYellow,
-    padding: 10,
-    fontSize: 20,
-    paddingHorizontal: 30,
-    fontWeight: 'bold'
-  },
-  titlecontainer: {
-    width: "80%",
-    maxHeight: "fit-content",
-    borderRadius: 50,
-    backgroundColor: Colors.bgGray,
-    justifyContent: "center"
-  },
   bottomsheet: {
     backgroundColor: Colors.bgOffWhite,
-    //borderRadius: 20,
     flex: 1,
-    //paddingHorizontal: 20,
   },
   addButton: {
     position: "absolute",

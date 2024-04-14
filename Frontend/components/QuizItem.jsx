@@ -1,8 +1,7 @@
-import { Text, Pressable, StyleSheet, View, Image, Dimensions } from "react-native";
+import { Text, Pressable, StyleSheet, View, Dimensions } from "react-native";
 import Colors from "../constants/Colors";
 import { useEffect, useState } from "react";
-
-const dimensions = Dimensions.get('window');
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 
 export default function QuizItem(props) {
   const [selected, setSelected] = useState(null);
@@ -40,13 +39,34 @@ export default function QuizItem(props) {
       props.setScore(prevState => prevState + singleScore)
     }
    
-   
   },[singleScore])
   console.log(props.score)
  console.log(singleScore)
   return (
     <View style={styles.itemcontainer}>
       <View style={styles.questioncontainer}>
+        <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+          <Text style={styles.questionNumberText}>Question {props.itemNumber} </Text>
+          <View style={styles.buttonsContainer}>
+            <Pressable>
+                <MaterialCommunityIcons 
+                  name="square-edit-outline" 
+                  size={24}
+                  color={Colors.bgYellow}
+                  style={styles.buttons}
+                />
+              </Pressable>
+
+              <Pressable>
+                <MaterialCommunityIcons 
+                  name="delete"
+                  size={24}
+                  color={Colors.bgYellow}
+                  style={styles.buttons}
+                />
+              </Pressable>
+            </View>
+        </View>
         <Text style={styles.questiontext}>{props.question}</Text>
       </View>
 
@@ -80,24 +100,32 @@ export default function QuizItem(props) {
 
 
 const styles = StyleSheet.create({
-
   itemcontainer: {
     backgroundColor: Colors.bgYellow,
-    justifyContent: "center",
     alignItems: "center",
     borderRadius: 10,
     marginBottom: 10,
-    marginHorizontal: 10
-
+    marginHorizontal: 20
   },
   questioncontainer: {
-    borderBottomWidth: 2,
-    borderBottomColor: Colors.bgDarkYellow,
-    padding: 15,
-    width: '90%'
+    width: '90%',
+    paddingTop: 15,
   },
   questiontext: {
     fontSize: 16,
+    fontFamily: 'PTSans-Regular',
+    textAlign: 'justify',
+  },
+  questionNumberText:{
+    fontSize: 16,
+    fontFamily: 'PTSans-Bold',
+    color: Colors.bgYellow,
+    backgroundColor: 'black',
+    borderRadius: 10,
+    width: '33%',
+    textAlign: 'center',
+    padding:10,
+    marginBottom:10,
   },
   choicescontainer: {
     flexDirection: 'column',
@@ -116,16 +144,27 @@ const styles = StyleSheet.create({
   choices: {
     backgroundColor: Colors.bgDarkYellow,
     borderRadius: 100,
+    borderColor: Colors.bgGray,
+    borderWidth: 1,
     minWidth: '100%',
     padding: 10,
-    paddingLeft: 15,
-    paddingRight: 15,
+    paddingHorizontal: 15,
   },
   choicestext: {
-    fontSize: 15,
+    fontSize: 16,
+    fontFamily: 'PTSans-Regular'
   },
   selectedchoices: {
     backgroundColor: Colors.bgDarkViolet,
-    borderColor: 'black',
-  }
+  },
+  buttonsContainer:{
+    flexDirection: 'row',
+    gap: 5,
+    justifyContent: 'flex-end'
+  },
+  buttons:{
+    borderRadius:10,
+    padding:7,
+    backgroundColor: 'black',
+  },
 })
