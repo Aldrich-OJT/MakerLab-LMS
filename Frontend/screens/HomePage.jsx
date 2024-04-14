@@ -3,9 +3,11 @@ import CircularProgress from "react-native-circular-progress-indicator";
 import Colors from "../constants/Colors";
 import { FontAwesome5 } from '@expo/vector-icons';
 import { Ionicons } from '@expo/vector-icons';
+import { useContext } from "react";
+import {AuthContext} from "../context/AuthProvider"
 
 export default function HomePage() {
-  //const authContext = useContext(AuthContext)
+  const authContext = useContext(AuthContext)
 
   //console.log(authContext)
   return (

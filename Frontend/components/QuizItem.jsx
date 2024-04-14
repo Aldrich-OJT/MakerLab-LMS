@@ -6,27 +6,35 @@ const dimensions = Dimensions.get('window');
 
 export default function QuizItem(props) {
   const [selected, setSelected] = useState(null);
+
   const [singleScore, setSingleScore] = useState(0)
   const handleChoiceSelection = (choice) => {
+    console.log("i am pressed")
     setSelected(choice);
-    
+    props.setAnsweredQuestion(prevState => prevState + 1)
     //prevent multiple selection if user clicks the selected option again
     if (selected === choice) {
-      return
-    }
-    //adds 1 to singleScore state if choice is equal to answer else reset to  0
-    if (props.options[choice] === props.answer) {
+      console.log("i am selected again")
+      setSelected(null)
+      setSingleScore(0)
+  
+      props.setAnsweredQuestion(prevState => prevState - 1)
+        
+    }else if (props.options[choice] === props.answer) {//adds 1 to singleScore state if choice is equal to answer else reset to  0
       setSingleScore(prevState=>prevState+1)
     }else{
       setSingleScore(0)
     }
+    
+   
   };
   //only checks if state changes from 0 to 1 or vice versa, do not check if already 0
   useEffect(()=>{
     //initial value of score is zero, so this code prevents from subtracting at the inital value
     if (singleScore === 0 && props.score !=0) {
-      console.log("chgange")
+      console.log("change")
       console.log(singleScore)
+     
       props.setScore(prevState => prevState - 1)
     }else{
       props.setScore(prevState => prevState + singleScore)
@@ -34,7 +42,8 @@ export default function QuizItem(props) {
    
    
   },[singleScore])
- //console.log(props)
+  console.log(props.score)
+ console.log(singleScore)
   return (
     <View style={styles.itemcontainer}>
       <View style={styles.questioncontainer}>

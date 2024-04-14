@@ -22,7 +22,7 @@ const mimeTypes = [
 
 //FIX ON DOCUMENT BLANK ERROR
 export default function ModalContent({documentName,title, description, visibility, onPress,children,id, setRefresh}) {
-  const {token} = useContext(AuthContext)
+  const {userData} = useContext(AuthContext)
   const navigation = useNavigation()
   const [errorMessage, setErrorMessage] = useState("");
   
@@ -89,7 +89,7 @@ const pickDocument = async () => {
       formDataToSend.append('categoryID', id)
       console.log(formDataToSend._parts)
       try {
-        const data = await axiosPost(POSTURL,formDataToSend,contentType,token)
+        const data = await axiosPost(POSTURL,formDataToSend,contentType,userData.token)
         console.log(data)
       } catch (error) {
         console.log(error.data.message)
@@ -99,7 +99,7 @@ const pickDocument = async () => {
       }
     }else if (children.split(" ")[0] === "Edit"){
       try {
-        const data = await axiosPut(`${PUTURL}${id}`,formDataToSend,contentType,token)
+        const data = await axiosPut(`${PUTURL}${id}`,formDataToSend,contentType,userData.token)
         console.log(data)
         
       } catch (error) {
@@ -117,7 +117,7 @@ const pickDocument = async () => {
   // console.log(selectedFile)
   // console.log(formData)
   //console.log(formData.title)
-  console.log(formData.title,formData.description)
+  //console.log(formData)
   return (
     <KeyboardAvoidingView behavior="padding">
       <Modal
@@ -143,7 +143,7 @@ const pickDocument = async () => {
                 style={styles.textInput}
                 onChangeText={(inputvalue) => handleForm("title", inputvalue)}
                 mode="flat" 
-                value={formData.title ?? title}
+                value={formData.title ? formData.title : ""}
                 />
                 
               <TextInput
@@ -152,7 +152,7 @@ const pickDocument = async () => {
                 style={styles.textInput}
                 onChangeText={(inputvalue) => handleForm("description", inputvalue)}
                 mode="flat"
-                value={formData.description ?? description} />
+                value={formData.description ? formData.description : ""} />
   
               <Pressable onPress={pickDocument}>
                 <Text style={styles.selectButton}>

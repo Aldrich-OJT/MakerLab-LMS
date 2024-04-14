@@ -37,11 +37,12 @@ export default function Login() {
   const submitForm = async () => {
 
     try {
+      console.log("trying to log in")
       const data = await axiosPost(loginURL, textInputs,contentType)
       if (data) {
-        console.log("login success")
-        authContext.authenticate(data.token)
-        console.log(data.token)
+        console.log(data)
+        authContext.authenticate(data)
+       
       }
     } catch (error) {
       
@@ -55,7 +56,7 @@ export default function Login() {
       setInputInvalid(false) 
 		}
 	}, [textInputs]);
-  console.log("hi")
+  console.log(textInputs)
   return (
     <KeyboardAvoidingView style={styles.container} behavior={Platform.OS === "ios" ? "padding" : "height"}>
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>

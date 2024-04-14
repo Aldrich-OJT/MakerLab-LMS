@@ -76,16 +76,19 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'center',
     marginTop: -30,
+    
   },
   lessonNumberText: {
     backgroundColor: Colors.bgGray,
     fontSize: 16,
     color: 'white',
     fontWeight: 'bold',
-    borderRadius: 50,
+    borderRadius: 15,
     width: deviceWidth * .3,
     paddingVertical: 5,
     textAlign: 'center',
+    overflow:"hidden",
+   
   },
   edit: {
     position: 'absolute',

@@ -10,22 +10,27 @@ const addQuestion = asyncHandler(async (req, res) => {
 
     if (questionExist) {
         res.status(400).json({ message: "Question already exists" });
+        return;
     }
 
     if (options.length !== 4) {
         res.status(400).json({ message: "Provide exactly 4 options" });
+        return;
     }
 
     if (!options.includes(answer)) {
         res.status(400).json({ message: "Answer is not included in the options" });
+        return;
     }
 
     if (new Set(options).size !== options.length) {
         res.status(400).json({ message: "There are duplicate options" });
+        return;
     }
 
     if (!question || !options || !answer) {
         res.status(400).json({ message: "Please fill all fields" });
+        return;
     }
 
     const newQuestion = await Question.create({
@@ -45,6 +50,7 @@ const getAllQuestion = asyncHandler(async (req, res) => {
 
     if(!data){
         res.status(404).json("no question found")
+        return;
     }
 
     res.status(200).json(data);
@@ -64,22 +70,27 @@ const editQuestion = asyncHandler(async (req, res) => {
     const idExist = await Question.findById(id);
     if (!idExist) {
         res.status(400).json({ message: "Question not found" });
+        return;
     }
 
     if (options.length !== 4) {
         res.status(400).json({ message: "Provide exactly 4 options" });
+        return;
     }
 
     if (!options.includes(answer)) {
         res.status(400).json({ message: "Answer is not included in the options" });
+        return;
     }
 
     if (new Set(options).size !== options.length) {
         res.status(400).json({ message: "There are duplicate options" });
+        return;
     }
 
     if (!question || !options || !answer) {
         res.status(400).json({ message: "Please fill all fields" });
+        return;
     }
 
     const newQuestion = await Question.findByIdAndUpdate(id, {
@@ -97,6 +108,7 @@ const deleteQuestion = asyncHandler(async (req, res) => {
 
     if (!question) {
         res.status(400).json({ message: "Question not found" });
+        return;
     }
 
     const { _id } = await Question.findByIdAndDelete(req.params.id);

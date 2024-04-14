@@ -104,8 +104,8 @@ export default function Signup() {
 			const userdata = await axiosPost(`${adduserdataURL}${user._id}`, textInputs, contentType)
 			console.log(user);
 			console.log(userdata); 
-			authContext.authenticate(user.token)
-			console.log(user.token);
+			authContext.authenticate(user)
+			console.log(user);
 		} catch (error) {
 			console.error(error.status);
 			console.error(error);

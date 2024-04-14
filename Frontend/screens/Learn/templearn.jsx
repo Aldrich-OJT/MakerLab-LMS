@@ -28,7 +28,7 @@ export default function Templearn({ route, navigation }) {
   const [modalVisible, setModalVisible] = useState(false);
   const { param } = route.params;
 
-  const authContext = useContext(AuthContext);
+  const {userData} = useContext(AuthContext);
   const [videoData, setVideoData] = useState(null);
   const [contentLoading, setContentLoading] = useState(false)
   const [nocontent, setNoContent] = useState(false)
@@ -40,7 +40,7 @@ export default function Templearn({ route, navigation }) {
       try {
         setContentLoading(true);
 
-        const data = await axiosGet(`${getPostURL}${param._id}`, authContext.token);
+        const data = await axiosGet(`${getPostURL}${param._id}`, userData.token);
         //console.log("i am trying to get something")
         setVideoData(data);
 

@@ -31,9 +31,8 @@
             fetchData()
         }, [refresh])
         useLayoutEffect(() => {
-            if (postData.title) {
                 navigation.setOptions({
-                    headerTitle: postData.title,
+                    headerTitle: postData.title ? postData.title :  "",
                     headerStyle: {
                         backgroundColor: "black",
                     },
@@ -44,7 +43,6 @@
                     headerTintColor: 'white',
                     headerTitleAlign: 'center',
                 });
-            }
         }, [postData])
 
         const createTwoButtonAlert = () =>

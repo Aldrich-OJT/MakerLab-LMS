@@ -5,27 +5,50 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 import Header from "../../components/Header";
 import { useContext, useEffect, useState } from "react";
 import { FlatList } from "react-native";
-import { axiosGet } from "../../utils/axios";
+import { axiosGet, axiosPut } from "../../utils/axios";
 import { useRoute } from '@react-navigation/native';
 import { AuthContext } from "../../context/AuthProvider";
 
 const getQuizzesURL = "/api/question/"
+const editScoreURL = "/api/user/data/update/"
+const contentType = "application/json"
+
 
 export default function Assess() {
-  const { token } = useContext(AuthContext)
+  const { userData } = useContext(AuthContext)
   const [score, setScore] = useState(0)
   const route = useRoute()
+  const [answeredQuestion, setAnsweredQuestion] = useState(0)
+  const [quizNumber, setQuizNumber] = useState(0)
   const param = route.params.item
-
-
   const [quizData, setQuizData] = useState([])
+  const [quizForm, setQuizForm] = useState({
+    quizScores:{
+      postId: param._id,
+      score: score,
+      passed: false
+    }
+  })
+  useEffect(()=>{
+    setQuizForm(prevstate => ({
+      ...prevstate,
+      quizScores:{
+        ...prevstate.quizScores,
+        score: score,
+        passed: score < Math.round(quizNumber * .6) ? false : true
+      }
+    }))
+  },[score])
 
   useEffect(() => {
     //console.log(param)
 
     const fetchData = async () => {
-      const data = await axiosGet(`${getQuizzesURL}${param._id}`, token)
+      console.log("fetch rerendered")
+      const data = await axiosGet(`${getQuizzesURL}${param._id}`,userData.token)
       setQuizData(data)
+      setQuizNumber(data.length)
+      console.log(quizNumber)
       //console.log("QUIZDATA", data)
     }
 
@@ -38,10 +61,26 @@ export default function Assess() {
       options={item.options}
       answer = {item.answer}
       setScore ={setScore}
+      setAnsweredQuestion={setAnsweredQuestion}
+      //setQuizForm={setQuizForm}
       score ={score}
     />
   );
-  console.log(score)
+  const handleSubmit = async () => {
+    try {
+      const data = await axiosPut(editScoreURL + userData._id, quizForm, contentType, userData.token);
+      console.log(data);
+      // Handle successful response
+    } catch (error) {
+      // Handle errors
+      console.error("Error in handleSubmit:", error);
+      // You might want to show an error message to the user
+    }
+  };
+  console.log(quizForm)
+  // console.log("number of answered question is",answeredQuestion)
+ //console.log(quizData)
+ console.log(userData._id)
   return (
     <View style={styles.mainContainer}>
       <Header />
@@ -52,14 +91,14 @@ export default function Assess() {
         </View>
 
         <View style={styles.flatlist}>
-          {quizData.length>0 ? (<FlatList
+          {quizData ? (<FlatList
 
             showsVerticalScrollIndicator={false}
             data={quizData}
             renderItem={renderQuizItem}
             keyExtractor={item => item._id}
             ListFooterComponent={
-              <Pressable style={styles.submitbutton}>
+              <Pressable style={styles.submitbutton} onPress={handleSubmit}>
                 <Text style={styles.submittext}>Submit</Text>
               </Pressable>
             }

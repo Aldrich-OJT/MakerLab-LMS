@@ -37,7 +37,6 @@ const userRegister = asyncHandler(async (req, res) => {
     if (!name || !email || !password) {
         res.status(400).json({ message: "Please fill out all input" });
         return;
-        
     }
 
     const salt = await bcrypt.genSalt(10);
@@ -75,7 +74,7 @@ const getUser = asyncHandler(async (req, res) => {
 });
 
 const generateToken = (id) => {
-    jwt.sign({ id }, process.env.JWT_SECRET, {
+    return jwt.sign({ id }, process.env.JWT_SECRET, {
         expiresIn: '1d'
     });
 }

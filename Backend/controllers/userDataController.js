@@ -8,6 +8,7 @@ const getuserData = asyncHandler(async (req, res) => {
 
     if (!user) {
         res.status(400).json({ message: "No user found" });
+        return;
     }
     res.status(200).json(user);
 });
@@ -17,6 +18,7 @@ const adduserData = asyncHandler(async (req, res) => {
     console.log(userID);
     if (!userID) {
         res.status(400).json({ message: "Please provide userID" });
+        return;
     }
 
     const newUserData = await UserData.create({
@@ -27,13 +29,17 @@ const adduserData = asyncHandler(async (req, res) => {
 });
 
 const updateuserData = asyncHandler(async (req, res) => {
-    id = req.params.id;
+    id = req.params.userID;
     const { avatar, progress, quizScores } = req.body;
 
-    const data = await UserData.find({ user: id });
+    console.log(id)
+
+    const data = await UserData.findOne({ user: id });
+
+    console.log(data)
 
     const updatedUserData = await UserData.findByIdAndUpdate(
-        id,
+        data._id,
         {
             user: data.user,
             avatar: avatar ? avatar : data.avatar,
@@ -44,9 +50,10 @@ const updateuserData = asyncHandler(async (req, res) => {
     );
     if (!updatedUserData) {
         res.status(400).json({ message: "No user found" });
+        return;
     }
 
-    res.status(200).json(updatedUserData);
+     res.status(200).json(updatedUserData);
 });
 
 module.exports = {

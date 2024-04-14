@@ -10,7 +10,7 @@ router.get("/me", protect,getUser);
 
 router.get("/data/:userID",getuserData)
 router.post("/data/add/:userID",adduserData)
-router.put("/data/update/:id",updateuserData)
+router.put("/data/update/:userID",updateuserData)
 
 
 module.exports = router; 

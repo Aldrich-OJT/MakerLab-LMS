@@ -14,7 +14,7 @@ import { AuthContext } from "../../context/AuthProvider";
 const getCategoryURL = "/api/categories/"
 
 export default function Lessons({ navigation }) {
-  const authcontext = useContext(AuthContext);
+  const {userData,logout} = useContext(AuthContext);
   const  tabBarHeight  = useBottomTabBarHeight();
   const [lessonData, setLessonData] = useState([]);
   const [refresh, setRefresh] = useState(false);
@@ -22,14 +22,14 @@ export default function Lessons({ navigation }) {
   useEffect(() => {
     const fetchLessonData = async () => {
       try {
-        const data = await axiosGet(getCategoryURL, authcontext.token);
+        const data = await axiosGet(getCategoryURL, userData.token);
         //console.log(data)
         setLessonData(data);
         setRefresh(false)
       } catch (error) {
         console.log(error.status)
         if (error.status == 401) {
-          authcontext.logout();
+          logout();
         }
       }
     };
