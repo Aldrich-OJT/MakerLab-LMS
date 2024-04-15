@@ -75,11 +75,13 @@ export default function Lessons({ navigation }) {
           />
         )}
       </View>
+      {userData.role === 'admin' && (
       <Pressable style={styles.addButton} onPress={() => setModalVisible(true)}>
           <Text style={styles.buttonText} >
             +
           </Text>
         </Pressable>
+      )}
     </View>
   );
 }

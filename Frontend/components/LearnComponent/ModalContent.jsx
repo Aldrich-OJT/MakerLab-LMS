@@ -231,7 +231,7 @@ const styles = StyleSheet.create({
     marginTop: 10,
   },
   selectButton: {
-    backgroundColor: "#FFA800",
+    backgroundColor: Colors.bgDarkYellow,
     paddingVertical: 10,
     width: deviceWidth * .75,
     borderRadius: 6,

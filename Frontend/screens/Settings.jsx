@@ -1,5 +1,5 @@
 import React, { useState, useContext } from "react";
-import { View, Text, StyleSheet, Dimensions,Image,Modal, Pressable } from "react-native";
+import { View, Text, StyleSheet, Dimensions,Image,Modal, Pressable, ScrollView } from "react-native";
 import ProgressBar from 'react-native-progress/Bar';
 import Colors from "../constants/Colors";
 import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs';
@@ -13,7 +13,7 @@ const deviceHeight = dimensions.height;
 export default function Settings () {
 const [avatarModalVisible, setAvatarModalVisible] = useState(false);
 const [avatar,setAvatar] = useState(0);
-const { logout } = useContext(AuthContext);
+const { logout, userData } = useContext(AuthContext);
 
 const avatarChoices = [
   require('../assets/avatar1.png'),
@@ -32,6 +32,7 @@ const badges = [
 const  tabBarHeight  = useBottomTabBarHeight();
 
   return (
+    <ScrollView showsVerticalScrollIndicator={false}>
     <View style={[styles.mainContainer,{marginBottom:tabBarHeight}]}>
       <Modal
           animationType="slide"
@@ -42,10 +43,10 @@ const  tabBarHeight  = useBottomTabBarHeight();
           <View style={styles.modalMainContainer}>
             <View style={styles.modalContentContainer}>
               <View style={styles.titleContainer}>
-              <Text style={styles.modalText}>Select Avatar</Text>
-              <Pressable style={styles.closeButton} onPress={() => setAvatarModalVisible(false)}>
-                <Text><MaterialCommunityIcons name="close" size={30} color={Colors.bgRedInvalid} /></Text>
-              </Pressable>
+                <Text style={styles.modalText}>Select Avatar</Text>
+                <Pressable style={styles.closeButton} onPress={() => setAvatarModalVisible(false)}>
+                  <Text><MaterialCommunityIcons name="close" size={30} color={Colors.bgRedInvalid} /></Text>
+                </Pressable>
               </View>
 
               <View style={styles.imageContainer}>
@@ -71,7 +72,7 @@ const  tabBarHeight  = useBottomTabBarHeight();
                   color="black" 
                   onPress={() => setAvatarModalVisible(true)}/>
         <Image source={avatarChoices[avatar]} style={styles.avatar}></Image>
-        <Text style={styles.nameText}>Full Name ko</Text>
+        <Text style={styles.nameText}>{userData.name}</Text>
         <View style={styles.progressContainer}>
           <Text style={styles.progressText}>Progress: 68%</Text>
           <View style={styles.progressBar}>
@@ -109,8 +110,9 @@ const  tabBarHeight  = useBottomTabBarHeight();
           <Text style={styles.logoutText}> 
           <MaterialCommunityIcons name="logout" size={18} color='white'/>Logout</Text>
         </Pressable>
-
     </View>
+    </ScrollView>
+    
   );
   }
 
@@ -182,6 +184,7 @@ const  tabBarHeight  = useBottomTabBarHeight();
       height: '5%',
       borderRadius: 10,
       position: 'absolute',
+      bottom: 0,
     },
     logoutText:{
       color: 'white',

@@ -79,7 +79,7 @@ const TabGroup = () => {
             case 'Profile':
               iconName = <FontAwesome
                 name={focused ? 'user' : 'user-o'}
-                size={focused ? 23 : 20} // Decrease font size if not focused
+                size={focused ? 23 : 20}
                 color={'black'}
               />
               break;
@@ -112,11 +112,7 @@ const TabGroup = () => {
         headerStyle: {height: 120,},
         headerShown: true, 
         headerTitle: '', 
-        headerBackground: ()=> (<Header/>),
-        headerRight: () => (
-          <Pressable onPress={logout}>
-            <Text style={{color: 'white',fontFamily: 'PTSans-Bold', fontSize: 20}}>Logout</Text>
-          </Pressable>)
+        headerBackground: ()=> (<Header/>)
       }} name='Profile' component={Settings} />
     </Tab.Navigator>
   )

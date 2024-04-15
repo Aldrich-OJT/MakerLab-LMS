@@ -118,11 +118,13 @@ export default function Templearn({ route, navigation }) {
             )}
         </View>
 
+        {userData.role === 'admin' && (
         <Pressable style={styles.addButton} onPress={() => setModalVisible(true)}>
           <Text style={styles.buttonText} >
             +
           </Text>
         </Pressable>
+        )}
       </View>
     </View>
 
