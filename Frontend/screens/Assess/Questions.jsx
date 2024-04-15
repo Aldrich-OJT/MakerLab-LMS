@@ -120,7 +120,7 @@ export default function Assess() {
   //console.log(userData._id)
   return (
     <View style={styles.mainContainer}>
-      <QuizModal setRefresh={() => setRefresh(true)} visibility={modalVisible} onPress={() => setModalVisible(false)}>
+      <QuizModal ID={param._id} setRefresh={() => setRefresh(true)} visibility={modalVisible} onPress={() => setModalVisible(false)}>
         Enter question
       </QuizModal>
       <LearnHeader title={param.title} navigation={navigation} />
