@@ -57,7 +57,7 @@ export default function Lessons({ navigation }) {
               <LessonCards
                 onPress={() => handleNavigation(item)}
                 title={item.title}
-                id={item._id}
+                ID={item._id}
                 description={item.description}
                 setRefresh={setRefresh}
                 index={index}

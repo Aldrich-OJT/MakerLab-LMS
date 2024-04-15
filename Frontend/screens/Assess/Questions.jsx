@@ -5,7 +5,7 @@ import LearnHeader from "../../components/LearnComponent/LearnHeader";
 import QuizModal from "../../components/QuizModal";
 import { useContext, useEffect, useState } from "react";
 import { FlatList } from "react-native";
-import { axiosGet, axiosPut } from "../../utils/axios";
+import { axiosDelete, axiosGet, axiosPut } from "../../utils/axios";
 import { useRoute } from '@react-navigation/native';
 import { AuthContext } from "../../context/AuthProvider";
 import { useNavigation } from '@react-navigation/native';
@@ -18,6 +18,7 @@ const contentType = "application/json"
 
 export default function Assess() {
   const { userData } = useContext(AuthContext)
+  console.log(userData)
   const [score, setScore] = useState(0)
   const [isloading, setLoading] = useState(false)
   const route = useRoute()
@@ -26,7 +27,7 @@ export default function Assess() {
   const param = route.params.item
   const navigation = useNavigation();
 
-  const [quizData, setQuizData] = useState(null)
+  const [quizData, setQuizData] = useState([])
   const [quizForm, setQuizForm] = useState({
     quizScores: {
       postId: param._id,
@@ -46,6 +47,7 @@ export default function Assess() {
   }, [score])
   const [modalVisible, setModalVisible] = useState(false);
 
+ 
   useEffect(() => {
     //console.log(param)
 
@@ -65,27 +67,32 @@ export default function Assess() {
 
   // Alert user if leaving screen
   useEffect(() => {
-    const leaving = navigation.addListener('beforeRemove', (e) => {
-      e.preventDefault();
-      Alert.alert(
-        'Leave assessment?',
-        'Do you want to leave the asssessment? Your progress will be lost.',
-        [
-          { text: "Stay", style: "cancel", onPress: () => { } },
-          {
-            text: "Leave",
-            onPress: () => navigation.dispatch(e.data.action),
-          },
-        ]
-      );
-    });
+    if (userData.role === "admin") {
+      return
+    }else if(userData.role === "user"){
+      const leaving = navigation.addListener('beforeRemove', (e) => {
+        e.preventDefault();
+        Alert.alert(
+          'Leave assessment?',
+          'Do you want to leave the asssessment? Your progress will be lost.',
+          [
+            { text: "Stay", style: "cancel", onPress: () => { } },
+            {
+              text: "Leave",
+              onPress: () => navigation.dispatch(e.data.action),
+            },
+          ]
+        );
+      });
+      return leaving;
+    }
 
-    return leaving;
+   
   }, [navigation]);
 
   const renderQuizItem = ({ item, index }) => (
     <QuizItem
-      key={item._id}
+      ID={item._id}
       question={item.question}
       options={item.options}
       answer={item.answer}
@@ -107,10 +114,10 @@ export default function Assess() {
       // You might want to show an error message to the user
     }
   };
-  console.log(quizForm)
+  //console.log(quizForm)
   // console.log("number of answered question is",answeredQuestion)
-  //console.log(quizData)
-  console.log(userData._id)
+  console.log(quizData)
+  //console.log(userData._id)
   return (
     <View style={styles.mainContainer}>
       <QuizModal setRefresh={() => setRefresh(true)} visibility={modalVisible} onPress={() => setModalVisible(false)}>
@@ -118,7 +125,7 @@ export default function Assess() {
       </QuizModal>
       <LearnHeader title={param.title} navigation={navigation} />
       <View style={styles.quizContainer}>
-        {quizData && <Text style={styles.quizDescription}>Choose the correct answer.</Text>}
+        {quizData.length > 0 && <Text style={styles.quizDescription}>Choose the correct answer.</Text>}
 
         <View style={styles.flatlist}>
           {isloading ? (
@@ -127,14 +134,14 @@ export default function Assess() {
               style={{ top: 20 }}
               size={60}
             />
-          ) : quizData ? (<FlatList
+          ) : quizData.length > 0 ? (<FlatList
 
             showsVerticalScrollIndicator={false}
             data={quizData}
             renderItem={renderQuizItem}
             keyExtractor={item => item._id}
             ListFooterComponent={
-              quizData && (
+              quizData.length > 0 && (
                 <Pressable style={styles.submitbutton} onPress={handleSubmit}>
                   <Text style={styles.submittext}>Submit</Text>
                 </Pressable>

@@ -169,7 +169,7 @@ const Root = () => {
 
         if (userData) {
           authContext.authenticate(JSON.parse(userData));
-          console.log(userData)
+          //console.log(userData)
         } else {
           console.log("no data found");
         }
