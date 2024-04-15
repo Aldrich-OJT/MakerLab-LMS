@@ -46,20 +46,21 @@ export default function Lessons({ navigation }) {
  
   return (
     <View style={[styles.mainContainer,{marginBottom:tabBarHeight}]}>
-      <LessonModal setRefresh={() => setRefresh(true)} visibility={modalVisible} onPress={() => setModalVisible(false)}>Upload Course</LessonModal>
+      <LessonModal setRefresh={() => setRefresh(true)} visibility={modalVisible} onPress={() => setModalVisible(false)}>Upload Lesson</LessonModal>
       
       <View style={styles.mainContainer}>
         {lessonData ? (
           <FlatList
             showsVerticalScrollIndicator={false}
             data={lessonData}
-            renderItem={({ item }) => (
+            renderItem={({ item, index }) => (
               <LessonCards
                 onPress={() => handleNavigation(item)}
                 title={item.title}
                 id={item._id}
                 description={item.description}
                 setRefresh={setRefresh}
+                index={index}
                 // modalVisible={modalVisible}
                 // setModalVisible={setModalVisible}
               />
@@ -85,13 +86,6 @@ export default function Lessons({ navigation }) {
 const styles = StyleSheet.create({
   mainContainer:{
     flex:1
-  },
-  container: {
-    alignItems: 'center',
-    paddingHorizontal: 20,
-    backgroundColor: Colors.bgOffWhite,
-    gap: 20,
-    flex: 1
   },
   addButton: {
     position: "absolute",

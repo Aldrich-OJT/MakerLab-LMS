@@ -11,6 +11,7 @@ import { Pressable, Text} from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Learn from './screens/Learn/Learn';
 import Settings from './screens/Settings';
+import { FontAwesome } from '@expo/vector-icons';
 import Header from "./components/Header";
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Lessons from './screens/Learn/Lessons';
@@ -67,22 +68,28 @@ const TabGroup = () => {
       screenOptions={({ route, navigation }) => ({
         tabBarIcon: ({ focused }) => {
           let iconName;
-          if (route.name !== 'Lessons') {
-            if (route.name === 'HomePage') {
-              iconName = focused ? 'home' : 'home-outline';
-            } else if (route.name === 'AssesStackGroup') {
-              iconName = focused ? 'book' : 'book-outline';
-            } else if (route.name === 'Settings') {
-              iconName = focused ? 'settings' : 'settings-outline';
-            }
 
-            return <Ionicons name={iconName} size={23} color={'black'} />
-          }
-          else if (route.name === 'Lessons') {
-            iconName = focused ? 'school' : 'school-outline';
-            return <Ionicons name={iconName} size={25} color={'black'} />
-          }
+          switch (route.name) {
+            case 'HomePage':
+              iconName = <Ionicons name={focused ? 'home' : 'home-outline'} size={23} color={'black'} />;
+              break;
+            case 'AssesStackGroup':
+              iconName = <Ionicons name={focused ? 'book' : 'book-outline'} size={23} color={'black'} />;
+              break;
+            case 'Profile':
+              iconName = <FontAwesome
+                name={focused ? 'user' : 'user-o'}
+                size={focused ? 23 : 20} // Decrease font size if not focused
+                color={'black'}
+              />
+              break;
+            case 'Lessons':
+              iconName = <Ionicons name={focused ? 'school' : 'school-outline'} size={25} color={'black'} />;
+              break;
+            }
+          return iconName;
         },
+        
         tabBarActiveTintColor: "black",
         tabBarActiveBackgroundColor: Colors.bgYellow,
         tabBarHideOnKeyboard: true,
@@ -110,7 +117,7 @@ const TabGroup = () => {
           <Pressable onPress={logout}>
             <Text style={{color: 'white',fontFamily: 'PTSans-Bold', fontSize: 20}}>Logout</Text>
           </Pressable>)
-      }} name='Settings' component={Settings} />
+      }} name='Profile' component={Settings} />
     </Tab.Navigator>
   )
 }

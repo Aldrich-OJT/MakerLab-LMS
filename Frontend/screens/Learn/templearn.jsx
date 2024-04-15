@@ -152,12 +152,11 @@ const styles = StyleSheet.create({
 
   },
   buttonText: {
-    color: Colors.bgYellow,
+    color: Colors.bgYellow,   
     fontSize: 25
   },
   FlatListContainer: {
     flex: 1,
-    marginTop: 10,
     alignItems: "center",
     borderRadius: 10,
     //overflow:"hidden"

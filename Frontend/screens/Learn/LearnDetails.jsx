@@ -31,8 +31,10 @@
             fetchData()
         }, [refresh])
         useLayoutEffect(() => {
+            if (postData.title) {
+                const truncatedTitle = postData.title.length > 30 ? postData.title.slice(0, 30) + "..." : postData.title;
                 navigation.setOptions({
-                    headerTitle: postData.title ? postData.title :  "",
+                    headerTitle: truncatedTitle,
                     headerStyle: {
                         backgroundColor: "black",
                     },
@@ -43,6 +45,7 @@
                     headerTintColor: 'white',
                     headerTitleAlign: 'center',
                 });
+            }
         }, [postData])
 
         const createTwoButtonAlert = () =>

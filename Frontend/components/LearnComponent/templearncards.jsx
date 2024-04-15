@@ -10,7 +10,7 @@ const deviceWidth = dimensions.width;
 export default function Templearncards({ id, title, description, onPress, lessoncount,pressQuiz,pressLearn }) {
 
   return (
-    <Pressable style={styles.container} onPress={pressLearn}>
+    <Pressable style={[styles.container, { marginTop: lessoncount === 1 ? 25 : 0 }]} onPress={pressLearn}>
       <View style={styles.lessonNumberContainer}>
         <Text style={styles.lessonNumberText}>
           Lesson {lessoncount}
@@ -19,7 +19,6 @@ export default function Templearncards({ id, title, description, onPress, lesson
 
       <View style={styles.titleContainer} numberOfLines={1}>
         <FontAwesome5
-          //style={styles.titleIcon}
           name="book"
           size={24}
           color={Colors.bgViolet} />
@@ -58,7 +57,7 @@ const styles = StyleSheet.create({
     minwidth: '100%',
     padding: 20,
     marginHorizontal: 20,
-    marginVertical:15
+    marginBottom:25,
   },
   // video: {
   //   width: '50%',
