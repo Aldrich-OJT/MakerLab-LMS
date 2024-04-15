@@ -18,6 +18,7 @@ export default function Lessons({ navigation }) {
   const  tabBarHeight  = useBottomTabBarHeight();
   const [lessonData, setLessonData] = useState([]);
   const [refresh, setRefresh] = useState(false);
+  const [modalVisible, setModalVisible] = useState(false);
 
   useEffect(() => {
     const fetchLessonData = async () => {
@@ -42,7 +43,7 @@ export default function Lessons({ navigation }) {
     navigation.navigate('templearn', { param });
   };
  
-  const [modalVisible, setModalVisible] = useState(false);
+ 
   return (
     <View style={[styles.mainContainer,{marginBottom:tabBarHeight}]}>
       <LessonModal setRefresh={() => setRefresh(true)} visibility={modalVisible} onPress={() => setModalVisible(false)}>Upload Course</LessonModal>
@@ -56,7 +57,11 @@ export default function Lessons({ navigation }) {
               <LessonCards
                 onPress={() => handleNavigation(item)}
                 title={item.title}
+                id={item._id}
                 description={item.description}
+                setRefresh={setRefresh}
+                // modalVisible={modalVisible}
+                // setModalVisible={setModalVisible}
               />
             )}
             keyExtractor={(item) => item._id}

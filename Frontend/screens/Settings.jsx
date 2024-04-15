@@ -127,7 +127,8 @@ const  tabBarHeight  = useBottomTabBarHeight();
       marginTop: 20,
       borderRadius: 10,
       gap: 5,
-      height: '34%',
+      paddingVertical:15,
+      height: 'fit-content',
     },
     editButton:{
       position: 'absolute',
@@ -215,6 +216,7 @@ const  tabBarHeight  = useBottomTabBarHeight();
     imageContainer: {
       gap: 10,
       flexDirection: 'column',
+      height:"fit-content",
       marginBottom: 8,
     },
     modalText: {

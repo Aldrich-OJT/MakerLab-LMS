@@ -23,8 +23,6 @@ const AuthProvider = ({children})=>{
         console.log("logout called")
         setUserData(null)
         AsyncStorage.removeItem('userData')
-
-        AsyncStorage.removeItem('Token')
         console.log("logout success")
     }
     const value = {

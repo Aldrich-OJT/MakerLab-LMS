@@ -32,7 +32,6 @@ const Tab = createBottomTabNavigator()
 const LearnStackGroup = () => {
   return (
     <LearnStack.Navigator>
-      
       <LearnStack.Screen options={{ headerShown: false }} name="TabGroup" component={TabGroup} />
       <LearnStack.Screen options={{ headerShown: false }} name='Lessons' component={Lessons} />
       <LearnStack.Screen options={{ presentation: "modal" }} name="LearnDetails" component={LearnDetails} />
@@ -62,6 +61,7 @@ const LearnStackGroup = () => {
 // };
 
 const TabGroup = () => {
+  const { logout } = useContext(AuthContext)
   return (
     <Tab.Navigator
       screenOptions={({ route, navigation }) => ({
@@ -106,6 +106,10 @@ const TabGroup = () => {
         headerShown: true, 
         headerTitle: '', 
         headerBackground: ()=> (<Header/>),
+        headerRight: () => (
+          <Pressable onPress={logout}>
+            <Text style={{color: 'white',fontFamily: 'PTSans-Bold', fontSize: 20}}>Logout</Text>
+          </Pressable>)
       }} name='Settings' component={Settings} />
     </Tab.Navigator>
   )
@@ -151,24 +155,19 @@ const Root = () => {
   useEffect(() => {
     setLoading(true);
 
-    const loadFonts = async ()=>{
-      try {
 
-      } catch (error) {
-        console.error(error)
-      }
-    }
-    const fetchToken = async () => {
+    const fetchData = async () => {
       try {
-        const token = await AsyncStorage.getItem('token');
+        const userData = await AsyncStorage.getItem('userData');
 
-        if (token) {
-          authContext.authenticate(token);
+        if (userData) {
+          authContext.authenticate(JSON.parse(userData));
+          console.log(userData)
         } else {
-          console.log("no token found");
+          console.log("no data found");
         }
       } catch (error) {
-        console.error("Error fetching token:", error);
+        console.error("Error fetching data:", error);
 
       } finally {
         if (fontsLoaded) {
@@ -183,7 +182,7 @@ const Root = () => {
       }
     };
 
-    fetchToken();
+    fetchData();
   }, [fontsLoaded,fontError]);
 
   return loading ? <LoadingScreen /> : <Navigation />;

@@ -8,11 +8,6 @@ const dimensions = Dimensions.get("window");
 const deviceWidth = dimensions.width;
 
 export default function Templearncards({ id, title, description, onPress, lessoncount,pressQuiz,pressLearn }) {
-  const [showDescription, setShowDescription] = useState(false);
-
-  const showDescriptionHandler = () => {
-      setShowDescription(!showDescription);
-  };
 
   return (
     <Pressable style={styles.container} onPress={pressLearn}>
@@ -32,7 +27,7 @@ export default function Templearncards({ id, title, description, onPress, lesson
       </View>
 
       <View>
-        <Text numberOfLines={showDescription ? undefined : 1} 
+        <Text numberOfLines={2} 
         style={styles.description}
         >{description}</Text>
       </View>
@@ -49,16 +44,6 @@ export default function Templearncards({ id, title, description, onPress, lesson
               color={Colors.bgViolet} />
         </Pressable>
         
-        {description.length > 50 && (
-            <Pressable onPress={showDescriptionHandler}>
-               <MaterialCommunityIcons 
-                  name={showDescription ? "chevron-up" : "chevron-down"} 
-                  size={26} 
-                  color={Colors.bgViolet}
-                  style={{alignSelf:'flex-end', marginRight:5,marginTop:10}}
-               />
-            </Pressable>
-          )}
       </View>
     </Pressable>
   )
@@ -84,25 +69,16 @@ const styles = StyleSheet.create({
   lessonNumberContainer: {
     flexDirection: 'row',
     justifyContent: 'center',
-<<<<<<< HEAD
     marginTop: -30,
-    
-=======
-    marginTop: -35,
->>>>>>> 9961725eb16347e8607d8053309edff5579b5ad3
+  
   },
   lessonNumberText: {
     backgroundColor: 'black',
     fontSize: 16,
     color: 'white',
-<<<<<<< HEAD
-    fontWeight: 'bold',
-    borderRadius: 15,
-=======
     fontFamily: 'PTSans-Bold',
-    borderRadius: 50,
->>>>>>> 9961725eb16347e8607d8053309edff5579b5ad3
-    width: deviceWidth * .3,
+    borderRadius: 15,
+    width: "30%",
     paddingVertical: 5,
     textAlign: 'center',
     overflow:"hidden",
@@ -112,6 +88,7 @@ const styles = StyleSheet.create({
     marginTop:4,
     flexDirection: 'row',
     gap: 5,
+    marginRight:20
   },
   title: {
     color: Colors.bgViolet,
@@ -123,6 +100,7 @@ const styles = StyleSheet.create({
     marginTop: 5,
     fontSize: 14,
     minWidth: "100%",
+    textAlign:"justify",
     fontFamily: 'PTSans-Regular',
   },
   assessContainer: {
@@ -133,11 +111,6 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: Colors.bgViolet,
     fontFamily: 'PTSans-Bold',
-  },
-  title: {
-    color: Colors.bgViolet,
-    fontSize: 22,
-    fontWeight: 'bold',
   },
   assessmentButton:{
     flexDirection:"row",

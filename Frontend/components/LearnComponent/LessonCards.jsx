@@ -1,28 +1,52 @@
-import React, { useState } from "react";
-import { StyleSheet, View, Text, Pressable } from "react-native";
+import React, { useContext, useState } from "react";
+import { StyleSheet, View, Text, Pressable, Alert } from "react-native";
 import Colors from "../../constants/Colors";
 import { FontAwesome5 } from '@expo/vector-icons';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { axiosDelete, axiosGet, axiosPut } from "../../utils/axios";
 import { AuthContext } from "../../context/AuthProvider";
+import LessonModal from "./LessonModal";
 
-const deleteURL = "/api/video/delete/"
+const deleteCategoryURL = "/api/categories/delete/"
 
-export default function LessonCards ({title, description, onPress}) {
+export default function LessonCards ({title, description, onPress, id,setRefresh,}) {
+  const {userData} = useContext(AuthContext)
+  const [modalVisible,setModalVisible] = useState(false)
+ 
   const [showDescription, setShowDescription] = useState(false);
 
   const showDescriptionHandler = () => {
       setShowDescription(!showDescription);
   };
+  const createTwoButtonAlert = () =>
+  Alert.alert('Warning', 'Do you really want to delete this file?', [
+      {
+          text: 'Cancel',
+          onPress: () => console.log('Cancel Pressed'),
+          style: 'cancel',
+      },
+      { text: 'YES', onPress: deletePost },
+  ]);
+  const deletePost= ()=>{
 
+    const res = axiosDelete(`${deleteCategoryURL}${id}`,userData.token)
+    console.log(res, "deleted")
+    setRefresh(true)
+  }
+  //console.log(modalVisible)
     return (
       <Pressable style={styles.lessonContainer} onPress={onPress}>
+        <LessonModal
+          onPress={()=>setModalVisible(false)}
+          visibility={modalVisible}
+          setRefresh={setRefresh}
+        >Edit Lesson</LessonModal>
         <View style={styles.titleContainer}>
           <Text style={styles.title}>
             <FontAwesome5 name="book" size={20} color={Colors.bgViolet} /> {title}
           </Text>
 
-          <Pressable>
+          <Pressable onPress={()=>setModalVisible(true)}>
               <MaterialCommunityIcons 
                 name="square-edit-outline" 
                 size={24}
@@ -31,7 +55,7 @@ export default function LessonCards ({title, description, onPress}) {
               />
             </Pressable>
 
-            <Pressable>
+            <Pressable onPress={createTwoButtonAlert}>
               <MaterialCommunityIcons 
                 name="delete"
                 size={24}
@@ -43,7 +67,7 @@ export default function LessonCards ({title, description, onPress}) {
 
           <View>            
             <Text 
-              numberOfLines={showDescription ? undefined : 1}
+              numberOfLines={showDescription ? undefined : 3}
               style={styles.lessonDescription}>
               {description}
             </Text>
@@ -70,9 +94,10 @@ const styles = StyleSheet.create({
         borderRadius: 10,
         height: 'fit-content',
         minwidth: '100%',
-        padding: 20,
+        paddingHorizontal: 20,
+        paddingVertical:10,
         marginHorizontal: 20,
-        marginTop: 20,
+        margin: 10,
     },
     titleContainer: {
         flexDirection: 'row',
@@ -90,6 +115,7 @@ const styles = StyleSheet.create({
       padding:7,
       backgroundColor: 'black',
       marginLeft: 10,
+      overflow:"hidden"
     },
     lessonDescription:{
         marginVertical: 5,

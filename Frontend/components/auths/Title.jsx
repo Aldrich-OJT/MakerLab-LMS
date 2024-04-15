@@ -17,6 +17,6 @@ const styles = StyleSheet.create({
 	bgimage:{
 		width: '100%', 
 		height: '100%',
-		resizeMode: 'contain'
+		resizeMode: "cover"
 	},
 })

@@ -126,6 +126,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     padding:10,
     marginBottom:10,
+    overflow:"hidden"
   },
   choicescontainer: {
     flexDirection: 'column',
@@ -166,5 +167,6 @@ const styles = StyleSheet.create({
     borderRadius:10,
     padding:7,
     backgroundColor: 'black',
+    overflow:"hidden"
   },
 })

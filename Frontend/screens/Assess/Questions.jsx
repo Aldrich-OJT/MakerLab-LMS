@@ -9,6 +9,7 @@ import { axiosGet, axiosPut } from "../../utils/axios";
 import { useRoute } from '@react-navigation/native';
 import { AuthContext } from "../../context/AuthProvider";
 import { useNavigation } from '@react-navigation/native';
+import { ActivityIndicator } from "react-native-paper";
 
 const getQuizzesURL = "/api/question/"
 const editScoreURL = "/api/user/data/update/"
@@ -18,42 +19,45 @@ const contentType = "application/json"
 export default function Assess() {
   const { userData } = useContext(AuthContext)
   const [score, setScore] = useState(0)
+  const [isloading, setLoading] = useState(false)
   const route = useRoute()
   const [answeredQuestion, setAnsweredQuestion] = useState(0)
   const [quizNumber, setQuizNumber] = useState(0)
   const param = route.params.item
   const navigation = useNavigation();
 
-  const [quizData, setQuizData] = useState([])
+  const [quizData, setQuizData] = useState(null)
   const [quizForm, setQuizForm] = useState({
-    quizScores:{
+    quizScores: {
       postId: param._id,
       score: score,
       passed: false
     }
   })
-  useEffect(()=>{
+  useEffect(() => {
     setQuizForm(prevstate => ({
       ...prevstate,
-      quizScores:{
+      quizScores: {
         ...prevstate.quizScores,
         score: score,
         passed: score < Math.round(quizNumber * .6) ? false : true
       }
     }))
-  },[score])
+  }, [score])
   const [modalVisible, setModalVisible] = useState(false);
 
   useEffect(() => {
     //console.log(param)
 
     const fetchData = async () => {
+      setLoading(true)
       console.log("fetch rerendered")
-      const data = await axiosGet(`${getQuizzesURL}${param._id}`,userData.token)
+      const data = await axiosGet(`${getQuizzesURL}${param._id}`, userData.token)
       setQuizData(data)
       setQuizNumber(data.length)
       console.log(quizNumber)
       //console.log("QUIZDATA", data)
+      setLoading(false)
     }
 
     fetchData()
@@ -67,7 +71,7 @@ export default function Assess() {
         'Leave assessment?',
         'Do you want to leave the asssessment? Your progress will be lost.',
         [
-          { text: "Stay", style: "cancel", onPress: () => {} },
+          { text: "Stay", style: "cancel", onPress: () => { } },
           {
             text: "Leave",
             onPress: () => navigation.dispatch(e.data.action),
@@ -79,16 +83,16 @@ export default function Assess() {
     return leaving;
   }, [navigation]);
 
-  const renderQuizItem = ({ item, index}) => (
+  const renderQuizItem = ({ item, index }) => (
     <QuizItem
       key={item._id}
       question={item.question}
       options={item.options}
-      answer = {item.answer}
-      setScore ={setScore}
+      answer={item.answer}
+      setScore={setScore}
       setAnsweredQuestion={setAnsweredQuestion}
       //setQuizForm={setQuizForm}
-      score ={score}
+      score={score}
       itemNumber={index + 1}
     />
   );
@@ -105,39 +109,46 @@ export default function Assess() {
   };
   console.log(quizForm)
   // console.log("number of answered question is",answeredQuestion)
- //console.log(quizData)
- console.log(userData._id)
+  //console.log(quizData)
+  console.log(userData._id)
   return (
     <View style={styles.mainContainer}>
-        <QuizModal setRefresh={() => setRefresh(true)} visibility={modalVisible} onPress={() => setModalVisible(false)}>
-          Enter question
-        </QuizModal>
-      <LearnHeader title={param.title} navigation={navigation}/>
+      <QuizModal setRefresh={() => setRefresh(true)} visibility={modalVisible} onPress={() => setModalVisible(false)}>
+        Enter question
+      </QuizModal>
+      <LearnHeader title={param.title} navigation={navigation} />
       <View style={styles.quizContainer}>
-        <Text style={styles.quizDescription}>Choose the correct answer.</Text>
+        {quizData && <Text style={styles.quizDescription}>Choose the correct answer.</Text>}
 
         <View style={styles.flatlist}>
-          {quizData ? (<FlatList
+          {isloading ? (
+            <ActivityIndicator
+              animating={true}
+              style={{ top: 20 }}
+              size={60}
+            />
+          ) : quizData ? (<FlatList
 
             showsVerticalScrollIndicator={false}
             data={quizData}
             renderItem={renderQuizItem}
             keyExtractor={item => item._id}
             ListFooterComponent={
-              <Pressable style={styles.submitbutton} onPress={handleSubmit}>
-                <Text style={styles.submittext}>Submit</Text>
-              </Pressable>
+              quizData && (
+                <Pressable style={styles.submitbutton} onPress={handleSubmit}>
+                  <Text style={styles.submittext}>Submit</Text>
+                </Pressable>
+              )
             }
-          />) : <Text style={{alignSelf:"center", fontFamily: 'PTSans-Bold'}}> No questions found</Text>}
+          />) : (<Text style={{ alignSelf: "center", fontFamily: 'PTSans-Bold' }}> No questions found</Text>)}
 
         </View>
       </View>
 
-      <Pressable style={styles.addButton} //</View>onPress={() => setModalVisible(true)}
-      >
-          <Text style={styles.buttonText} onPress={() => setModalVisible(true)}>
-            +
-          </Text>
+      <Pressable style={styles.addButton}>
+        <Text style={styles.buttonText} onPress={() => setModalVisible(true)}>
+          +
+        </Text>
       </Pressable>
     </View>
   )
