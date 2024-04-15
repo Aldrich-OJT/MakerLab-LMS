@@ -106,7 +106,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
   },
-  shortcutText:{
+  shortcutText:{     
     fontFamily: 'PTSans-Bold',
   }
 })

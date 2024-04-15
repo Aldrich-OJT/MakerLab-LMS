@@ -83,6 +83,7 @@ export default function QuizItem(props) {
               </Pressable>
             )}
 
+            {userData.role === 'admin' && (
             <Pressable onPress={createTwoButtonAlert}>
               <MaterialCommunityIcons
                 name="delete"
@@ -91,6 +92,7 @@ export default function QuizItem(props) {
                 style={styles.buttons}
               />
             </Pressable>
+            )}
           </View>
         </View>
         <Text style={styles.questiontext}>{props.question}</Text>

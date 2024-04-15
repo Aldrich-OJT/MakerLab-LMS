@@ -18,6 +18,7 @@
         const { _id } = route.params.item;
         const [postData, setPostData] = useState({})
         const [refresh, setRefresh] = useState(false)
+        const {userData} = useContext(AuthContext);
 
         useEffect(() => {
             console.log("effect")
@@ -31,8 +32,10 @@
             fetchData()
         }, [refresh])
         useLayoutEffect(() => {
+            if (postData.title) {
+                const truncatedTitle = postData.title.length > 30 ? postData.title.slice(0, 30) + "..." : postData.title;
                 navigation.setOptions({
-                    headerTitle: postData.title ? postData.title :  "",
+                    headerTitle: truncatedTitle,
                     headerStyle: {
                         backgroundColor: "black",
                     },
@@ -43,6 +46,7 @@
                     headerTintColor: 'white',
                     headerTitleAlign: 'center',
                 });
+            }
         }, [postData])
 
         const createTwoButtonAlert = () =>
@@ -94,12 +98,16 @@
                     <Image />
                 </View>
                 <View style={styles.buttonContainer} >
+                {userData.role === 'admin' && (
                     <Pressable style={styles.button} onPress={() => setModalVisible(true)}>
                         <MaterialCommunityIcons name="square-edit-outline" size={25} color={Colors.bgYellow} />
                     </Pressable>
+                )}
+                {userData.role === 'admin' && (
                     <Pressable style={styles.button} onPress={createTwoButtonAlert}>
                         <MaterialCommunityIcons name="delete" size={25} color={Colors.bgYellow} />
                     </Pressable>
+                )}
                 </View>
             </View>
         )

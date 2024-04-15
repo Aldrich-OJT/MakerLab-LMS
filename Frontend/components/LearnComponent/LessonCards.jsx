@@ -9,7 +9,7 @@ import LessonModal from "./LessonModal";
 
 const deleteCategoryURL = "/api/categories/delete/"
 
-export default function LessonCards ({title, description, onPress, ID,setRefresh,}) {
+export default function LessonCards ({title, description, onPress, ID,setRefresh,index}) {
   const {userData} = useContext(AuthContext)
   const [modalVisible,setModalVisible] = useState(false)
  
@@ -35,7 +35,7 @@ export default function LessonCards ({title, description, onPress, ID,setRefresh
   }
   console.log(title)
     return (
-      <Pressable style={styles.lessonContainer} onPress={onPress}>
+      <Pressable style={[styles.lessonContainer, { marginTop: index === 0 ? 20 : 10 }]} onPress={onPress}>
         <LessonModal
           onPress={()=>setModalVisible(false)}
           visibility={modalVisible}
@@ -48,7 +48,7 @@ export default function LessonCards ({title, description, onPress, ID,setRefresh
           <Text style={styles.title}>
             <FontAwesome5 name="book" size={20} color={Colors.bgViolet} /> {title}
           </Text>
-
+         {userData.role === 'admin' && (
           <Pressable onPress={()=>setModalVisible(true)}>
               <MaterialCommunityIcons 
                 name="square-edit-outline" 
@@ -56,8 +56,9 @@ export default function LessonCards ({title, description, onPress, ID,setRefresh
                 color={Colors.bgYellow}
                 style={styles.buttons}
               />
-            </Pressable>
-
+            </Pressable> 
+          )}
+          {userData.role === 'admin' && (
             <Pressable onPress={createTwoButtonAlert}>
               <MaterialCommunityIcons 
                 name="delete"
@@ -66,6 +67,7 @@ export default function LessonCards ({title, description, onPress, ID,setRefresh
                 style={styles.buttons}
               />
             </Pressable>
+          )}
         </View>
 
           <View>            

@@ -9,7 +9,8 @@ import { axiosDelete, axiosGet, axiosPut } from "../../utils/axios";
 import { useRoute } from '@react-navigation/native';
 import { AuthContext } from "../../context/AuthProvider";
 import { useNavigation } from '@react-navigation/native';
-import { ActivityIndicator } from "react-native-paper";
+import { ActivityIndicator, Modal } from "react-native-paper";
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 
 const getQuizzesURL = "/api/question/"
 const editScoreURL = "/api/user/data/update/"
@@ -46,7 +47,7 @@ export default function Assess() {
     }))
   }, [score])
   const [modalVisible, setModalVisible] = useState(false);
-
+  const [submitModalVisible, setSubmitModalVisible] = useState(false);
  
   useEffect(() => {
     //console.log(param)
@@ -142,8 +143,11 @@ export default function Assess() {
             keyExtractor={item => item._id}
             ListFooterComponent={
               quizData.length > 0 && (
-                <Pressable style={styles.submitbutton} onPress={handleSubmit}>
-                  <Text style={styles.submittext}>Submit</Text>
+                <Pressable style={styles.submitButton} onPress={() => {
+                  handleSubmit();
+                  setSubmitModalVisible(true);
+              }}>
+                  <Text style={styles.submitText}>Submit</Text>
                 </Pressable>
               )
             }
@@ -152,11 +156,43 @@ export default function Assess() {
         </View>
       </View>
 
+      {userData.role === 'admin' && (
       <Pressable style={styles.addButton}>
         <Text style={styles.buttonText} onPress={() => setModalVisible(true)}>
           +
         </Text>
       </Pressable>
+      )}
+
+      <Modal 
+        animationType="slide"
+        transparent={true}
+        visible={submitModalVisible}
+      >
+        <View style={styles.modalMainContainer}>
+          <View style={styles.modalInnerContainer}>
+            <View style={styles.titleContainer}>
+              <Text style={styles.modalText}>Assessment Finished!</Text>
+            </View>
+
+            <View style={styles.scoreContainer}>
+              <Text style={[styles.scoreText, {fontSize: 35}]}>{score}/{quizData.length}</Text>
+              <Text style={[styles.scoreText, {fontSize: 20}]}>{quizForm.quizScores.passed ? "Good Job!": "Better luck next time."}</Text>
+            </View>
+
+            <Pressable style={styles.reviewButton}>
+              <Text style={styles.reviewText}>Review your answers.</Text>
+            </Pressable>
+
+            <Pressable style={[styles.submitButton, {width: '90%',marginBottom: 0,}]} onPress={navigation.goBack}>
+              <Text style={styles.submitText}>Back to lessons</Text>
+            </Pressable>
+          </View>
+        </View>
+
+      </Modal>
+
+
     </View>
   )
 }
@@ -176,7 +212,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontFamily: 'PTSans-Regular'
   },
-  submitbutton: {
+  submitButton: {
     backgroundColor: Colors.bgViolet,
     borderRadius: 10,
     width: '40%',
@@ -184,7 +220,7 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     padding: 15,
   },
-  submittext: {
+  submitText: {
     fontSize: 16,
     color: 'white',
     alignSelf: 'center',
@@ -207,5 +243,56 @@ const styles = StyleSheet.create({
   buttonText: {
     color: Colors.bgYellow,
     fontSize: 25
+  },
+
+  submitMainContainer: {
+    backgroundColor: 'rgba(0,0,0,0.3)',
+    justifyContent: 'center',
+    alignContent: 'center',
+    flex:1,
+  },
+  modalInnerContainer:{
+    gap: 10,
+    backgroundColor: Colors.bgYellow,
+    margin: 20,
+    paddingHorizontal: 10,
+    alignItems: 'center',
+    borderRadius: 10,
+  },
+  titleContainer:{
+    flexDirection: 'row',
+    padding: 10,
+  },
+  modalText: {
+    fontSize: 20,
+    fontFamily: 'PTSans-Bold',
+    flex:5,
+    marginTop: 10,
+    textAlign:'center',
+  },
+  scoreContainer: {
+    backgroundColor: Colors.bgOffWhite,
+    height: '40%',
+    width: '90%',
+    borderRadius: 10,
+    justifyContent: 'center',
+    gap:15,
+  },
+  scoreText:{
+    fontFamily: 'PTSans-Bold',
+    color: Colors.bgViolet,
+    textAlign: 'center',
+  },
+  reviewButton:{
+    backgroundColor: Colors.bgDarkYellow,
+    width: '90%',
+    alignItems: 'center',
+    height: '10%',
+    justifyContent: 'center'
+  },
+  reviewText: {
+    fontFamily: 'PTSans-Bold',
+    fontSize: 16,
+    textDecorationLine: 'underline'
   },
 })
