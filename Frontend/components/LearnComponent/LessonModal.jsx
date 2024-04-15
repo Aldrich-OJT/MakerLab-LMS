@@ -14,17 +14,18 @@ const dimensions = Dimensions.get("window");
 const deviceWidth = dimensions.width;
 
 const POSTURL = "/api/categories/add"
+const EDITURL = "/api/categories/update/"
 const contentType = "application/json"
 
 //FIX ON DOCUMENT BLANK ERROR
-export default function LessonModal({ visibility, onPress, children, setRefresh }) {
+export default function LessonModal({ visibility, onPress,title,description, children, setRefresh,ID }) {
   const { userData } = useContext(AuthContext)
   //const navigation = useNavigation()
   const [errorMessage, setErrorMessage] = useState("");
 
   const formInitialData = {
-    title: "",
-    description: "",
+    title: title ?? "",
+    description: description ?? "",
   }
   const [formData, setFormData] = useState(formInitialData)
 
@@ -35,7 +36,7 @@ export default function LessonModal({ visibility, onPress, children, setRefresh 
     }))
 
   }
-
+  console.log(ID)
   const cancelForm = () => {
     onPress();
     setFormData(formInitialData);
@@ -43,18 +44,24 @@ export default function LessonModal({ visibility, onPress, children, setRefresh 
   }
 
   const submitForm = async () => {
-    console.log(formData)
+    //console.log(formData)
+  
     try {
-      const data = await axiosPost(POSTURL, formData, contentType, userData.token)
-      console.log(data)
-      onPress()
-      setRefresh(true)
-      console.log("working2")
-      setFormData(formInitialData)
-      setErrorMessage("");
+      if(children.split(" ")[0] === "Upload"){
+        const data = await axiosPost(POSTURL, formData, contentType, userData.token)
+        console.log(data)
+      }else{
+        const data = await axiosPut(`${EDITURL}${ID}`, formData, contentType, userData.token)
+        console.log(data)
+      }
+
     } catch (error) {
       setErrorMessage(error?.data?.message)
     }
+    onPress()
+    setRefresh(true)
+    setFormData(formInitialData)
+    setErrorMessage("");
   }
 
   return (

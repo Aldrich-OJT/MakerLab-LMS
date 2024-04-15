@@ -9,7 +9,7 @@ import LessonModal from "./LessonModal";
 
 const deleteCategoryURL = "/api/categories/delete/"
 
-export default function LessonCards ({title, description, onPress, id,setRefresh,}) {
+export default function LessonCards ({title, description, onPress, ID,setRefresh,}) {
   const {userData} = useContext(AuthContext)
   const [modalVisible,setModalVisible] = useState(false)
  
@@ -29,17 +29,20 @@ export default function LessonCards ({title, description, onPress, id,setRefresh
   ]);
   const deletePost= ()=>{
 
-    const res = axiosDelete(`${deleteCategoryURL}${id}`,userData.token)
+    const res = axiosDelete(`${deleteCategoryURL}${ID}`,userData.token)
     console.log(res, "deleted")
     setRefresh(true)
   }
-  //console.log(modalVisible)
+  console.log(title)
     return (
       <Pressable style={styles.lessonContainer} onPress={onPress}>
         <LessonModal
           onPress={()=>setModalVisible(false)}
           visibility={modalVisible}
           setRefresh={setRefresh}
+          title={title}
+          description={description}
+          ID={ID}
         >Edit Lesson</LessonModal>
         <View style={styles.titleContainer}>
           <Text style={styles.title}>

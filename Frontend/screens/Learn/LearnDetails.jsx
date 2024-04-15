@@ -65,7 +65,7 @@
                 console.log(error)
             }
         }
-        console.log(postData)
+        //console.log(postData)
 
         return (
 
