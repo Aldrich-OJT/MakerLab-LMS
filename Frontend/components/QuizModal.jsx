@@ -1,12 +1,13 @@
 import { useContext, useState } from 'react';
-import { Text, Pressable, StyleSheet, View, Modal, TouchableWithoutFeedback, KeyboardAvoidingView, Keyboard } from "react-native";
+import { Text, Pressable, StyleSheet, View, Modal, Dimensions, TouchableWithoutFeedback, KeyboardAvoidingView, Keyboard } from "react-native";
 import { TextInput, RadioButton } from "react-native-paper"
 import Colors from "../constants/Colors";
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { axiosPost, axiosPut } from '../utils/axios';
 import { AuthContext } from '../context/AuthProvider';
 
-
+const dimensions = Dimensions.get("window");
+const deviceWidth = dimensions.width;
 
 const postquestionURL = "/api/question/add"
 const updateQuestionURL = "/api/question/update/"
@@ -75,11 +76,6 @@ const addQuestion = async () => {
             <View style={styles.inputContainer}>
               <View style={styles.titleContainer}>
                 <Text style={styles.textTitle}>{children}</Text>
-                <Pressable style={styles.closeButton} onPress={cancelForm}>
-                  <Text>
-                    <MaterialCommunityIcons name="close" size={30} color={Colors.bgRedInvalid} />
-                  </Text>
-                </Pressable>
               </View>
 
               <View style={styles.inputText}>
@@ -115,14 +111,17 @@ const addQuestion = async () => {
                     />
                   </View>
                 ))}
-
-
               </View>
 
               <View style={styles.buttonContainer}>
+              <Pressable style={[styles.submitButton, { borderWidth: 2, borderColor: Colors.bgPurple, backgroundColor: 'white' }]} onPress={cancelForm}>
+                  <Text style={[styles.submitText, { color: Colors.bgPurple }]}>
+                    Cancel
+                  </Text>
+                </Pressable>
                 {errorMessage && <Text style={styles.errorMessage}>{errorMessage}</Text>}
                 <Pressable style={[styles.submitButton]}onPress={addQuestion}>
-                  <Text style={styles.SubmitText}>
+                  <Text style={styles.submitText}>
                     {children.split(" ")[0]} Question
                   </Text>
                 </Pressable>
@@ -143,11 +142,13 @@ const styles = StyleSheet.create({
     backgroundColor: "rgba(0,0,0,0.4)"
   },
   inputContainer: {
-    width: '90%',
+    height: '30%',
+    width: deviceWidth * .9,
+    justifyContent: "center",
     alignItems: "center",
     padding: 15,
     borderRadius: 10,
-    backgroundColor: Colors.bgYellow,
+    backgroundColor: 'white',
     height: "fit-content",
     gap: 10,
   },
@@ -174,24 +175,24 @@ const styles = StyleSheet.create({
   inputText: {
     width: '90%',
   },
-  //radioButtons:{
-  //  textSelf:'center'
-  //},
   buttonContainer: {
-    width:"100%",
-    justifyContent:"center",
-    alignItems:"stretch",
+    flexDirection: "row",
+    gap: 30,
     paddingBottom: 5,
   },
   submitButton: {
-    backgroundColor: Colors.bgViolet,
+    backgroundColor: Colors.bgPurple,
+    justifyContent: "center",
+    alignItems: "center",
+    height: deviceWidth * .13,
+    width: deviceWidth * .34,
     borderRadius: 10,
-    paddingVertical: 15,
+    paddingVertical: 10,
     marginTop: 10,
   },
-  SubmitText: {
-    textAlign:"center",
+  submitText: {
     color: 'white',
+    fontSize: 16,
     fontFamily: 'PTSans-Bold',
   },
   radiobuttonContainer:{

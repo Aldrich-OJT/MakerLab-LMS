@@ -56,39 +56,36 @@ const styles = StyleSheet.create({
     width: '30%',
     resizeMode: 'contain',
     alignSelf: 'flex-end',
-    margin: 20,
+    marginVertical:35,
+    marginRight:20,
   },
   text: {
     textAlign:"center",
-    fontWeight:'bold',
-    fontSize: 35,
-    margin: 5
+    fontFamily:'PTSans-Bold',
+    fontSize: 40,
   },
   imagecontainer: {
     width: devicewidth > 380 ? 300 : 250,
     alignSelf:"center",
-    justifyContent: 'center',
     flex: 2,
   },
   image:{
     resizeMode:"contain",
     width: "100%",
     height: "100%",
-   
   },
   bottomcontainer: {
-    flex: .5
+    flex: .75
   },
   button: {
     borderColor: 'black',
-    color: Colors.bgYellow,
+    color: 'white',
     overflow:"hidden",
-    backgroundColor: "black",
+    backgroundColor: Colors.bgDarkGray,
     padding: 15,
-    borderWidth: 1,
     textAlign: 'center',
     fontSize: 20,
-    fontWeight: 'bold',
+    fontFamily:'PTSans-Bold',
     borderRadius: 10,
     width: '60%',
     alignSelf: 'center',

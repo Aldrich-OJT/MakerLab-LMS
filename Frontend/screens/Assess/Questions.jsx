@@ -182,7 +182,7 @@ export default function Assess({route, navigation}) {
         transparent={true}
         visible={submitModalVisible}
       >
-        <View style={styles.modalMainContainer}>
+        <View>
           <View style={styles.modalInnerContainer}>
             <View style={styles.titleContainer}>
               <Text style={styles.modalText}>Assessment Finished!</Text>
@@ -192,10 +192,6 @@ export default function Assess({route, navigation}) {
               <Text style={[styles.scoreText, { fontSize: 35 }]}>{score}/{quizData.length}</Text>
               <Text style={[styles.scoreText, { fontSize: 20 }]}>{quizForm.quizScores.passed ? "Good Job!" : "Better luck next time."}</Text>
             </View>
-
-            <Pressable style={styles.reviewButton}>
-              <Text style={styles.reviewText}>Review your answers.</Text>
-            </Pressable>
 
             <Pressable style={[styles.submitButton, { width: '90%', marginBottom: 0, }]} onPress={navigation.goBack}>
               <Text style={styles.submitText}>Back to lessons</Text>
@@ -248,7 +244,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     borderRadius: 10,
-    backgroundColor: "black",
+    backgroundColor: Colors.bgDarkGray,
   },
   buttonText: {
     color: Colors.bgYellow,
@@ -286,18 +282,5 @@ const styles = StyleSheet.create({
     fontFamily: 'PTSans-Bold',
     color: Colors.bgViolet,
     textAlign: 'center',
-  },
-  reviewButton:{
-    backgroundColor: Colors.bgLightGray,
-    borderRadius:10,
-    width: '90%',
-    alignItems: 'center',
-    height: '10%',
-    justifyContent: 'center'
-  },
-  reviewText: {
-    fontFamily: 'PTSans-Bold',
-    fontSize: 16,
-    textDecorationLine: 'underline'
   },
 })

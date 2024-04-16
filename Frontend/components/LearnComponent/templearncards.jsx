@@ -5,7 +5,7 @@ import { useState } from "react";
 export default function Templearncards({ id, title, description, onPress, lessoncount, pressQuiz,pressLearn }) {
 
   return (
-    <Pressable style={[styles.container, { marginTop: lessoncount === 1 ? 25 : 0 }]} onPress={pressLearn}>
+    <Pressable style={[styles.container, { marginTop: lessoncount === 1 ? 20 : 0 }]} onPress={pressLearn}>
       
       <View style={styles.purpleTint}>
         <View style={styles.titleContainer} numberOfLines={1}>
@@ -36,7 +36,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     borderRadius: 10,
     marginHorizontal: 20,
-    marginBottom:25,
+    marginBottom:20,
     shadowColor: "#000",
     shadowOffset: {
       width: 0,

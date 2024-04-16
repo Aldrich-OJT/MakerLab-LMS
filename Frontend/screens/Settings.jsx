@@ -32,8 +32,8 @@ const  tabBarHeight  = useBottomTabBarHeight();
 
   return (
     <ScrollView showsVerticalScrollIndicator={false}>
-    <View style={[styles.mainContainer,{marginBottom:tabBarHeight}]}>
-      <Modal
+      <View style={[styles.mainContainer,{marginBottom:tabBarHeight}]}>
+        <Modal
           animationType="fade"
           transparent={true}
           visible={avatarModalVisible}
@@ -65,51 +65,50 @@ const  tabBarHeight  = useBottomTabBarHeight();
           </View>
         </Modal> 
 
-      <View style={styles.innerContainer}>
-      <Text style={[styles.editButton, {fontFamily: 'icon', fontSize:20, color: Colors.bgGray}]} 
-        onPress={() => setAvatarModalVisible(true)}></Text>
-        <Image source={avatarChoices[avatar]} style={styles.avatar}></Image>
-        <Text style={styles.nameText}>{userData.name}</Text>
-        <View style={styles.progressContainer}>
-          <Text style={styles.progressText}>Progress: 68%</Text>
-          <View style={styles.progressBar}>
-            <ProgressBar 
-            animated={true}
-            progress={.68} 
-            width={270} 
-            height={10}
-            borderRadius={10}
-            unfilledColor={Colors.bgOffWhite}
-            borderWidth={0}
-            color={Colors.bgPurple}
-            />
+        <View style={styles.innerContainer}>
+        <Text style={[styles.editButton, {fontFamily: 'icon', fontSize:20, color: Colors.bgGray}]} 
+          onPress={() => setAvatarModalVisible(true)}></Text>
+          <Image source={avatarChoices[avatar]} style={styles.avatar}></Image>
+          <Text style={styles.nameText}>{userData.name}</Text>
+          <View style={styles.progressContainer}>
+            <Text style={styles.progressText}>Progress: 68%</Text>
+            <View style={styles.progressBar}>
+              <ProgressBar 
+              animated={true}
+              progress={.68} 
+              width={270} 
+              height={10}
+              borderRadius={10}
+              unfilledColor={Colors.bgOffWhite}
+              borderWidth={0}
+              color={Colors.bgPurple}
+              />
+            </View>
           </View>
         </View>
-      </View>
 
-      <View style={styles.innerContainer}>
-        <Text style={styles.nameText}>My badges</Text>
-        <View style={styles.badgesContainer}>
-          {badges.map((badge, index) => (
-            <View key={index} style={styles.badge}>
-              {badge ? (
-              <Image
-                source={badge}
-                style={{ width: '100%', height: '100%', resizeMode: 'contain' }}
-              />
-              ) : null}
-            </View>
-          ))}
+        <View style={styles.innerContainer}>
+          <Text style={styles.nameText}>My badges</Text>
+          <View style={styles.badgesContainer}>
+            {badges.map((badge, index) => (
+              <View key={index} style={styles.badge}>
+                {badge ? (
+                <Image
+                  source={badge}
+                  style={{ width: '100%', height: '100%', resizeMode: 'contain' }}
+                />
+                ) : null}
+              </View>
+            ))}
+          </View>
         </View>
-      </View>
 
-        <Pressable style={[styles.logoutButton,{bottom:tabBarHeight}]} onPress={logout}>
-          <Text style={styles.logoutText}> 
-          <Text style={{fontFamily: 'icon', fontSize:18}}></Text>Logout</Text>
-        </Pressable>
-    </View>
+          <Pressable style={[styles.logoutButton,{bottom:tabBarHeight}]} onPress={logout}>
+            <Text style={styles.logoutText}> 
+            <Text style={{fontFamily: 'icon', fontSize:18}}></Text>Logout</Text>
+          </Pressable>
+      </View>
     </ScrollView>
-    
   );
   }
 

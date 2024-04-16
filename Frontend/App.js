@@ -94,11 +94,11 @@ const TabGroup = () => {
         },
       })}
       >
-      <Tab.Screen options={{ headerStyle: {height: 120,}, headerShown: true, headerTitle: '', headerBackground: ()=> (<Header/>) }} name='Home' component={HomePage} />  
-      <Tab.Screen options={{ headerStyle: {height: 120,}, headerShown: true, headerTitle: '', headerBackground: ()=> (<Header/>) }} name='Lessons' component={Lessons} />
+      <Tab.Screen options={{ headerStyle: {height: 105}, headerShown: true, headerTitle: '', headerBackground: ()=> (<Header/>) }} name='Home' component={HomePage} />  
+      <Tab.Screen options={{ headerStyle: {height: 105,}, headerShown: true, headerTitle: '', headerBackground: ()=> (<Header/>) }} name='Lessons' component={Lessons} />
       {/* <Tab.Screen options={{ headerShown: false }} name='AssesStackGroup' component={AssesStackGroup} /> */}
       <Tab.Screen options={{ 
-        headerStyle: {height: 120,},
+        headerStyle: {height: 105},
         headerShown: true, 
         headerTitle: '', 
         headerBackground: ()=> (<Header/>)
@@ -131,7 +131,6 @@ const Root = () => {
   const authContext = useContext(AuthContext);
   const [loading, setLoading] = useState(false);
   const [fontsLoaded, fontError] = useFonts({
-    'Dongle-Regular': require('./assets/fonts/Dongle-Regular.ttf'),
     'PTSans-Regular': require('./assets/fonts/PTSans-Regular.ttf'),
     'PTSans-Bold': require('./assets/fonts/PTSans-Bold.ttf'),
     'icon' : require('./assets/fonts/icomoon.ttf'),

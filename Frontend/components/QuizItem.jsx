@@ -116,7 +116,7 @@ export default function QuizItem(props) {
               <Text
                 style={[
                   styles.choicestext,
-                  selected === index && { color: 'white' }
+                  selected === index && { color: 'black' }
                 ]}
               >
                 {String.fromCharCode(97 + index).toUpperCase()}. {option}
@@ -128,8 +128,6 @@ export default function QuizItem(props) {
     </View>
   );
 };
-
-
 
 const styles = StyleSheet.create({
   itemcontainer: {
@@ -184,7 +182,7 @@ const styles = StyleSheet.create({
     gap: 20,
   },
   choices: {
-    backgroundColor: '#FFF5DB',
+    backgroundColor: Colors.bgOffWhite,
     borderRadius: 100,
     borderColor: Colors.bgGray,
     borderWidth: .5,
@@ -197,7 +195,7 @@ const styles = StyleSheet.create({
     fontFamily: 'PTSans-Regular'
   },
   selectedchoices: {
-    backgroundColor: Colors.bgPurple,
+    backgroundColor: Colors.bgLightYellow,
   },
   buttonsContainer: {
     flexDirection: 'row',
