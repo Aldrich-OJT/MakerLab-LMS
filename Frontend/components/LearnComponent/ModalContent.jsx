@@ -1,13 +1,13 @@
 import { TextInput } from "react-native-paper"
 import { View, Pressable, Text, StyleSheet, Modal, KeyboardAvoidingView, TouchableWithoutFeedback, Keyboard, Dimensions } from "react-native"
 import { useContext, useEffect, useState } from "react"
-import Colors from "../../constants/Colors";
-import * as DocumentPicker from 'expo-document-picker';
 import { axiosPost, axiosPut } from "../../utils/axios";
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { AuthContext } from "../../context/AuthProvider";
 //import { SafeAreaView } from "react-native-safe-area-context";
 import { useNavigation } from '@react-navigation/native';
+import Colors from "../../constants/Colors";
+import * as DocumentPicker from 'expo-document-picker';
 
 const dimensions = Dimensions.get("window");
 const deviceWidth = dimensions.width;
@@ -131,11 +131,6 @@ const pickDocument = async () => {
             <View style={styles.inputContainer}>
               <View style={styles.titleContainer}>
                 <Text style={styles.textTitle}>{children}</Text>
-                
-                <Pressable style={styles.closeButton} onPress={cancelForm}>
-                <Text><MaterialCommunityIcons name="close" size={30} color={Colors.bgRedInvalid} /></Text>
-                </Pressable>
-                
               </View>
 
               <TextInput
@@ -144,7 +139,7 @@ const pickDocument = async () => {
                 onChangeText={(inputvalue) => handleForm("title", inputvalue)}
                 mode="flat" 
                 value={formData.title ? formData.title : ""}
-                />
+              />
                 
               <TextInput
                 multiline={true}
@@ -152,23 +147,29 @@ const pickDocument = async () => {
                 style={styles.textInput}
                 onChangeText={(inputvalue) => handleForm("description", inputvalue)}
                 mode="flat"
-                value={formData.description ? formData.description : ""} />
+                value={formData.description ? formData.description : ""} 
+              />
   
               <Pressable onPress={pickDocument}>
                 <Text style={styles.selectButton}>
-                  <Text style={{fontFamily: 'PTSans-Regular'}}>
-                  <MaterialCommunityIcons name="paperclip" size={20} color="black" />
-                  {formData.document ? `${formData.document.name}` : "Upload File"}
-                  {/* formData.document ? `${formData.document.name}` :  */}
+                  <Text style={{fontFamily: 'PTSans-Bold', color: Colors.bgDarkGray}}>
+                    <Text style={{fontFamily: 'icon', fontSize:20}}></Text>
+                    {formData.document ? `${formData.document.name}` : " Upload File"}
+                    {/* formData.document ? `${formData.document.name}` :  */}
                   </Text>
-                
                 </Text>
               </Pressable>
               {errorMessage && <Text style={styles.errorMessage}>{errorMessage}</Text>}
     
               <View style={styles.buttonContainer}>
-                <Pressable style={[styles.submitButton]} onPress={submitForm}>
-                  <Text style={styles.SubmitText}>
+                <Pressable style={[styles.submitButton, {borderWidth:2, borderColor: Colors.bgPurple, backgroundColor: 'white'}]} onPress={cancelForm}>
+                  <Text style={[styles.submitText, {color:Colors.bgPurple}]}>
+                    Cancel
+                  </Text>
+                </Pressable>
+
+                <Pressable style={styles.submitButton} onPress={submitForm}>
+                  <Text style={styles.submitText}>
                     Submit
                   </Text>
                 </Pressable>
@@ -190,11 +191,13 @@ const styles = StyleSheet.create({
     backgroundColor: "rgba(0,0,0,0.4)"
   },
   inputContainer: {
-    width: '90%',
+    height: '30%',
+    width: deviceWidth * .9,
+    justifyContent: "center",
     alignItems: "center",
     padding: 15,
     borderRadius: 10,
-    backgroundColor: Colors.bgYellow,
+    backgroundColor: 'white',
     height: "fit-content",
     gap: 10,
   },
@@ -202,9 +205,9 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
   },
   textTitle: {
-    fontSize: 20,
+    fontSize: 18,
     fontFamily: 'PTSans-Bold',
-    flex:5,
+    flex: 5,
     textAlign: 'center',
     alignSelf: 'center',
     padding: 10,
@@ -220,31 +223,38 @@ const styles = StyleSheet.create({
   buttonContainer: {
     flexDirection:"row",
     paddingBottom: 5,
+    gap: 30,
   },
   submitButton: {
-    backgroundColor: Colors.bgViolet,
+    backgroundColor: Colors.bgPurple,
     justifyContent: "center",
     alignItems: "center",
-    width: '60%',
+    height: deviceWidth * .13,
+    width: deviceWidth * .34,
     borderRadius: 10,
-    paddingVertical: 15,
+    paddingVertical: 10,
     marginTop: 10,
   },
   selectButton: {
-    backgroundColor: Colors.bgDarkYellow,
+    backgroundColor: Colors.bgLightGray,
     paddingVertical: 10,
     width: deviceWidth * .75,
     borderRadius: 6,
     textAlign: 'center',
     textAlignVertical: 'center',
   },
-  SubmitText:{
+  submitText:{
     color: 'white',
     fontSize: 16,
     fontFamily: 'PTSans-Bold',
   },
-  errorMessage:{
-    alignSelf:"center",
+  cancelText:{
+    color: 'white',
+    fontSize: 16,
+    fontFamily: 'PTSans-Bold',
+  },
+  errorMessage: {
+    alignSelf: "center",
     color: Colors.bgError,
     fontFamily: 'PTSans-Bold',
   }

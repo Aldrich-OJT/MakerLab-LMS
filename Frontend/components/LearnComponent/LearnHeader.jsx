@@ -1,22 +1,19 @@
 import { View, Text, StyleSheet, Pressable } from "react-native";
 import Colors from "../../constants/Colors";
-import { FontAwesome5 } from '@expo/vector-icons';
 
 export default function Header ({title, navigation}) {
     return(
     <View style={styles.headercontainer}>
             <View>
             <Pressable style={styles.backButtonContainer} onPress={() => (navigation.goBack())} >
-                <FontAwesome5
-                name="chevron-left"
-                size={20}
-                color={Colors.bgYellow}
-                />
-
+              <Text style={{fontFamily: 'icon', fontSize: 30, color: Colors.bgYellow}}></Text>
             </Pressable>
             </View>
             <View style={styles.titlecontainer}>
-            <Text style={styles.title} numberOfLines={1}><FontAwesome5 name="book" size={24} color={Colors.bgYellow} /> {title}</Text>
+            <Text style={styles.title} numberOfLines={1}>
+              <Text style={{fontFamily: 'icon', fontSize: 22, color: Colors.bgYellow, alignSelf:'center'}}></Text> 
+               {title}
+            </Text>
             </View>
         </View>
       );
@@ -32,7 +29,7 @@ const styles = StyleSheet.create({
     marginTop: "10%",
   },
   backButtonContainer: {
-    backgroundColor: '#292929',
+    backgroundColor: Colors.bgGray,
     height: 50,
     width: 50,
     justifyContent: "center",
@@ -52,6 +49,6 @@ const styles = StyleSheet.create({
     maxHeight: "fit-content",
     borderRadius: 50,
     backgroundColor: Colors.bgGray,
-    justifyContent: "center"
+    justifyContent: "center",
   },
 })

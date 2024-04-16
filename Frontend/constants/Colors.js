@@ -1,15 +1,13 @@
 const Colors = {
-    bgYellow: '#ffc42c',
-    bgDarkYellow: '#FFA800',
-    bgError: "#640233",
+    bgYellow: '#FFB800',
+    bgError: "#CF316A",
     bgOffWhite: '#EDEDED',
     bgViolet: "#733AD1",
-    bgDarkViolet: "#733AD1",
-    bgGray: "#898989",
     bgRedInvalid: "#Be254b",
-    bgVioletDisable: "#B99CE8",
-    bgGray: "#292929",
+    bgPurple: "#8F7CFF",
+    bgGray: "#484848",
+    bgLightGray: "#CBCBCB",
+    bgDarkGray: "#1D1D1D",
 }
-
 
 export default Colors

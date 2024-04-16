@@ -3,7 +3,6 @@ import { View, Text, StyleSheet, Dimensions,Image,Modal, Pressable, ScrollView }
 import ProgressBar from 'react-native-progress/Bar';
 import Colors from "../constants/Colors";
 import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs';
-import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { AuthContext } from '../context/AuthProvider';
 
 const dimensions = Dimensions.get('window');   
@@ -35,7 +34,7 @@ const  tabBarHeight  = useBottomTabBarHeight();
     <ScrollView showsVerticalScrollIndicator={false}>
     <View style={[styles.mainContainer,{marginBottom:tabBarHeight}]}>
       <Modal
-          animationType="slide"
+          animationType="fade"
           transparent={true}
           visible={avatarModalVisible}
           onRequestClose={() => setAvatarModalVisible(false)}
@@ -44,9 +43,6 @@ const  tabBarHeight  = useBottomTabBarHeight();
             <View style={styles.modalContentContainer}>
               <View style={styles.titleContainer}>
                 <Text style={styles.modalText}>Select Avatar</Text>
-                <Pressable style={styles.closeButton} onPress={() => setAvatarModalVisible(false)}>
-                  <Text><MaterialCommunityIcons name="close" size={30} color={Colors.bgRedInvalid} /></Text>
-                </Pressable>
               </View>
 
               <View style={styles.imageContainer}>
@@ -60,17 +56,18 @@ const  tabBarHeight  = useBottomTabBarHeight();
                 </View>
               </View>
 
+              <Pressable style={styles.cancelButton} onPress={() => setAvatarModalVisible(false)}>
+                  <Text style={styles.cancelText}>
+                    Cancel
+                  </Text>
+                </Pressable>
             </View>
           </View>
         </Modal> 
 
       <View style={styles.innerContainer}>
-        <MaterialCommunityIcons 
-                  name="square-edit-outline" 
-                  size={26}
-                  style={styles.editButton}  
-                  color="black" 
-                  onPress={() => setAvatarModalVisible(true)}/>
+      <Text style={[styles.editButton, {fontFamily: 'icon', fontSize:20, color: Colors.bgGray}]} 
+        onPress={() => setAvatarModalVisible(true)}></Text>
         <Image source={avatarChoices[avatar]} style={styles.avatar}></Image>
         <Text style={styles.nameText}>{userData.name}</Text>
         <View style={styles.progressContainer}>
@@ -84,7 +81,7 @@ const  tabBarHeight  = useBottomTabBarHeight();
             borderRadius={10}
             unfilledColor={Colors.bgOffWhite}
             borderWidth={0}
-            color={Colors.bgDarkViolet}
+            color={Colors.bgPurple}
             />
           </View>
         </View>
@@ -108,7 +105,7 @@ const  tabBarHeight  = useBottomTabBarHeight();
 
         <Pressable style={[styles.logoutButton,{bottom:tabBarHeight}]} onPress={logout}>
           <Text style={styles.logoutText}> 
-          <MaterialCommunityIcons name="logout" size={18} color='white'/>Logout</Text>
+          <Text style={{fontFamily: 'icon', fontSize:18}}></Text>Logout</Text>
         </Pressable>
     </View>
     </ScrollView>
@@ -122,7 +119,7 @@ const  tabBarHeight  = useBottomTabBarHeight();
       height: deviceHeight - (deviceWidth * 0.27), //Header height
     },
     innerContainer: {
-      backgroundColor: Colors.bgYellow,
+      backgroundColor: 'white',
       justifyContent: 'center',
       alignItems: 'center',
       marginHorizontal: 20,
@@ -131,6 +128,15 @@ const  tabBarHeight  = useBottomTabBarHeight();
       gap: 5,
       paddingVertical:15,
       height: 'fit-content',
+      shadowColor: "#000",
+      shadowOffset: {
+        width: 0,
+        height: 2,
+      },
+      shadowOpacity: 0.25,
+      shadowRadius: 3.84,
+      
+      elevation: 5,
     },
     editButton:{
       position: 'absolute',
@@ -177,17 +183,16 @@ const  tabBarHeight  = useBottomTabBarHeight();
       margin: 10,
     },
     logoutButton:{
-      backgroundColor: Colors.bgViolet,
+      backgroundColor: Colors.bgGray,
       alignSelf:'center',
       justifyContent:'center',
       width: '30%',
       height: '5%',
       borderRadius: 10,
       position: 'absolute',
-      bottom: 0,
     },
     logoutText:{
-      color: 'white',
+      color: Colors.bgYellow,
       fontFamily: 'PTSans-Bold',
       fontSize: 16,
       textAlign:'center',
@@ -206,7 +211,7 @@ const  tabBarHeight  = useBottomTabBarHeight();
     },
     modalContentContainer:{
       gap: 10,
-      backgroundColor: Colors.bgYellow,
+      backgroundColor: 'white',
       margin: 20,
       padding: 10,
       alignItems: 'center',
@@ -228,9 +233,21 @@ const  tabBarHeight  = useBottomTabBarHeight();
       flex:5,
       textAlign: 'center',
     },
-    closeButton: {
-      position: 'absolute',
-      right: 0,
-      padding: 5,
+    cancelButton: {
+      backgroundColor: 'white',
+      justifyContent: "center",
+      alignItems: "center",
+      height: deviceWidth * .13,
+      width: deviceWidth * .34,
+      borderRadius: 10,
+      paddingVertical: 10,
+      marginVertical: 10,
+      borderColor: Colors.bgPurple,
+      borderWidth: 2,
+    },
+    cancelText: {
+      color: Colors.bgPurple,
+      fontSize: 16,
+      fontFamily: 'PTSans-Bold',
     },
   })

@@ -84,22 +84,29 @@ export default function Templearn({ route, navigation }) {
   return (
     <View style={styles.maincontainer}>
       <ModalContent 
-      id={param._id}
-      setRefresh={() => setRefresh(true)} 
-      visibility={modalVisible} 
-      onPress={() => setModalVisible(false)} >Upload Lesson</ModalContent>
-    <LearnHeader title={param.title} navigation={navigation}/>
+        id={param._id}
+        setRefresh={() => setRefresh(true)} 
+        visibility={modalVisible} 
+        onPress={() => setModalVisible(false)}>
+        Upload Lesson
+      </ModalContent>
+
+      <LearnHeader title={param.title} navigation={navigation}/>
 
       <View style={styles.bottomsheet}>
-
         <View style={styles.FlatListContainer}>
           {contentLoading ? (
-          <ActivityIndicator 
-          animating={true} 
-          style={{top:20}}
-          size={60}
-          />)
-            : (nocontent ? (<Text style={{fontFamily: 'PTSans-Bold'}}>No contents found</Text>) : (
+            <ActivityIndicator 
+              animating={true} 
+              style={{top:20}}
+              size={60}
+            />
+          ) : (
+            nocontent ? (
+              <Text style={{fontFamily: 'PTSans-Bold'}}>
+                No contents found
+              </Text>
+            ) : (
               <FlatList
                 showsVerticalScrollIndicator={false}
                 keyExtractor={(item) => item._id}
@@ -119,15 +126,14 @@ export default function Templearn({ route, navigation }) {
         </View>
 
         {userData.role === 'admin' && (
-        <Pressable style={styles.addButton} onPress={() => setModalVisible(true)}>
-          <Text style={styles.buttonText} >
-            +
-          </Text>
-        </Pressable>
+          <Pressable style={styles.addButton} onPress={() => setModalVisible(true)}>
+            <Text style={styles.buttonText} >
+              +
+            </Text>
+          </Pressable>
         )}
       </View>
     </View>
-
   );
 }
 
@@ -135,7 +141,7 @@ const styles = StyleSheet.create({
   maincontainer: {
     flex: 1,
     flexDirection: 'column',
-    backgroundColor: 'black',
+    backgroundColor: Colors.bgDarkGray,
   },
   bottomsheet: {
     backgroundColor: Colors.bgOffWhite,
@@ -150,7 +156,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     borderRadius: 10,
-    backgroundColor: "black",
+    backgroundColor: Colors.bgDarkGray,
 
   },
   buttonText: {
