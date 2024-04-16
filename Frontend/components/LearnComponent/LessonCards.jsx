@@ -18,10 +18,10 @@ export default function LessonCards ({title, description, onPress, ID,setRefresh
       setShowDescription(!showDescription);
   };
   const createTwoButtonAlert = () =>
-  Alert.alert('Warning', 'Do you really want to delete this file?', [
+  Alert.alert('Warning', 'Do you really want to delete this category?', [
       {
           text: 'Cancel',
-          onPress: () => console.log('Cancel Pressed'),
+          //onPress: () => console.log('Cancel Pressed'),
           style: 'cancel',
       },
       { text: 'YES', onPress: deletePost },
@@ -29,10 +29,10 @@ export default function LessonCards ({title, description, onPress, ID,setRefresh
   const deletePost= ()=>{
 
     const res = axiosDelete(`${deleteCategoryURL}${ID}`,userData.token)
-    console.log(res, "deleted")
+    //console.log(res, "deleted")
     setRefresh(true)
   }
-  console.log(title)
+  //console.log(title)
   const [menuVisible, setMenuVisible] = useState(false);
 
     return (

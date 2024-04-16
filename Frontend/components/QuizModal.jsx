@@ -44,11 +44,11 @@ const addQuestion = async () => {
 
     if(children.split(" ")[0] === "Upload"){
       const data = await axiosPost(postquestionURL, questionForm, contentType, userData.token);
-      console.log("this is data",data);
+      console.log("ssuccess");
      
     }else if (children.split(" ")[0] === "Edit"){
       const data = await axiosPut(`${updateQuestionURL}${item?._id}`, questionForm, contentType, userData.token);
-      console.log("this is data",data);
+      console.log("ssuccess");
       
     }
     setRefresh()
@@ -61,7 +61,7 @@ const addQuestion = async () => {
 };
 
   
-  //console.log(questionForm)
+  console.log(questionForm)
   return (
     <KeyboardAvoidingView behavior="padding">
       <Modal

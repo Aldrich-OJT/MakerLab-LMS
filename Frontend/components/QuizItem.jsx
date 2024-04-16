@@ -1,27 +1,28 @@
 import { Text, Pressable, StyleSheet, View, Alert } from "react-native";
 import Colors from "../constants/Colors";
 import { useContext, useEffect, useState } from "react";
-import { MaterialCommunityIcons } from '@expo/vector-icons';
+
 import { axiosDelete } from "../utils/axios";
 import { AuthContext } from "../context/AuthProvider";
 import QuizModal from "./QuizModal";
+import { Menu } from "react-native-paper";
 
 const deleteQuestionURL = "/api/question/delete/"
 
 export default function QuizItem(props) {
-  console.log(props)
+  const [menuVisible, setMenuVisible] = useState(false);
   const { userData } = useContext(AuthContext)
   const [modalVisible, setModalVisible] = useState(false)
   const [selected, setSelected] = useState(null);
 
   const [singleScore, setSingleScore] = useState(0)
   const handleChoiceSelection = (choice) => {
-    console.log("i am pressed")
+    //console.log("i am pressed")
     setSelected(choice);
     props.setAnsweredQuestion(prevState => prevState + 1)
     //prevent multiple selection if user clicks the selected option again
     if (selected === choice) {
-      console.log("i am selected again")
+      //console.log("i am selected again")
       setSelected(null)
       setSingleScore(0)
 
@@ -39,8 +40,8 @@ export default function QuizItem(props) {
   useEffect(() => {
     //initial value of score is zero, so this code prevents from subtracting at the inital value
     if (singleScore === 0 && props.score != 0) {
-      console.log("change")
-      console.log(singleScore)
+      // console.log("change")
+      // console.log(singleScore)
 
       props.setScore(prevState => prevState - 1)
     } else {
@@ -63,7 +64,7 @@ export default function QuizItem(props) {
   }
   const deleteQuestion = async () => {
     const data = await axiosDelete(`${deleteQuestionURL}${props.ID}`, userData.token)
-    console.log(data)
+    //console.log(data)
     props.setRefresh()
   }
 
@@ -83,17 +84,19 @@ export default function QuizItem(props) {
         <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
           <Text style={styles.questionNumberText}>Question {props.itemNumber} </Text>
           <View style={styles.buttonsContainer}>
-            {userData.role === "admin" && (
-              <Pressable>
-                <Text style={[styles.buttons, {fontFamily: 'icon', fontSize:21, color:Colors.bgYellow,padding:8.5}]}></Text>
-              </Pressable>
-            )}
-
-            {userData.role === 'admin' && (
-            <Pressable onPress={createTwoButtonAlert}>
-              <Text style={[styles.buttons, {fontFamily: 'icon', fontSize:25, color:Colors.bgError}]}></Text>
-            </Pressable>
-            )}
+          {userData.role === 'admin' && (
+                <Menu
+                  visible={menuVisible}
+                  onDismiss={()=>setMenuVisible(false)}
+                  anchor={
+                  <Pressable style={{width:50,height:30}} onPress={()=>(setMenuVisible(true))}>
+                    <Text style={{fontFamily: 'icon', fontSize:22, color:Colors.bgPurple, alignSelf:'flex-end', marginRight:5}}> </Text>
+                  </Pressable>
+                }>
+                  <Menu.Item onPress={()=>setModalVisible(true)} title={<Text style={{fontFamily: 'icon', fontSize:16, color:Colors.bgDarkGray, textAlign:'center'}}> Edit</Text>} />
+                  <Menu.Item onPress={createTwoButtonAlert} title={<Text style={{fontFamily: 'icon', fontSize:16, color:Colors.bgDarkGray, textAlign:'center'}}> Delete</Text>} />
+                </Menu>
+              )}
           </View>
         </View>
         <Text style={styles.questiontext}>{props.item.question}</Text>

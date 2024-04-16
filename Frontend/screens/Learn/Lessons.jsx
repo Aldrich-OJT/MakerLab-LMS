@@ -18,7 +18,7 @@ export default function Lessons({ navigation }) {
   const  tabBarHeight  = useBottomTabBarHeight();
   const [lessonData, setLessonData] = useState([]);
   const [refresh, setRefresh] = useState(true);
-  const [modalVisible, setModalVisible] = useState(true);
+  const [modalVisible, setModalVisible] = useState(false);
 
   useEffect(() => {
     const fetchLessonData = async () => {

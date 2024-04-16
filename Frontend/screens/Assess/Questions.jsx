@@ -8,7 +8,7 @@ import { FlatList } from "react-native";
 import {  axiosGet, axiosPut } from "../../utils/axios";
 import { AuthContext } from "../../context/AuthProvider";
 import { ActivityIndicator, Modal } from "react-native-paper";
-import { MaterialCommunityIcons } from '@expo/vector-icons';
+
 
 const getQuizzesURL = "/api/question/"
 const editScoreURL = "/api/user/data/update/"
@@ -127,7 +127,7 @@ export default function Assess({route, navigation}) {
       <QuizModal 
         setRefresh={() => setRefresh(true)} 
         visibility={modalVisible} 
-        onPress={() => setModalVisible(false)}>
+        setModalVisible={() => setModalVisible(false)}>
         Enter question
       </QuizModal>
 

@@ -17,7 +17,7 @@ const EDITURL = "/api/categories/update/"
 const contentType = "application/json"
 
 //FIX ON DOCUMENT BLANK ERROR
-export default function LessonModal({ visibility, onPress,title,description, children, setRefresh,ID }) {
+export default function LessonModal({ visibility, onPress, title, description, children, setRefresh, ID }) {
   const { userData } = useContext(AuthContext)
   //const navigation = useNavigation()
   const [errorMessage, setErrorMessage] = useState("");
@@ -44,24 +44,23 @@ export default function LessonModal({ visibility, onPress,title,description, chi
 
   const submitForm = async () => {
     //console.log(formData)
-  
-    try {
-      if(children.split(" ")[0] === "Upload"){
-        const data = await axiosPost(POSTURL, formData, contentType, userData.token)
-        console.log(data)
-      }else{
-        const data = await axiosPut(`${EDITURL}${ID}`, formData, contentType, userData.token)
-        console.log(data)
-      }
 
+    try {
+      if (children.split(" ")[0] === "Upload") {
+        const data = await axiosPost(POSTURL, formData, contentType, userData.token)
+        console.log("success")
+      } else {
+        const data = await axiosPut(`${EDITURL}${ID}`, formData, contentType, userData.token)
+        console.log("success")
+      }
+      cancelForm()
+      setRefresh(true)
     } catch (error) {
       setErrorMessage(error?.data?.message)
     }
-    onPress()
-    setRefresh(true)
-    setFormData(formInitialData)
-    setErrorMessage("");
+  
   }
+
 
   return (
 
@@ -96,8 +95,8 @@ export default function LessonModal({ visibility, onPress,title,description, chi
                 value={formData.description} />
               {errorMessage && <Text style={styles.errorMessage}>{errorMessage}</Text>}
               <View style={styles.buttonContainer}>
-              <Pressable style={[styles.submitButton, {borderWidth:2, borderColor: Colors.bgPurple, backgroundColor: 'white'}]} onPress={cancelForm}>
-                  <Text style={[styles.submitText, {color:Colors.bgPurple}]}>
+                <Pressable style={[styles.submitButton, { borderWidth: 2, borderColor: Colors.bgPurple, backgroundColor: 'white' }]} onPress={cancelForm}>
+                  <Text style={[styles.submitText, { color: Colors.bgPurple }]}>
                     Cancel
                   </Text>
                 </Pressable>
@@ -171,7 +170,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontFamily: 'PTSans-Bold',
   },
-  cancelText:{
+  cancelText: {
     color: 'white',
     fontSize: 16,
     fontFamily: 'PTSans-Bold',

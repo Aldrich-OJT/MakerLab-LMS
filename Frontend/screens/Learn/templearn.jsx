@@ -23,7 +23,6 @@ export default function Templearn({ route, navigation }) {
   //const { navigate } = useNavigation()
   const [modalVisible, setModalVisible] = useState(false);
   const { param } = route.params;
-
   const {userData} = useContext(AuthContext);
   const [videoData, setVideoData] = useState(null);
   const [contentLoading, setContentLoading] = useState(false)

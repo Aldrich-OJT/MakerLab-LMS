@@ -7,9 +7,8 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { PaperProvider } from 'react-native-paper';
 import AuthProvider, { AuthContext } from './context/AuthProvider';
-import { Pressable, Text} from 'react-native';
+import { Text} from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import Learn from './screens/Learn/Learn';
 import Settings from './screens/Settings';
 import Header from "./components/Header";
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
@@ -18,10 +17,9 @@ import LearnDetails from './screens/Learn/LearnDetails';
 import Colors from './constants/Colors';
 import LoadingScreen from './screens/LoadingScreen';
 import { useFonts } from 'expo-font';
-// import QuizCategory from './screens/Assess/QuizCategory';
-// import Quizzes from './screens/Assess/Quizzes';
 import Questions from './screens/Assess/Questions';
 import Templearn from './screens/Learn/templearn';
+import LearnHeader from './components/LearnComponent/LearnHeader';
 
 const Stack = createNativeStackNavigator()
 const LearnStack = createNativeStackNavigator()
@@ -32,35 +30,27 @@ const LearnStackGroup = () => {
   return (
     <LearnStack.Navigator>
       <LearnStack.Screen options={{ headerShown: false }} name="TabGroup" component={TabGroup} />
-      <LearnStack.Screen options={{ headerShown: false }} name='Lessons' component={Lessons} />
-      <LearnStack.Screen options={{ presentation: "modal" }} name="LearnDetails" component={LearnDetails} />
+      {/* <LearnStack.Screen options={{ headerShown: false }} name='Lessons' component={Lessons} /> */}
+      <LearnStack.Screen options={{ 
+        presentation: "modal",
+        headerStyle: {
+            backgroundColor: "black",
+        },
+        headerTitleStyle: {
+            fontWeight: 'bold',
+            color: 'white',
+        },
+        headerTintColor: 'white',
+        headerTitleAlign: 'center',
+        }} name="LearnDetails" component={LearnDetails} />
       <LearnStack.Screen options={{ headerShown: false }} name="templearn" component={Templearn} />
       <LearnStack.Screen options={{ headerShown: false }} name="Questions" component={Questions}  />
     </LearnStack.Navigator>
 
   )
 }
-// const AssessStack = ()=>{
-//   return(
-//     <AssesStack.Navigator>
-//       
-//       <AssesStack.Screen options={{ headerShown: false }} name="QuizCategory" component={QuizCategory}/>
-//       <AssesStack.Screen options={{ headerShown: false }} name="Quizzses" component={Quizzes}  />
-//     </AssesStack.Navigator>
-//   )
-// }
-
-// const LessonStackGroup = () => {
-//   return (
-//     <LearnStack.Navigator>
-      
-
-//     </LearnStack.Navigator>
-//   );
-// };
 
 const TabGroup = () => {
-  const { logout } = useContext(AuthContext)
   return (
     <Tab.Navigator
       screenOptions={({ route, navigation }) => ({
@@ -126,14 +116,6 @@ const AuthStack = () => {
     </Stack.Navigator>
   )
 }
-// const AuthenticatedStack = () => {
-//   const {logout} = useContext(AuthContext)
-//   return(
-//     <Stack.Navigator>
-
-//     </Stack.Navigator>
-//   )
-// }
 const Navigation = () => {
   const authContext = useContext(AuthContext)
 
