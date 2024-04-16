@@ -17,19 +17,22 @@
         const [modalVisible, setModalVisible] = useState(false);
         const { _id } = route.params.item;
         const [postData, setPostData] = useState({})
-        const [refresh, setRefresh] = useState(false)
+        const [refresh, setRefresh] = useState(true)
         const {userData} = useContext(AuthContext);
-
+        console.log(refresh)
         useEffect(() => {
             console.log("effect")
-            setPostData({})
+            //setPostData({})
             const fetchData = async () => {
                 const data = await axiosGet(`${postURL}${_id}`, token)
+                console.log(data) 
                 setPostData(data)
                 setRefresh(false)
             }
 
-            fetchData()
+            if (refresh) {
+                fetchData()
+            }
         }, [refresh])
         useLayoutEffect(() => {
             if (postData.title) {

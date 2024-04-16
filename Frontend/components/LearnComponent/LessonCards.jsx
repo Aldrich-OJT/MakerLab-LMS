@@ -33,7 +33,7 @@ export default function LessonCards ({title, description, onPress, ID,setRefresh
     console.log(res, "deleted")
     setRefresh(true)
   }
-  console.log(title)
+  //console.log(title)
     return (
       <Pressable style={[styles.lessonContainer, { marginTop: index === 0 ? 20 : 10 }]} onPress={onPress}>
         <LessonModal

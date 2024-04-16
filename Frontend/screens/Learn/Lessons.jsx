@@ -17,8 +17,8 @@ export default function Lessons({ navigation }) {
   const {userData,logout} = useContext(AuthContext);
   const  tabBarHeight  = useBottomTabBarHeight();
   const [lessonData, setLessonData] = useState([]);
-  const [refresh, setRefresh] = useState(false);
-  const [modalVisible, setModalVisible] = useState(false);
+  const [refresh, setRefresh] = useState(true);
+  const [modalVisible, setModalVisible] = useState(true);
 
   useEffect(() => {
     const fetchLessonData = async () => {
@@ -35,7 +35,9 @@ export default function Lessons({ navigation }) {
       }
     };
 
-    fetchLessonData();
+    if (refresh) {
+      fetchLessonData();
+    }
   }, [refresh]);
 
 

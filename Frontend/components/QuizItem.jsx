@@ -4,12 +4,14 @@ import { useContext, useEffect, useState } from "react";
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { axiosDelete } from "../utils/axios";
 import { AuthContext } from "../context/AuthProvider";
+import QuizModal from "./QuizModal";
 
 const deleteQuestionURL = "/api/question/delete/"
 
 export default function QuizItem(props) {
-
+  console.log(props)
   const { userData } = useContext(AuthContext)
+  const [modalVisible, setModalVisible] = useState(false)
   const [selected, setSelected] = useState(null);
 
   const [singleScore, setSingleScore] = useState(0)
@@ -25,7 +27,7 @@ export default function QuizItem(props) {
 
       props.setAnsweredQuestion(prevState => prevState - 1)
 
-    } else if (props.options[choice] === props.answer) {//adds 1 to singleScore state if choice is equal to answer else reset to  0
+    } else if (props.item.options[choice] === props.item.answer) {//adds 1 to singleScore state if choice is equal to answer else reset to  0
       setSingleScore(prevState => prevState + 1)
     } else {
       setSingleScore(0)
@@ -62,18 +64,27 @@ export default function QuizItem(props) {
   const deleteQuestion = async () => {
     const data = await axiosDelete(`${deleteQuestionURL}${props.ID}`, userData.token)
     console.log(data)
+    props.setRefresh()
   }
 
   //   console.log(props.score)
   //  console.log(singleScore)
   return (
     <View style={styles.itemcontainer}>
+      <QuizModal
+      visibility={modalVisible}
+      item={props.item}
+      postID={props.postID}
+      setModalVisible={()=>setModalVisible(false)}
+      setRefresh={props.setRefresh}
+      
+      >Edit Question</QuizModal>
       <View style={styles.questioncontainer}>
         <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
           <Text style={styles.questionNumberText}>Question {props.itemNumber} </Text>
           <View style={styles.buttonsContainer}>
             {userData.role === "admin" && (
-              <Pressable>
+              <Pressable onPress={()=>setModalVisible(true)}>
                 <MaterialCommunityIcons
                   name="square-edit-outline"
                   size={24}
@@ -95,12 +106,12 @@ export default function QuizItem(props) {
             )}
           </View>
         </View>
-        <Text style={styles.questiontext}>{props.question}</Text>
+        <Text style={styles.questiontext}>{props.item.question}</Text>
       </View>
 
       <View style={styles.choicescontainer}>
         <View style={styles.choicesrow}>
-          {props.options.map((option, index) => (
+          {props.item.options.map((option, index) => (
             <Pressable
               key={index}
               style={[
@@ -115,7 +126,7 @@ export default function QuizItem(props) {
                   selected === index && { color: Colors.bgOffWhite }
                 ]}
               >
-                {String.fromCharCode(97 + index)}. {option}
+                {String.fromCharCode(97 + index).toUpperCase()}. {option}
               </Text>
             </Pressable>
           ))}

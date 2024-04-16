@@ -5,10 +5,8 @@ import LearnHeader from "../../components/LearnComponent/LearnHeader";
 import QuizModal from "../../components/QuizModal";
 import { useContext, useEffect, useState } from "react";
 import { FlatList } from "react-native";
-import { axiosDelete, axiosGet, axiosPut } from "../../utils/axios";
-import { useRoute } from '@react-navigation/native';
+import {  axiosGet, axiosPut } from "../../utils/axios";
 import { AuthContext } from "../../context/AuthProvider";
-import { useNavigation } from '@react-navigation/native';
 import { ActivityIndicator, Modal } from "react-native-paper";
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 
@@ -17,16 +15,17 @@ const editScoreURL = "/api/user/data/update/"
 const contentType = "application/json"
 
 
-export default function Assess() {
+export default function Assess({route, navigation}) {
   const { userData } = useContext(AuthContext)
-  console.log(userData)
+  //console.log(userData)
   const [score, setScore] = useState(0)
   const [isloading, setLoading] = useState(false)
-  const route = useRoute()
   const [answeredQuestion, setAnsweredQuestion] = useState(0)
   const [quizNumber, setQuizNumber] = useState(0)
   const param = route.params.item
-  const navigation = useNavigation();
+  const [modalVisible, setModalVisible] = useState(false);
+  const [submitModalVisible, setSubmitModalVisible] = useState(false);
+  const [refresh, setRefresh] = useState(true);
 
   const [quizData, setQuizData] = useState([])
   const [quizForm, setQuizForm] = useState({
@@ -46,9 +45,8 @@ export default function Assess() {
       }
     }))
   }, [score])
-  const [modalVisible, setModalVisible] = useState(false);
-  const [submitModalVisible, setSubmitModalVisible] = useState(false);
- 
+
+
   useEffect(() => {
     //console.log(param)
 
@@ -58,19 +56,22 @@ export default function Assess() {
       const data = await axiosGet(`${getQuizzesURL}${param._id}`, userData.token)
       setQuizData(data)
       setQuizNumber(data.length)
-      console.log(quizNumber)
+      setRefresh(false)
+      //console.log(quizNumber)
       //console.log("QUIZDATA", data)
       setLoading(false)
     }
 
-    fetchData()
-  }, [])
+    if (refresh) {
+      fetchData()
+    }
+  }, [refresh])
 
   // Alert user if leaving screen
   useEffect(() => {
     if (userData.role === "admin") {
       return
-    }else if(userData.role === "user"){
+    } else if (userData.role === "user") {
       const leaving = navigation.addListener('beforeRemove', (e) => {
         e.preventDefault();
         Alert.alert(
@@ -88,16 +89,18 @@ export default function Assess() {
       return leaving;
     }
 
-   
+
   }, [navigation]);
 
   const renderQuizItem = ({ item, index }) => (
     <QuizItem
       ID={item._id}
-      question={item.question}
-      options={item.options}
-      answer={item.answer}
+      item={item}
+      postID={param._id}
       setScore={setScore}
+      setRefresh={()=>setRefresh(true)}
+      //visibility={modalVisible}
+      //setModalVisible={setModalVisible}
       setAnsweredQuestion={setAnsweredQuestion}
       //setQuizForm={setQuizForm}
       score={score}
@@ -117,12 +120,12 @@ export default function Assess() {
   };
   //console.log(quizForm)
   // console.log("number of answered question is",answeredQuestion)
-  console.log(quizData)
-  //console.log(userData._id)
+  //console.log(quizData)
+  //console.log(param._id)
   return (
     <View style={styles.mainContainer}>
-      <QuizModal ID={param._id} setRefresh={() => setRefresh(true)} visibility={modalVisible} onPress={() => setModalVisible(false)}>
-        Enter question
+      <QuizModal postID={param._id} setRefresh={() => setRefresh(true)} visibility={modalVisible} setModalVisible={() => setModalVisible(false)}>
+        Upload question
       </QuizModal>
       <LearnHeader title={param.title} navigation={navigation} />
       <View style={styles.quizContainer}>
@@ -146,7 +149,7 @@ export default function Assess() {
                 <Pressable style={styles.submitButton} onPress={() => {
                   handleSubmit();
                   setSubmitModalVisible(true);
-              }}>
+                }}>
                   <Text style={styles.submitText}>Submit</Text>
                 </Pressable>
               )
@@ -157,14 +160,14 @@ export default function Assess() {
       </View>
 
       {userData.role === 'admin' && (
-      <Pressable style={styles.addButton}>
-        <Text style={styles.buttonText} onPress={() => setModalVisible(true)}>
-          +
-        </Text>
-      </Pressable>
+        <Pressable style={styles.addButton} onPress={() => setModalVisible(true)}>
+          <Text style={styles.buttonText} >
+            +
+          </Text>
+        </Pressable>
       )}
 
-      <Modal 
+      <Modal
         animationType="slide"
         transparent={true}
         visible={submitModalVisible}
@@ -176,15 +179,15 @@ export default function Assess() {
             </View>
 
             <View style={styles.scoreContainer}>
-              <Text style={[styles.scoreText, {fontSize: 35}]}>{score}/{quizData.length}</Text>
-              <Text style={[styles.scoreText, {fontSize: 20}]}>{quizForm.quizScores.passed ? "Good Job!": "Better luck next time."}</Text>
+              <Text style={[styles.scoreText, { fontSize: 35 }]}>{score}/{quizData.length}</Text>
+              <Text style={[styles.scoreText, { fontSize: 20 }]}>{quizForm.quizScores.passed ? "Good Job!" : "Better luck next time."}</Text>
             </View>
 
             <Pressable style={styles.reviewButton}>
               <Text style={styles.reviewText}>Review your answers.</Text>
             </Pressable>
 
-            <Pressable style={[styles.submitButton, {width: '90%',marginBottom: 0,}]} onPress={navigation.goBack}>
+            <Pressable style={[styles.submitButton, { width: '90%', marginBottom: 0, }]} onPress={navigation.goBack}>
               <Text style={styles.submitText}>Back to lessons</Text>
             </Pressable>
           </View>
@@ -249,9 +252,9 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(0,0,0,0.3)',
     justifyContent: 'center',
     alignContent: 'center',
-    flex:1,
+    flex: 1,
   },
-  modalInnerContainer:{
+  modalInnerContainer: {
     gap: 10,
     backgroundColor: Colors.bgYellow,
     margin: 20,
@@ -259,16 +262,16 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     borderRadius: 10,
   },
-  titleContainer:{
+  titleContainer: {
     flexDirection: 'row',
     padding: 10,
   },
   modalText: {
     fontSize: 20,
     fontFamily: 'PTSans-Bold',
-    flex:5,
+    flex: 5,
     marginTop: 10,
-    textAlign:'center',
+    textAlign: 'center',
   },
   scoreContainer: {
     backgroundColor: Colors.bgOffWhite,
@@ -276,14 +279,14 @@ const styles = StyleSheet.create({
     width: '90%',
     borderRadius: 10,
     justifyContent: 'center',
-    gap:15,
+    gap: 15,
   },
-  scoreText:{
+  scoreText: {
     fontFamily: 'PTSans-Bold',
     color: Colors.bgViolet,
     textAlign: 'center',
   },
-  reviewButton:{
+  reviewButton: {
     backgroundColor: Colors.bgDarkYellow,
     width: '90%',
     alignItems: 'center',

@@ -39,16 +39,16 @@ export default function Learn( { route, navigation } ) {
   const [videoData, setVideoData] = useState(null);
   const [contentLoading, setContentLoading] = useState(false)
   const [nocontent, setNoContent] = useState(false)
-  const [refresh, setRefresh] = useState(false)
+  const [refresh, setRefresh] = useState(true)
 
   useEffect(() => {
     const fetchData = async () => {
-      console.log(param);
+      //console.log(param);
       try {
         setContentLoading(true);
         
         const data = await axiosGet(`${getVideosURL}${param._id}`, authContext.token);
-        console.log("i am trying to get something")
+        //console.log("i am trying to get something")
         setVideoData(data);
         if(data){
           setNoContent(false)
@@ -67,7 +67,9 @@ export default function Learn( { route, navigation } ) {
         setContentLoading(false);
       }
     };
-    fetchData()
+    if (refresh) {
+      fetchData()
+    }
   }, [refresh])
   
   //refresh the page when focus goes back on this tab

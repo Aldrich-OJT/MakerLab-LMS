@@ -36,7 +36,7 @@ export default function LessonModal({ visibility, onPress,title,description, chi
     }))
 
   }
-  console.log(ID)
+  //console.log(ID)
   const cancelForm = () => {
     onPress();
     setFormData(formInitialData);
