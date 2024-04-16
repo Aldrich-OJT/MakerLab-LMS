@@ -121,13 +121,16 @@ export default function Assess() {
   //console.log(userData._id)
   return (
     <View style={styles.mainContainer}>
-      <QuizModal setRefresh={() => setRefresh(true)} visibility={modalVisible} onPress={() => setModalVisible(false)}>
+      <QuizModal 
+        setRefresh={() => setRefresh(true)} 
+        visibility={modalVisible} 
+        onPress={() => setModalVisible(false)}>
         Enter question
       </QuizModal>
-      <LearnHeader title={param.title} navigation={navigation} />
-      <View style={styles.quizContainer}>
-        {quizData.length > 0 && <Text style={styles.quizDescription}>Choose the correct answer.</Text>}
 
+      <LearnHeader title={param.title} navigation={navigation} />
+      
+      <View style={styles.quizContainer}>
         <View style={styles.flatlist}>
           {isloading ? (
             <ActivityIndicator
@@ -135,33 +138,40 @@ export default function Assess() {
               style={{ top: 20 }}
               size={60}
             />
-          ) : quizData.length > 0 ? (<FlatList
-
-            showsVerticalScrollIndicator={false}
-            data={quizData}
-            renderItem={renderQuizItem}
-            keyExtractor={item => item._id}
-            ListFooterComponent={
-              quizData.length > 0 && (
-                <Pressable style={styles.submitButton} onPress={() => {
-                  handleSubmit();
-                  setSubmitModalVisible(true);
-              }}>
-                  <Text style={styles.submitText}>Submit</Text>
-                </Pressable>
-              )
-            }
-          />) : (<Text style={{ alignSelf: "center", fontFamily: 'PTSans-Bold' }}> No questions found</Text>)}
-
+          ) : quizData.length > 0 ? (
+            <FlatList
+              showsVerticalScrollIndicator={false}
+              data={quizData}
+              renderItem={renderQuizItem}
+              keyExtractor={item => item._id}
+              ListHeaderComponent={() => (
+                <View>
+                  {quizData.length > 0 && (
+                    <Text style={styles.quizDescription}>Choose the correct answer.</Text>
+                  )}
+                </View>
+              )}
+              ListFooterComponent={
+                quizData.length > 0 && (
+                  <Pressable style={styles.submitButton} onPress={() => {
+                    handleSubmit();
+                    setSubmitModalVisible(true);
+                  }}>
+                    <Text style={styles.submitText}>Submit</Text>
+                  </Pressable>
+                )
+              }/>
+          ) : (
+            <Text style={{ alignSelf: "center", fontFamily: 'PTSans-Bold' }}> No questions found</Text>)}
         </View>
       </View>
 
       {userData.role === 'admin' && (
-      <Pressable style={styles.addButton}>
-        <Text style={styles.buttonText} onPress={() => setModalVisible(true)}>
-          +
-        </Text>
-      </Pressable>
+        <Pressable style={styles.addButton}>
+          <Text style={styles.buttonText} onPress={() => setModalVisible(true)}>
+            +
+          </Text>
+        </Pressable>
       )}
 
       <Modal 
@@ -189,10 +199,7 @@ export default function Assess() {
             </Pressable>
           </View>
         </View>
-
       </Modal>
-
-
     </View>
   )
 }
@@ -200,7 +207,7 @@ export default function Assess() {
 const styles = StyleSheet.create({
   mainContainer: {
     flex: 1,
-    backgroundColor: 'black',
+    backgroundColor: Colors.bgDarkGray,
   },
   quizContainer: {
     backgroundColor: Colors.bgOffWhite,
@@ -209,11 +216,11 @@ const styles = StyleSheet.create({
   quizDescription: {
     marginVertical: 5,
     marginLeft: 20,
-    fontSize: 16,
-    fontFamily: 'PTSans-Regular'
+    fontSize: 18,
+    fontFamily: 'PTSans-Bold'
   },
   submitButton: {
-    backgroundColor: Colors.bgViolet,
+    backgroundColor: Colors.bgPurple,
     borderRadius: 10,
     width: '40%',
     alignSelf: 'center',
@@ -245,15 +252,9 @@ const styles = StyleSheet.create({
     fontSize: 25
   },
 
-  submitMainContainer: {
-    backgroundColor: 'rgba(0,0,0,0.3)',
-    justifyContent: 'center',
-    alignContent: 'center',
-    flex:1,
-  },
   modalInnerContainer:{
     gap: 10,
-    backgroundColor: Colors.bgYellow,
+    backgroundColor: 'white',
     margin: 20,
     paddingHorizontal: 10,
     alignItems: 'center',
@@ -284,7 +285,8 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   reviewButton:{
-    backgroundColor: Colors.bgDarkYellow,
+    backgroundColor: Colors.bgLightGray,
+    borderRadius:10,
     width: '90%',
     alignItems: 'center',
     height: '10%',

@@ -11,11 +11,9 @@ import { Pressable, Text} from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Learn from './screens/Learn/Learn';
 import Settings from './screens/Settings';
-import { FontAwesome } from '@expo/vector-icons';
 import Header from "./components/Header";
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Lessons from './screens/Learn/Lessons';
-import { Ionicons } from '@expo/vector-icons';
 import LearnDetails from './screens/Learn/LearnDetails';
 import Colors from './constants/Colors';
 import LoadingScreen from './screens/LoadingScreen';
@@ -70,21 +68,14 @@ const TabGroup = () => {
           let iconName;
 
           switch (route.name) {
-            case 'HomePage':
-              iconName = <Ionicons name={focused ? 'home' : 'home-outline'} size={23} color={'black'} />;
-              break;
-            case 'AssesStackGroup':
-              iconName = <Ionicons name={focused ? 'book' : 'book-outline'} size={23} color={'black'} />;
+            case 'Home':
+              iconName = <Text style={{fontFamily: 'icon', fontSize:30, color: focused ? Colors.bgDarkGray : Colors.bgYellow}}></Text>
               break;
             case 'Profile':
-              iconName = <FontAwesome
-                name={focused ? 'user' : 'user-o'}
-                size={focused ? 23 : 20}
-                color={'black'}
-              />
+              iconName = <Text style={{fontFamily: 'icon', fontSize:30, color: focused ? Colors.bgDarkGray : Colors.bgYellow}}></Text>
               break;
             case 'Lessons':
-              iconName = <Ionicons name={focused ? 'school' : 'school-outline'} size={25} color={'black'} />;
+              iconName = <Text style={{fontFamily: 'icon', fontSize:30, color: focused ? Colors.bgDarkGray : Colors.bgYellow}}></Text>
               break;
             }
           return iconName;
@@ -93,19 +84,27 @@ const TabGroup = () => {
         tabBarActiveTintColor: "black",
         tabBarActiveBackgroundColor: Colors.bgYellow,
         tabBarHideOnKeyboard: true,
+        tabBarInactiveTintColor: Colors.bgYellow,
         tabBarStyle: {
+          backgroundColor: Colors.bgDarkGray,
           overflow: "hidden",
           borderTopLeftRadius: 20,
           borderTopRightRadius: 20,
-          position: "absolute"
+          position: "absolute",
+          height: 60,
+          alignItems: 'center',
         },
         tabBarItemStyle: {
-          borderTopLeftRadius: 20,
-          borderTopRightRadius: 20,
+          height: 45,
+          paddingVertical:3,
+          maxWidth: 80,
+          alignSelf:'center',
+          borderRadius: 100,
+          marginHorizontal: 15,
         },
       })}
-    >
-      <Tab.Screen options={{ headerStyle: {height: 120,}, headerShown: true, headerTitle: '', headerBackground: ()=> (<Header/>) }} name='HomePage' component={HomePage} />  
+      >
+      <Tab.Screen options={{ headerStyle: {height: 120,}, headerShown: true, headerTitle: '', headerBackground: ()=> (<Header/>) }} name='Home' component={HomePage} />  
       <Tab.Screen options={{ headerStyle: {height: 120,}, headerShown: true, headerTitle: '', headerBackground: ()=> (<Header/>) }} name='Lessons' component={Lessons} />
       {/* <Tab.Screen options={{ headerShown: false }} name='AssesStackGroup' component={AssesStackGroup} /> */}
       <Tab.Screen options={{ 
@@ -153,6 +152,7 @@ const Root = () => {
     'Dongle-Regular': require('./assets/fonts/Dongle-Regular.ttf'),
     'PTSans-Regular': require('./assets/fonts/PTSans-Regular.ttf'),
     'PTSans-Bold': require('./assets/fonts/PTSans-Bold.ttf'),
+    'icon' : require('./assets/fonts/icomoon.ttf'),
   });
 
   useEffect(() => {

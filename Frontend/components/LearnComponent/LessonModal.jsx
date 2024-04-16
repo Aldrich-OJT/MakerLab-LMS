@@ -4,7 +4,6 @@ import { useContext, useState } from "react"
 import Colors from "../../constants/Colors";
 import * as DocumentPicker from 'expo-document-picker';
 import { axiosPost, axiosPut } from "../../utils/axios";
-import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { AuthContext } from "../../context/AuthProvider";
 //import { SafeAreaView } from "react-native-safe-area-context";
 import { useNavigation } from '@react-navigation/native';
@@ -78,11 +77,6 @@ export default function LessonModal({ visibility, onPress,title,description, chi
             <View style={styles.inputContainer}>
               <View style={styles.titleContainer}>
                 <Text style={styles.textTitle}>{children}</Text>
-
-                <Pressable style={styles.closeButton} onPress={cancelForm}>
-                  <Text><MaterialCommunityIcons name="close" size={30} color={Colors.bgRedInvalid} /></Text>
-                </Pressable>
-
               </View>
 
               <TextInput
@@ -102,8 +96,14 @@ export default function LessonModal({ visibility, onPress,title,description, chi
                 value={formData.description} />
               {errorMessage && <Text style={styles.errorMessage}>{errorMessage}</Text>}
               <View style={styles.buttonContainer}>
-                <Pressable style={[styles.submitButton]} onPress={submitForm}>
-                  <Text style={styles.SubmitText}>
+              <Pressable style={[styles.submitButton, {borderWidth:2, borderColor: Colors.bgPurple, backgroundColor: 'white'}]} onPress={cancelForm}>
+                  <Text style={[styles.submitText, {color:Colors.bgPurple}]}>
+                    Cancel
+                  </Text>
+                </Pressable>
+
+                <Pressable style={styles.submitButton} onPress={submitForm}>
+                  <Text style={styles.submitText}>
                     Submit
                   </Text>
                 </Pressable>
@@ -133,13 +133,12 @@ const styles = StyleSheet.create({
     alignItems: "center",
     padding: 15,
     borderRadius: 10,
-    backgroundColor: Colors.bgYellow,
+    backgroundColor: 'white',
     height: "fit-content",
     gap: 10,
   },
   titleContainer: {
     flexDirection: 'row',
-    width: '100%',
   },
   textTitle: {
     fontSize: 18,
@@ -148,12 +147,6 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     alignSelf: 'center',
     padding: 10,
-  },
-  closeButton: {
-    height: deviceWidth * .13,
-    position: 'absolute',
-    right: 0,
-    top: 0,
   },
   textInput: {
     width: "92%",
@@ -164,24 +157,21 @@ const styles = StyleSheet.create({
     paddingBottom: 5,
   },
   submitButton: {
-    backgroundColor: Colors.bgViolet,
+    backgroundColor: Colors.bgPurple,
     justifyContent: "center",
     alignItems: "center",
     height: deviceWidth * .13,
-    width: deviceWidth * .75,
-    borderRadius: 50,
+    width: deviceWidth * .34,
+    borderRadius: 10,
     paddingVertical: 10,
     marginTop: 10,
   },
-  selectButton: {
-    backgroundColor: "#FFA800",
-    height: deviceWidth * .10,
-    width: deviceWidth * .75,
-    borderRadius: 6,
-    textAlign: 'center',
-    textAlignVertical: 'center',
+  submitText: {
+    color: 'white',
+    fontSize: 16,
+    fontFamily: 'PTSans-Bold',
   },
-  SubmitText: {
+  cancelText:{
     color: 'white',
     fontSize: 16,
     fontFamily: 'PTSans-Bold',

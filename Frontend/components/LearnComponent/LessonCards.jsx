@@ -1,11 +1,10 @@
 import React, { useContext, useState } from "react";
-import { StyleSheet, View, Text, Pressable, Alert } from "react-native";
-import Colors from "../../constants/Colors";
-import { FontAwesome5 } from '@expo/vector-icons';
-import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { StyleSheet, View, Text, Pressable, Alert, ImageBackground } from "react-native";
 import { axiosDelete, axiosGet, axiosPut } from "../../utils/axios";
 import { AuthContext } from "../../context/AuthProvider";
+import { Menu} from 'react-native-paper';
 import LessonModal from "./LessonModal";
+import Colors from "../../constants/Colors";
 
 const deleteCategoryURL = "/api/categories/delete/"
 
@@ -34,6 +33,10 @@ export default function LessonCards ({title, description, onPress, ID,setRefresh
     setRefresh(true)
   }
   console.log(title)
+  const [menuVisible, setMenuVisible] = useState(false);
+
+  const openMenu = () => setMenuVisible(true);
+  const closeMenu = () => setMenuVisible(false);
     return (
       <Pressable style={[styles.lessonContainer, { marginTop: index === 0 ? 20 : 10 }]} onPress={onPress}>
         <LessonModal
@@ -42,37 +45,39 @@ export default function LessonCards ({title, description, onPress, ID,setRefresh
           setRefresh={setRefresh}
           title={title}
           description={description}
-          ID={ID}
-        >Edit Lesson</LessonModal>
-        <View style={styles.titleContainer}>
-          <Text style={styles.title}>
-            <FontAwesome5 name="book" size={20} color={Colors.bgViolet} /> {title}
-          </Text>
-         {userData.role === 'admin' && (
-          <Pressable onPress={()=>setModalVisible(true)}>
-              <MaterialCommunityIcons 
-                name="square-edit-outline" 
-                size={24}
-                color={Colors.bgYellow}
-                style={styles.buttons}
-              />
-            </Pressable> 
-          )}
-          {userData.role === 'admin' && (
-            <Pressable onPress={createTwoButtonAlert}>
-              <MaterialCommunityIcons 
-                name="delete"
-                size={24}
-                color={Colors.bgYellow}
-                style={styles.buttons}
-              />
-            </Pressable>
-          )}
-        </View>
+          ID={ID}>
+          Edit Lesson
+        </LessonModal>
 
+        <ImageBackground 
+          source={require('../../assets/lesson-image.png')} 
+          style={styles.imageContainer}>
+        
+          <View style={styles.purpleTint}>
+            <View style={styles.titleContainer}>
+              <Text style={{fontFamily: 'icon', fontSize:23, color: Colors.bgPurple, marginTop:2}}></Text> 
+              <Text style={styles.title}>{title}</Text>
+
+              {userData.role === 'admin' && (
+                <Menu
+                  visible={menuVisible}
+                  onDismiss={closeMenu}
+                  anchor={
+                  <Pressable style={{width:50,height:30}} onPress={openMenu}>
+                    <Text style={{fontFamily: 'icon', fontSize:22, color:Colors.bgPurple, alignSelf:'flex-end', marginRight:5}}> </Text>
+                  </Pressable>
+                }>
+                  <Menu.Item onPress={()=>setModalVisible(true)} title={<Text style={{fontFamily: 'icon', fontSize:16, color:Colors.bgDarkGray, textAlign:'center'}}> Edit</Text>} />
+                  <Menu.Item onPress={createTwoButtonAlert} title={<Text style={{fontFamily: 'icon', fontSize:16, color:Colors.bgDarkGray, textAlign:'center'}}> Delete</Text>} />
+                </Menu>
+              )}
+            </View>
+          </View>
+        </ImageBackground>
+        
           <View>            
             <Text 
-              numberOfLines={showDescription ? undefined : 3}
+              numberOfLines={showDescription ? undefined : 2}
               style={styles.lessonDescription}>
               {description}
             </Text>
@@ -80,12 +85,9 @@ export default function LessonCards ({title, description, onPress, ID,setRefresh
 
           {description.length > 50 && (
             <Pressable onPress={showDescriptionHandler}>
-               <MaterialCommunityIcons 
-                  name={showDescription ? "chevron-up" : "chevron-down"} 
-                  size={26} 
-                  color={Colors.bgViolet}
-                  style={{alignSelf:'flex-end', marginRight:5 }}
-               />
+              <Text style={{ fontFamily: 'icon', fontSize: 20, color: Colors.bgPurple,alignSelf:'flex-end', marginRight:25, marginBottom:10 }}>
+                {showDescription ? '' : ''}
+              </Text>
             </Pressable>
           )}
       </Pressable>
@@ -95,21 +97,36 @@ export default function LessonCards ({title, description, onPress, ID,setRefresh
 const styles = StyleSheet.create({
     lessonContainer: {
         flexDirection: 'column',
-        backgroundColor: Colors.bgYellow,
+        backgroundColor: 'white',
         borderRadius: 10,
-        height: 'fit-content',
-        minwidth: '100%',
-        paddingHorizontal: 20,
-        paddingVertical:10,
+        minHeight: 150,
         marginHorizontal: 20,
         margin: 10,
+        shadowColor: "#000",
+        shadowOffset: {
+          width: 0,
+          height: 2,
+        },
+        shadowOpacity: 0.25,
+        shadowRadius: 3.84,
+        
+        elevation: 5,
     },
     titleContainer: {
         flexDirection: 'row',
+        padding:20,
+    },
+    imageContainer:{
+      borderTopLeftRadius: 10,
+      borderTopRightRadius: 10,
+      overflow:"hidden",
+    },
+    purpleTint:{
+      backgroundColor: 'rgba(238, 227, 255, 0.90)',
     },
     title:{
-        color: Colors.bgViolet,
-        fontSize: 20,
+        color: Colors.bgPurple,
+        fontSize: 21,
         fontFamily: 'PTSans-Bold',
         marginRight:5,
         flex:2,
@@ -118,15 +135,25 @@ const styles = StyleSheet.create({
     buttons:{
       borderRadius:10,
       padding:7,
-      backgroundColor: 'black',
+      backgroundColor: Colors.bgDarkGray,
       marginLeft: 10,
-      overflow:"hidden"
+      overflow:"hidden",
+      shadowColor: "#000",
+      shadowOffset: {
+        width: 0,
+        height: 1,
+      },
+      shadowOpacity: 0.22,
+      shadowRadius: 2.22,
+      
+      elevation: 3,
     },
     lessonDescription:{
         marginVertical: 5,
         fontSize: 14,
         fontFamily: 'PTSans-Regular',
-        marginRight: 10,
         textAlign: 'justify',
+        paddingHorizontal:15,
+        paddingTop:15,
     },
 })

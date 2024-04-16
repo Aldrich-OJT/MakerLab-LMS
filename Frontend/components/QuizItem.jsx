@@ -74,23 +74,13 @@ export default function QuizItem(props) {
           <View style={styles.buttonsContainer}>
             {userData.role === "admin" && (
               <Pressable>
-                <MaterialCommunityIcons
-                  name="square-edit-outline"
-                  size={24}
-                  color={Colors.bgYellow}
-                  style={styles.buttons}
-                />
+                <Text style={[styles.buttons, {fontFamily: 'icon', fontSize:21, color:Colors.bgYellow,padding:8.5}]}></Text>
               </Pressable>
             )}
 
             {userData.role === 'admin' && (
             <Pressable onPress={createTwoButtonAlert}>
-              <MaterialCommunityIcons
-                name="delete"
-                size={24}
-                color={Colors.bgYellow}
-                style={styles.buttons}
-              />
+              <Text style={[styles.buttons, {fontFamily: 'icon', fontSize:25, color:Colors.bgError}]}></Text>
             </Pressable>
             )}
           </View>
@@ -112,7 +102,7 @@ export default function QuizItem(props) {
               <Text
                 style={[
                   styles.choicestext,
-                  selected === index && { color: Colors.bgOffWhite }
+                  selected === index && { color: 'white' }
                 ]}
               >
                 {String.fromCharCode(97 + index)}. {option}
@@ -129,11 +119,20 @@ export default function QuizItem(props) {
 
 const styles = StyleSheet.create({
   itemcontainer: {
-    backgroundColor: Colors.bgYellow,
+    backgroundColor: 'white',
     alignItems: "center",
     borderRadius: 10,
     marginBottom: 10,
-    marginHorizontal: 20
+    marginHorizontal: 20,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    
+    elevation: 5,
   },
   questioncontainer: {
     width: '90%',
@@ -147,8 +146,8 @@ const styles = StyleSheet.create({
   questionNumberText: {
     fontSize: 16,
     fontFamily: 'PTSans-Bold',
-    color: Colors.bgYellow,
-    backgroundColor: 'black',
+    color: 'white',
+    backgroundColor: Colors.bgPurple,
     borderRadius: 10,
     width: '33%',
     textAlign: 'center',
@@ -171,10 +170,10 @@ const styles = StyleSheet.create({
     gap: 20,
   },
   choices: {
-    backgroundColor: Colors.bgDarkYellow,
+    backgroundColor: '#FFF5DB',
     borderRadius: 100,
     borderColor: Colors.bgGray,
-    borderWidth: 1,
+    borderWidth: .5,
     minWidth: '100%',
     padding: 10,
     paddingHorizontal: 15,
@@ -184,7 +183,7 @@ const styles = StyleSheet.create({
     fontFamily: 'PTSans-Regular'
   },
   selectedchoices: {
-    backgroundColor: Colors.bgDarkViolet,
+    backgroundColor: Colors.bgPurple,
   },
   buttonsContainer: {
     flexDirection: 'row',
@@ -194,7 +193,7 @@ const styles = StyleSheet.create({
   buttons: {
     borderRadius: 10,
     padding: 7,
-    backgroundColor: 'black',
+    backgroundColor: Colors.bgDarkGray,
     overflow: "hidden"
   },
 })

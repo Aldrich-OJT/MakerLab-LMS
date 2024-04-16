@@ -7,11 +7,12 @@
     import ModalContent from "../../components/LearnComponent/ModalContent";
     import * as FileSystem from 'expo-file-system';
     import { AuthContext } from "../../context/AuthProvider";
-    import { MaterialCommunityIcons } from '@expo/vector-icons';
     import { ActivityIndicator } from 'react-native-paper';
+    import LearnHeader from "../../components/LearnComponent/LearnHeader";
 
     const deleteURL = "/api/post/delete/"
     const postURL = "/api/post/"
+    
     export default function LearnDetails({ route, navigation }) {
         const { token } = useContext(AuthContext)
         const [modalVisible, setModalVisible] = useState(false);
@@ -40,10 +41,10 @@
                         backgroundColor: "black",
                     },
                     headerTitleStyle: {
-                        fontWeight: 'bold',
-                        color: 'white',
+                        fontFamily: 'PTSans-Bold',
+                        color: Colors.bgYellow,
                     },
-                    headerTintColor: 'white',
+                    headerTintColor: Colors.bgYellow,
                     headerTitleAlign: 'center',
                 });
             }
@@ -100,12 +101,12 @@
                 <View style={styles.buttonContainer} >
                 {userData.role === 'admin' && (
                     <Pressable style={styles.button} onPress={() => setModalVisible(true)}>
-                        <MaterialCommunityIcons name="square-edit-outline" size={25} color={Colors.bgYellow} />
+                        <Text style={{fontFamily: 'icon', fontSize:21, color:Colors.bgYellow,padding:8.5}}></Text>
                     </Pressable>
                 )}
                 {userData.role === 'admin' && (
                     <Pressable style={styles.button} onPress={createTwoButtonAlert}>
-                        <MaterialCommunityIcons name="delete" size={25} color={Colors.bgYellow} />
+                        <Text style={{fontFamily: 'icon', fontSize:25, color:Colors.bgError}}></Text>
                     </Pressable>
                 )}
                 </View>
@@ -123,7 +124,8 @@
         },
         text: {
             fontSize: 17,
-            textAlign: "justify"
+            textAlign: "justify",
+            fontFamily: 'PTSans-Regular'
         },
         buttonContainer: {
             position: "absolute",
@@ -135,7 +137,7 @@
             width: 50,
             height: 50,
             borderRadius: 10,
-            backgroundColor: 'black',
+            backgroundColor: Colors.bgDarkGray,
             justifyContent: 'center',
             alignItems: 'center'
         },

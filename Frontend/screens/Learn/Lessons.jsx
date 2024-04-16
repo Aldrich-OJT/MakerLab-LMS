@@ -1,15 +1,15 @@
 import React, { useCallback, useContext, useEffect, useState } from "react";
 import { StyleSheet, View, FlatList, Pressable,Text } from "react-native";
+import { axiosGet } from "../../utils/axios";
+import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs';
+import { ActivityIndicator} from 'react-native-paper';
+import { AuthContext } from "../../context/AuthProvider";
+//import { useNavigation } from '@react-navigation/native';
 //import Header from "../../components/Header";
 import Colors from "../../constants/Colors";
 import LessonCards from "../../components/LearnComponent/LessonCards";
 import Learn from "./Learn";
 import LessonModal from "../../components/LearnComponent/LessonModal";
-//import { useNavigation } from '@react-navigation/native';
-import { axiosGet } from "../../utils/axios";
-import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs';
-import { ActivityIndicator} from 'react-native-paper';
-import { AuthContext } from "../../context/AuthProvider";
 
 const getCategoryURL = "/api/categories/"
 
@@ -46,7 +46,12 @@ export default function Lessons({ navigation }) {
  
   return (
     <View style={[styles.mainContainer,{marginBottom:tabBarHeight}]}>
-      <LessonModal setRefresh={() => setRefresh(true)} visibility={modalVisible} onPress={() => setModalVisible(false)}>Upload Lesson</LessonModal>
+      <LessonModal 
+        setRefresh={() => setRefresh(true)} 
+        visibility={modalVisible} 
+        onPress={() => setModalVisible(false)}>
+        Upload Lesson
+      </LessonModal>
       
       <View style={styles.mainContainer}>
         {lessonData ? (
@@ -75,8 +80,9 @@ export default function Lessons({ navigation }) {
           />
         )}
       </View>
+
       {userData.role === 'admin' && (
-      <Pressable style={styles.addButton} onPress={() => setModalVisible(true)}>
+        <Pressable style={styles.addButton} onPress={() => setModalVisible(true)}>
           <Text style={styles.buttonText} >
             +
           </Text>
@@ -98,7 +104,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     borderRadius: 10,
-    backgroundColor: "black",
+    backgroundColor: Colors.bgDarkGray,
   },
   buttonText: {
     color: Colors.bgYellow,
