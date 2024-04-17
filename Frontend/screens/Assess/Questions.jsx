@@ -21,7 +21,8 @@ export default function Assess({route, navigation}) {
   const [score, setScore] = useState(0)
   const [isloading, setLoading] = useState(false)
   const [answeredQuestion, setAnsweredQuestion] = useState(0)
-  const [quizNumber, setQuizNumber] = useState(0)
+  const [errorMessage,setErrorMessage ] = useState("")
+  const [questionNumber, setQuestionNumber] = useState(0)
   const param = route.params.item
   const [modalVisible, setModalVisible] = useState(false);
   const [submitModalVisible, setSubmitModalVisible] = useState(false);
@@ -41,7 +42,7 @@ export default function Assess({route, navigation}) {
       quizScores: {
         ...prevstate.quizScores,
         score: score,
-        passed: score < Math.round(quizNumber * .6) ? false : true
+        passed: score < Math.round(quizData.length * .6) ? false : true
       }
     }))
   }, [score])
@@ -55,10 +56,9 @@ export default function Assess({route, navigation}) {
       console.log("fetch rerendered")
       const data = await axiosGet(`${getQuizzesURL}${param._id}`, userData.token)
       setQuizData(data)
-      setQuizNumber(data.length)
+      //setQuizNumber(data.length)
       setRefresh(false)
-      //console.log(quizNumber)
-      //console.log("QUIZDATA", data)
+      //console.log(data.length)
       setLoading(false)
     }
 
@@ -99,36 +99,40 @@ export default function Assess({route, navigation}) {
       postID={param._id}
       setScore={setScore}
       setRefresh={()=>setRefresh(true)}
-      //visibility={modalVisible}
-      //setModalVisible={setModalVisible}
       setAnsweredQuestion={setAnsweredQuestion}
-      //setQuizForm={setQuizForm}
+      setQuestionNumber={setQuestionNumber}
+      setErrorMessage={setErrorMessage}
       score={score}
       itemNumber={index + 1}
     />
   );
+
   const handleSubmit = async () => {
-    try {
-      const data = await axiosPut(editScoreURL + userData._id, quizForm, contentType, userData.token);
-      console.log(data);
-      // Handle successful response
-    } catch (error) {
-      // Handle errors
-      console.error("Error in handleSubmit:", error);
-      // You might want to show an error message to the user
+    if (questionNumber === quizData.length) {
+      try {
+        const data = await axiosPut(editScoreURL + userData._id, quizForm, contentType, userData.token);
+        console.log(data);
+      } catch (error) {
+        console.error("Error in handleSubmit:", error);
+      }
+      setSubmitModalVisible(true);
+    } else {
+      setErrorMessage("Answer all questions!");
     }
+    console.log("total", questionNumber);
   };
   //console.log(quizForm)
   // console.log("number of answered question is",answeredQuestion)
   //console.log(quizData)
   //console.log(param._id)
+  console.log("total",questionNumber)
   return (
     <View style={styles.mainContainer}>
       <QuizModal 
         setRefresh={() => setRefresh(true)} 
         visibility={modalVisible} 
         setModalVisible={() => setModalVisible(false)}>
-        Enter question
+        Upload Question
       </QuizModal>
 
       <LearnHeader title={param.title} navigation={navigation} />
@@ -156,12 +160,14 @@ export default function Assess({route, navigation}) {
               )}
               ListFooterComponent={
                 quizData.length > 0 && (
+                 <View>
+                   {errorMessage && <Text style={styles.errorMessage}>{errorMessage}</Text>}
                   <Pressable style={styles.submitButton} onPress={() => {
                     handleSubmit();
-                    setSubmitModalVisible(true);
                   }}>
                     <Text style={styles.submitText}>Submit</Text>
                   </Pressable>
+                 </View>
                 )
               }/>
           ) : (
@@ -210,7 +216,6 @@ export default function Assess({route, navigation}) {
 const styles = StyleSheet.create({
   mainContainer: {
     flex: 1,
-    backgroundColor: Colors.bgDarkGray,
   },
   quizContainer: {
     backgroundColor: Colors.bgOffWhite,
@@ -300,4 +305,10 @@ const styles = StyleSheet.create({
     fontSize: 16,
     textDecorationLine: 'underline'
   },
+  errorMessage:{
+    textAlign:"center",
+    fontFamily:'PTSans-Bold',
+    marginBottom:5,
+    color: Colors.bgError
+  }
 })

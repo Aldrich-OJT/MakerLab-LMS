@@ -40,11 +40,12 @@ export default function QuizModal({ item, setRefresh, visibility, setModalVisibl
   }
 
 const addQuestion = async () => {
+  console.log("click")
   try {
 
     if(children.split(" ")[0] === "Upload"){
       const data = await axiosPost(postquestionURL, questionForm, contentType, userData.token);
-      console.log("ssuccess");
+      console.log(data);
      
     }else if (children.split(" ")[0] === "Edit"){
       const data = await axiosPut(`${updateQuestionURL}${item?._id}`, questionForm, contentType, userData.token);
@@ -54,6 +55,7 @@ const addQuestion = async () => {
     setRefresh()
     cancelForm()
   } catch (error) {
+    console.log("error occured")
     console.log(error.data.message);
     setErrorMessage(error?.data?.message);
   }
@@ -61,7 +63,7 @@ const addQuestion = async () => {
 };
 
   
-  console.log(questionForm)
+  //console.log(questionForm)
   return (
     <KeyboardAvoidingView behavior="padding">
       <Modal

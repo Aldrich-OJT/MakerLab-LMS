@@ -82,14 +82,6 @@ export default function Templearn({ route, navigation }) {
   //console.log(refresh)
   return (
     <View style={styles.maincontainer}>
-      <ModalContent 
-        id={param._id}
-        setRefresh={() => setRefresh(true)} 
-        visibility={modalVisible} 
-        onPress={() => setModalVisible(false)}>
-        Upload Lesson
-      </ModalContent>
-
       <LearnHeader title={param.title} navigation={navigation}/>
 
       <View style={styles.bottomsheet}>
@@ -132,6 +124,14 @@ export default function Templearn({ route, navigation }) {
           </Pressable>
         )}
       </View>
+      <ModalContent 
+        id={param._id}
+        setRefresh={() => setRefresh(true)} 
+        visibility={modalVisible} 
+        onPress={() => setModalVisible(false)}>
+        Upload Lesson
+      </ModalContent>
+
     </View>
   );
 }
@@ -140,7 +140,6 @@ const styles = StyleSheet.create({
   maincontainer: {
     flex: 1,
     flexDirection: 'column',
-    backgroundColor: Colors.bgDarkGray,
   },
   bottomsheet: {
     backgroundColor: Colors.bgOffWhite,

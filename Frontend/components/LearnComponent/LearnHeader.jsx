@@ -24,9 +24,11 @@ const styles = StyleSheet.create({
     justifyContent: 'space-evenly',
     alignItems: "center",
     width: "100%",
-    height: "10%",
     flexDirection: 'row',
-    marginTop: "10%",
+    paddingVertical: "7%",
+    backgroundColor: Colors.bgDarkGray,
+    borderBottomRightRadius:10,
+    borderBottomLeftRadius:10
   },
   backButtonContainer: {
     backgroundColor: Colors.bgGray,
