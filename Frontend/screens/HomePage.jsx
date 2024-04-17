@@ -24,7 +24,7 @@ export default function HomePage() {
           <ProgressBar 
             animated={true}
             progress={.68} 
-            width={310} 
+            width={300} 
             height={10}
             borderRadius={10}
             unfilledColor={Colors.bgLightGray}
@@ -75,6 +75,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     flexDirection: 'column',
     gap: 20,
+    alignItems:'center',
     shadowColor: "#000",
     shadowOffset: {
       width: 0,

@@ -41,7 +41,7 @@ export default function Settings() {
 
   return (
     <ScrollView showsVerticalScrollIndicator={false}>
-      <View style={[styles.mainContainer, { marginBottom: tabBarHeight }]}>
+      <View style={[styles.mainContainer,{marginBottom:tabBarHeight}]}>
         <Modal
           animationType="fade"
           transparent={true}

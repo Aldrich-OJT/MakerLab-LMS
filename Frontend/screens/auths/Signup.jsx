@@ -182,7 +182,7 @@ const styles = StyleSheet.create({
 	container: {
 		flex: 1,
 		justifyContent: "flex-end",
-		backgroundColor: Colors.bgYellow,
+		backgroundColor: Colors.bgOffWhite,
 	},
 	bottomsheet: {
 		backgroundColor: 'white',
@@ -193,6 +193,15 @@ const styles = StyleSheet.create({
 		justifyContent: 'center',
 		paddingHorizontal: 10,
     	paddingVertical: 30,
+		shadowColor: "#000",
+		shadowOffset: {
+			width: 0,
+			height: 2,
+		},
+		shadowOpacity: 0.25,
+		shadowRadius: 3.84,
+		
+		elevation: 5,
 	},
 	invalidText: {
 		color: Colors.bgRedInvalid,
