@@ -63,7 +63,6 @@ const addQuestion = async () => {
  
 };
 
-  
   //console.log(questionForm)
   return (
     <KeyboardAvoidingView behavior="padding">
@@ -87,6 +86,7 @@ const addQuestion = async () => {
                   mode="flat"
                   onChangeText={(inputValue) => { handleForm("question", inputValue) }}
                   value={questionForm.question}
+                  style={{maxHeight:90}}
                 />
               </View>
 
@@ -98,7 +98,6 @@ const addQuestion = async () => {
                     <RadioButton.Android
                       style={{}}
                       color={Colors.bgDarkViolet}
-                      
                       value={checked}
                       status={checked === option && option.length > 0 ? 'checked' : 'unchecked'}
                       onPress={() => (handleForm("answer", option, setChecked(option)))}
@@ -114,6 +113,7 @@ const addQuestion = async () => {
                   </View>
                 ))}
               </View>
+              {errorMessage && <Text style={styles.errorMessage}>{errorMessage}</Text>}
 
               <View style={styles.buttonContainer}>
               <Pressable style={[styles.submitButton, { borderWidth: 2, borderColor: Colors.bgPurple, backgroundColor: 'white' }]} onPress={cancelForm}>
@@ -121,8 +121,8 @@ const addQuestion = async () => {
                     Cancel
                   </Text>
                 </Pressable>
-                {errorMessage && <Text style={styles.errorMessage}>{errorMessage}</Text>}
-                <Pressable style={[styles.submitButton]}onPress={addQuestion}>
+
+                <Pressable style={[styles.submitButton]} onPress={addQuestion}>
                   <Text style={styles.submitText}>
                     {children.split(" ")[0]} Question
                   </Text>
@@ -176,6 +176,7 @@ const styles = StyleSheet.create({
   },
   inputText: {
     width: '90%',
+    maxHeight: 60
   },
   buttonContainer: {
     flexDirection: "row",
@@ -190,7 +191,6 @@ const styles = StyleSheet.create({
     width: deviceWidth * .34,
     borderRadius: 10,
     paddingVertical: 10,
-    marginTop: 10,
   },
   submitText: {
     color: 'white',

@@ -191,7 +191,7 @@ const styles = StyleSheet.create({
     backgroundColor: "rgba(0,0,0,0.4)"
   },
   inputContainer: {
-    height: '30%',
+    maxheight: '30%',
     width: deviceWidth * .9,
     justifyContent: "center",
     alignItems: "center",
@@ -219,6 +219,7 @@ const styles = StyleSheet.create({
   },
   textInput: {
     width: "92%",
+    maxHeight:'50%',
   },
   buttonContainer: {
     flexDirection:"row",

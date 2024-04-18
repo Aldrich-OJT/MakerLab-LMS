@@ -28,8 +28,8 @@ export default function Welcome() {
           </View>
 
           <View style={styles.bottomcontainer}>
-          <Pressable  onPress={() => navigation.replace('Signup')}>
-            <Text style={styles.button}>Sign Up</Text>
+          <Pressable  onPress={() => navigation.replace('Login')}>
+            <Text style={styles.button}>Sign In</Text>
           </Pressable>
           </View>
         </ImageBackground>

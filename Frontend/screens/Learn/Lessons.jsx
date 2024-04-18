@@ -45,7 +45,6 @@ export default function Lessons({ navigation }) {
     navigation.navigate('templearn', { param });
   };
  
- 
   return (
     <View style={[styles.mainContainer,{marginBottom:tabBarHeight}]}>
       <LessonModal 
@@ -68,6 +67,7 @@ export default function Lessons({ navigation }) {
                 description={item.description}
                 setRefresh={setRefresh}
                 index={index}
+                length={lessonData.length}
                 // modalVisible={modalVisible}
                 // setModalVisible={setModalVisible}
               />
@@ -95,7 +95,7 @@ export default function Lessons({ navigation }) {
 }
 const styles = StyleSheet.create({
   mainContainer:{
-    flex:1
+    flex:1,
   },
   addButton: {
     position: "absolute",

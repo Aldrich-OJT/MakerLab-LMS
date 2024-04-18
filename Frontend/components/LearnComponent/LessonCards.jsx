@@ -2,13 +2,13 @@ import React, { useContext, useState } from "react";
 import { StyleSheet, View, Text, Pressable, Alert, ImageBackground } from "react-native";
 import { axiosDelete, axiosGet, axiosPut } from "../../utils/axios";
 import { AuthContext } from "../../context/AuthProvider";
-import { Menu} from 'react-native-paper';
+import { Menu } from 'react-native-paper';
 import LessonModal from "./LessonModal";
 import Colors from "../../constants/Colors";
 
 const deleteCategoryURL = "/api/categories/delete/"
 
-export default function LessonCards ({title, description, onPress, ID,setRefresh,index}) {
+export default function LessonCards ({title, description, onPress, ID,setRefresh,index,length}) {
   const {userData} = useContext(AuthContext)
   const [modalVisible,setModalVisible] = useState(false)
  
@@ -34,9 +34,8 @@ export default function LessonCards ({title, description, onPress, ID,setRefresh
   }
   //console.log(title)
   const [menuVisible, setMenuVisible] = useState(false);
-
     return (
-      <Pressable style={[styles.lessonContainer, { marginTop: index === 0 ? 20 : 10 }]} onPress={onPress}>
+      <Pressable style={[styles.lessonContainer, {marginBottom: index === length-1 ? 70 : 0}]} onPress={onPress}>
         <LessonModal
           onPress={()=>setModalVisible(false)}
           visibility={modalVisible}
@@ -81,7 +80,7 @@ export default function LessonCards ({title, description, onPress, ID,setRefresh
             </Text>
           </View>
 
-          {description.length > 50 && (
+          {description.length > 100 && (
             <Pressable onPress={showDescriptionHandler}>
               <Text style={{ fontFamily: 'icon', fontSize: 20, color: Colors.bgPurple,alignSelf:'flex-end', marginRight:25, marginBottom:10 }}>
                 {showDescription ? '' : ''}
@@ -97,9 +96,9 @@ const styles = StyleSheet.create({
         flexDirection: 'column',
         backgroundColor: 'white',
         borderRadius: 10,
-        minHeight: 150,
+        minHeight: 155,
         marginHorizontal: 20,
-        margin: 10,
+        marginTop: 20,
         shadowColor: "#000",
         shadowOffset: {
           width: 0,

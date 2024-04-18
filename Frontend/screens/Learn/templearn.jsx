@@ -108,7 +108,8 @@ export default function Templearn({ route, navigation }) {
                     description={item.description}
                     pressLearn={() => showLearnDetail(item)}
                     pressQuiz={() => showQuestion(item)}
-                    lessoncount={index + 1}
+                    index={index}
+                    length={videoData.length}
                   />
                 )}
               />

@@ -147,8 +147,9 @@ const styles = StyleSheet.create({
   },
   editButton: {
     position: 'absolute',
-    top: 15,
-    right: 15,
+    top: 10,
+    right: 10,
+    padding:10,
   },
   avatar: {
     height: deviceWidth * .26,
@@ -190,16 +191,26 @@ const styles = StyleSheet.create({
     margin: 10,
   },
   logoutButton: {
-    backgroundColor: Colors.bgGray,
+    backgroundColor: 'white',
     alignSelf: 'center',
     justifyContent: 'center',
     width: '30%',
     height: '5%',
     borderRadius: 10,
     position: 'absolute',
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+
+    elevation: 5,
+    
   },
   logoutText: {
-    color: Colors.bgYellow,
+    color: Colors.bgError,
     fontFamily: 'PTSans-Bold',
     fontSize: 16,
     textAlign: 'center',
