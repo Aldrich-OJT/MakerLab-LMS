@@ -22,6 +22,7 @@ export default function Login() {
   };
   const [textInputs, setTextInputs] = useState(initialtextInput)
   const [passhidden, setpasshidden] = useState(true)
+  const [textInputFocused, setTextInputFocused] = useState(false);
 
   const passwordhandler = () => {
     setpasshidden((prevState) => !prevState);
@@ -59,9 +60,9 @@ export default function Login() {
   console.log(textInputs)
   return (
     <KeyboardAvoidingView style={styles.container} behavior={Platform.OS === "ios" ? "padding" : "height"}>
-      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+      <TouchableWithoutFeedback onPress={() => {Keyboard.dismiss(); setTextInputFocused(false);}}>
         <View style={styles.container}>
-          <Title />
+          <Title isTextInputFocused={textInputFocused}/>
           <View style={styles.bottomsheet}>
             <Text style={styles.logintext}>Log in</Text>
             <TextInput
@@ -72,7 +73,7 @@ export default function Login() {
               autoCapitalize="none"
               style={styles.textinput}
               mode='outlined'
-              onChangeText={(textValue) => handleInput("email", textValue)}
+              onChangeText={(textValue) => handleInput("email", textValue)} onFocus={() => setTextInputFocused(true)}
             />
               <TextInput
                 label={'Password'}
@@ -82,11 +83,12 @@ export default function Login() {
                 autoCapitalize="none"
                 mode='outlined'
                 right={<TextInput.Icon icon="eye" style={{top:5}} onPress={passwordhandler} />}
-                onChangeText={(textValue) => handleInput("password", textValue)}
+                onChangeText={(textValue) => handleInput("password", textValue)} onFocus={() => setTextInputFocused(true)}
               />
             <View>{inputInvalid && <Text style={styles.invalidText}>Invalid Email or Password</Text>}</View>
             <AuthButton submitForm={submitForm}>Log in</AuthButton>
-            <LinkContainer Link="Sign up" to="Signup" navigation={navigation}>Don't have an account? </LinkContainer>
+            <LinkContainer 
+              Link="Sign up" to="Signup" navigation={navigation} onPress={() => setTextInputFocused(false)}>Don't have an account? </LinkContainer>
           </View>
         </View>
       </TouchableWithoutFeedback>

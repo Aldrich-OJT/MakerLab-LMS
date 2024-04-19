@@ -3,6 +3,7 @@ import { StyleSheet, View, Text, Pressable, Alert, ImageBackground } from "react
 import { axiosDelete, } from "../../utils/axios";
 import { AuthContext } from "../../context/AuthProvider";
 import { Menu } from 'react-native-paper';
+import { Menu } from 'react-native-paper';
 import LessonModal from "./LessonModal";
 import Colors from "../../constants/Colors";
 
@@ -90,77 +91,77 @@ export default function LessonCards({ title, description, setModalVisible, ID, s
         </Text>
       </View>
 
-      {description.length > 50 && (
-        <Pressable onPress={showDescriptionHandler}>
-          <Text style={{ fontFamily: 'icon', fontSize: 20, color: Colors.bgPurple, alignSelf: 'flex-end', marginRight: 25, marginBottom: 10 }}>
-            {showDescription ? '' : ''}
-          </Text>
-        </Pressable>
-      )}
-    </Pressable>
-  );
-};
+          {description.length > 100 && (
+            <Pressable onPress={showDescriptionHandler}>
+              <Text style={{ fontFamily: 'icon', fontSize: 20, color: Colors.bgPurple,alignSelf:'flex-end', marginRight:25, marginBottom:10 }}>
+                {showDescription ? '' : ''}
+              </Text>
+            </Pressable>
+          )}
+      </Pressable>
+    );
+  };
 
 const styles = StyleSheet.create({
-  lessonContainer: {
-    flexDirection: 'column',
-    backgroundColor: 'white',
-    borderRadius: 10,
-    minHeight: 150,
-    marginHorizontal: 20,
-    margin: 10,
-    shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: 2,
+    lessonContainer: {
+        flexDirection: 'column',
+        backgroundColor: 'white',
+        borderRadius: 10,
+        minHeight: 155,
+        marginHorizontal: 20,
+        marginTop: 20,
+        shadowColor: "#000",
+        shadowOffset: {
+          width: 0,
+          height: 2,
+        },
+        shadowOpacity: 0.25,
+        shadowRadius: 3.84,
+        
+        elevation: 5,
     },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
-
-    elevation: 5,
-  },
-  titleContainer: {
-    flexDirection: 'row',
-    padding: 20,
-  },
-  imageContainer: {
-    borderTopLeftRadius: 10,
-    borderTopRightRadius: 10,
-    overflow: "hidden",
-  },
-  purpleTint: {
-    backgroundColor: 'rgba(238, 227, 255, 0.90)',
-  },
-  title: {
-    color: Colors.bgPurple,
-    fontSize: 21,
-    fontFamily: 'PTSans-Bold',
-    marginRight: 5,
-    flex: 2,
-    textAlignVertical: 'center'
-  },
-  buttons: {
-    borderRadius: 10,
-    padding: 7,
-    backgroundColor: Colors.bgDarkGray,
-    marginLeft: 10,
-    overflow: "hidden",
-    shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: 1,
+    titleContainer: {
+        flexDirection: 'row',
+        padding:20,
     },
-    shadowOpacity: 0.22,
-    shadowRadius: 2.22,
-
-    elevation: 3,
-  },
-  lessonDescription: {
-    marginVertical: 5,
-    fontSize: 14,
-    fontFamily: 'PTSans-Regular',
-    textAlign: 'justify',
-    paddingHorizontal: 15,
-    paddingTop: 15,
-  },
+    imageContainer:{
+      borderTopLeftRadius: 10,
+      borderTopRightRadius: 10,
+      overflow:"hidden",
+    },
+    purpleTint:{
+      backgroundColor: 'rgba(238, 227, 255, 0.90)',
+    },
+    title:{
+        color: Colors.bgPurple,
+        fontSize: 21,
+        fontFamily: 'PTSans-Bold',
+        marginRight:5,
+        flex:2,
+        textAlignVertical: 'center'
+    },
+    buttons:{
+      borderRadius:10,
+      padding:7,
+      backgroundColor: Colors.bgDarkGray,
+      marginLeft: 10,
+      overflow:"hidden",
+      shadowColor: "#000",
+      shadowOffset: {
+        width: 0,
+        height: 1,
+      },
+      shadowOpacity: 0.22,
+      shadowRadius: 2.22,
+      
+      elevation: 3,
+    },
+    lessonDescription:{
+        marginVertical: 5,
+        fontSize: 14,
+        fontFamily: 'PTSans-Regular',
+        textAlign: 'justify',
+        paddingHorizontal:15,
+        paddingTop:15,
+    },
 })

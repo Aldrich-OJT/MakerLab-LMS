@@ -88,6 +88,7 @@ export default function QuizModal({ item, selectedData,setSelectedData ,setRefre
                   mode="flat"
                   onChangeText={(inputValue) => { handleForm("question", inputValue) }}
                   value={questionForm.question}
+                  style={{maxHeight:90}}
                 />
               </View>
 
@@ -177,6 +178,7 @@ const styles = StyleSheet.create({
   },
   inputText: {
     width: '90%',
+    maxHeight: 60
   },
   buttonContainer: {
     flexDirection: "row",
@@ -191,7 +193,6 @@ const styles = StyleSheet.create({
     width: deviceWidth * .34,
     borderRadius: 10,
     paddingVertical: 10,
-    marginTop: 10,
   },
   submitText: {
     color: 'white',

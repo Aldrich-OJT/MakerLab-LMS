@@ -30,9 +30,10 @@ export default function Signup() {
 		isEmailInvalid: false,
 		isPasswordInvalid: false
 	}
-
+	
 	const [textInputs, setTextinputs] = useState(initialtextInput);
 	const [inputValid, setInputValid] = useState(initialErrorState);
+	const [textInputFocused, setTextInputFocused] = useState(false);
 	const [passhidden, setpasshidden] = useState({
 		password: true,
 		confirmpass: true
@@ -121,10 +122,10 @@ export default function Signup() {
 
 
 	return (
-		<TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+		<TouchableWithoutFeedback onPress={() => {Keyboard.dismiss(); setTextInputFocused(false);}}>
 			<KeyboardAvoidingView style={styles.container} behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
 				<View style={styles.container}>
-					<Title />
+					<Title isTextInputFocused={textInputFocused}/>
 					<View style={styles.bottomsheet}>
 						<Text style={styles.signuptext}>Sign up</Text>
 						<TextInput
@@ -132,7 +133,7 @@ export default function Signup() {
 							value={textInputs.name}
 							style={styles.textinput}
 							mode='outlined'
-							onChangeText={(textValue) => handleInput("name", textValue)}
+							onChangeText={(textValue) => handleInput("name", textValue)} onFocus={() => setTextInputFocused(true)}
 						/>
 						<TextInput
 							label={'Email'}
@@ -142,7 +143,7 @@ export default function Signup() {
 							autoCapitalize="none"
 							style={styles.textinput}
 							mode='outlined'
-							onChangeText={(textValue) => handleInput("email", textValue)}
+							onChangeText={(textValue) => handleInput("email", textValue)} onFocus={() => setTextInputFocused(true)}
 						/>
 						<TextInput
 							label={'Password'}
@@ -152,7 +153,7 @@ export default function Signup() {
 							style={styles.textinput}
 							mode='outlined'
 							right={<TextInput.Icon icon="eye" style={{top:5}} onPress={()=> passwordhandler('password')} />}
-							onChangeText={(textValue) => handleInput("password", textValue)}
+							onChangeText={(textValue) => handleInput("password", textValue)} onFocus={() => setTextInputFocused(true)}
 						/>
 						<TextInput
 							label={'Confirm Password'}
@@ -162,14 +163,14 @@ export default function Signup() {
 							style={styles.textinput}
 							mode='outlined'
 							right={<TextInput.Icon icon="eye" style={{top:5}} onPress={()=> passwordhandler('confirmpass')} />}
-							onChangeText={(textValue) => handleInput("confirmpassword", textValue)}
+							onChangeText={(textValue) => handleInput("confirmpassword", textValue)} onFocus={() => setTextInputFocused(true)}
 						/>
 						{inputValid.isTextEmpty && <Text style={styles.invalidText}>Please fill all fields</Text>}
 						{inputValid.isPassNotMatch && <Text style={styles.invalidText}>Password not match</Text>}
 						{inputValid.isEmailInvalid && <Text style={styles.invalidText}>invalid Email</Text>}
 						{inputValid.isPasswordInvalid && <Text style={styles.invalidText}>Password must be above 6 characters</Text>}
 						<AuthButton submitForm={submitForm}>Sign up</AuthButton>
-						<LinkContainer Link="Log in" to="Login" navigation={navigation}>Already have an account? </LinkContainer>
+						<LinkContainer Link="Log in" to="Login" navigation={navigation} onPress={() => setTextInputFocused(false)}>Already have an account? </LinkContainer>
 					</View>
 
 				</View>

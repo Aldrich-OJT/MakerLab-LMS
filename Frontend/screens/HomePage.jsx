@@ -5,7 +5,7 @@ import ProgressBar from 'react-native-progress/Bar';
 import Colors from "../constants/Colors";
 
 export default function HomePage() {
-  const authContext = useContext(AuthContext)
+  const { authContext, userData } = useContext(AuthContext);
 
   //console.log(authContext)
   return (
@@ -16,11 +16,13 @@ export default function HomePage() {
             <Text style={{fontFamily: 'icon', fontSize:100, color:Colors.bgGray}}></Text>
 
             <View style={styles.progressTextContainer}>
-              <Text style={styles.greetingText}>Hi User!</Text>
-              <Text style={styles.progressText}>You have finished 68% of the course. Good Job!</Text>
-            </View>
+              <Text style={styles.greetingText}>Hi {userData.name},</Text>
+              <Text style={styles.progressText}>
+                {userData.role === 'user' ? "You have finished 68% of the course. Good Job!" : "Welcome back!"}
+              </Text>
+              </View>
           </View>
-
+          {userData.role === 'user' && (
           <ProgressBar 
             animated={true}
             progress={.68} 
@@ -30,19 +32,23 @@ export default function HomePage() {
             unfilledColor={Colors.bgLightGray}
             borderWidth={0}
             color={Colors.bgPurple}
-            />
+          />
+          )}
         </View>
 
         <View style={styles.shortcutContainer}>
-          <View style={styles.shortcuts}>
-            <Text style={{fontFamily: 'icon', fontSize:70, color:Colors.bgGray}}></Text>
+
+             <View style={styles.shortcuts}>
+            <Text style={{fontFamily: 'icon', fontSize:70, color:Colors.bgGray}}>
+            {userData.role === 'user' ? "" : ""}</Text>
 
             <View style={styles.shortcutTextContainer}>
-              <Text style={styles.shortcutText}>Finished{'\n'}Lessons</Text>
+              <Text style={styles.shortcutText}>
+                {userData.role === 'user' ? "Finished\nLessons" : "List of Users"}
+              </Text>
               <Text style={{fontFamily: 'icon', fontSize:30, color:Colors.bgGray}}></Text>
             </View>
-
-          </View>
+            </View>
 
           <View style={styles.shortcuts}>
             <Text style={{fontFamily: 'icon', fontSize:70, color:Colors.bgGray}}></Text>
@@ -51,7 +57,6 @@ export default function HomePage() {
                 <Text style={styles.shortcutText}>Completed{'\n'}Assessments</Text>
                 <Text style={{fontFamily: 'icon', fontSize:30, color:Colors.bgGray}}></Text>
               </View>
-              
           </View>
         </View>
       </View>
@@ -125,6 +130,7 @@ const styles = StyleSheet.create({
   shortcutTextContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
+    minHeight:40,
   },
   shortcutText:{     
     fontFamily: 'PTSans-Bold',

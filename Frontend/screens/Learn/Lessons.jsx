@@ -75,6 +75,7 @@ export default function Lessons({ navigation }) {
                 setRefresh={setRefresh}
                 index={index}
                 setSelectedData={setSelectedData}
+                length={lessonData.length}
                 // modalVisible={modalVisible}
                 // setModalVisible={setModalVisible}
               />
@@ -102,7 +103,7 @@ export default function Lessons({ navigation }) {
 }
 const styles = StyleSheet.create({
   mainContainer:{
-    flex:1
+    flex:1,
   },
   addButton: {
     position: "absolute",

@@ -1,9 +1,10 @@
 import { StyleSheet, View, Image } from "react-native"
 
-export default function Title() {
+export default function Title({ isTextInputFocused }) {
   return (
     <View style={styles.topsheet}>
-		<Image source={require('../../assets/top-register.png')} style={styles.bgimage}></Image>
+		<Image source={require('../../assets/top-register.png')} 
+		style={[styles.bgimage, { resizeMode: isTextInputFocused ? "cover" : "contain" }]}></Image>
     </View>
   )
 }
@@ -17,6 +18,5 @@ const styles = StyleSheet.create({
 	bgimage:{
 		width: '100%', 
 		height: '100%',
-		resizeMode: "cover"
 	},
 })

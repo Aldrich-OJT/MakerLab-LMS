@@ -81,7 +81,7 @@ const TabGroup = () => {
           borderTopLeftRadius: 20,
           borderTopRightRadius: 20,
           position: "absolute",
-          height: 60,
+          height: '8%',
           alignItems: 'center',
         },
         tabBarItemStyle: {
