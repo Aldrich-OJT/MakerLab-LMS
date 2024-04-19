@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import { View, Text, StyleSheet, Dimensions, Image, Modal, Pressable, ScrollView } from "react-native";
 import ProgressBar from 'react-native-progress/Bar';
 import Colors from "../constants/Colors";
@@ -8,40 +8,52 @@ import avatar1 from '../assets/avatars/avatar1.png';
 import avatar2 from '../assets/avatars/avatar2.png';
 import avatar3 from '../assets/avatars/avatar3.png';
 import avatar4 from '../assets/avatars/avatar4.png';
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const dimensions = Dimensions.get('window');
 const deviceWidth = dimensions.width;
 const deviceHeight = dimensions.height;
 
-const avatarChoices= [avatar1,avatar2,avatar3,avatar4]
+const avatarChoices = [avatar1, avatar2, avatar3, avatar4]
 
 
 export default function Settings() {
 
-   console.log('Avatar choices:', avatarChoices);
+  const tabBarHeight = useBottomTabBarHeight();
   const [avatarModalVisible, setAvatarModalVisible] = useState(false);
-  const [avatar, setAvatar] = useState(0);
+  const [avatar, setAvatar] = useState(2);
+  const [loading, setLoading] = useState(false)
   const { logout, userData } = useContext(AuthContext);
 
-  // const avatarChoices = [
-  //   require('../assets/avatars/avatar1.png'),
-  //   require('../assets/avatars/avatar2.png'),
-  //   require('../assets/avatars/avatar3.png'),
-  //   require('../assets/avatars/avatar4.png'),
-  // ]
+  const saveAvatar = (index) => {
+    setAvatarModalVisible(false)
+    setAvatar(index)
+    AsyncStorage.setItem("Avatar", index.toString())
+  }
+  useEffect(() => {
+    const fetchData = async () => {
+      setLoading(true);
+      const userAvatar = await AsyncStorage.getItem("Avatar");
+      if (userAvatar){
+        setAvatar(userAvatar);
+      }
+      setLoading(false);
+    };
+    fetchData();
+  
+  }, []);
 
   const badges = [
     require('../assets/badges/badge-makerlab.png'),
     require('../assets/badges/badge-coding.png'),
-    require('../assets/badges/badge-3dprinting.png'), '',
-    '', '', '', ''
+    require('../assets/badges/badge-3dprinting.png')
   ];
 
-  const tabBarHeight = useBottomTabBarHeight();
-
+  
+  console.log('Avatar choiced:', avatarChoices[avatar], avatar);
   return (
     <ScrollView showsVerticalScrollIndicator={false}>
-      <View style={[styles.mainContainer,{marginBottom:tabBarHeight}]}>
+      <View style={[styles.mainContainer, { marginBottom: tabBarHeight }]}>
         <Modal
           animationType="fade"
           transparent={true}
@@ -55,10 +67,9 @@ export default function Settings() {
               </View>
 
               <View style={styles.imageContainer}>
-                {avatarChoices.map((avatar, index) => (
-                  <Pressable key={index} onPress={() => { setAvatarModalVisible(false) }}>
-                    <Image source={avatar} style={styles.avatar} />
-
+                {avatarChoices.map((item, index) => (
+                  <Pressable key={index} onPress={() => saveAvatar(index)}>
+                    <Image source={item} style={styles.avatar} />
                   </Pressable>
                 ))}
               </View>
@@ -153,7 +164,7 @@ const styles = StyleSheet.create({
   avatar: {
     height: deviceWidth * .26,
     width: deviceWidth * .26,
-    borderRadius: 50,
+    borderRadius: 1000,
     borderColor: Colors.bgGray,
     borderWidth: 5,
   },
@@ -231,10 +242,10 @@ const styles = StyleSheet.create({
   imageContainer: {
     gap: 10,
     flexDirection: 'row',
-    justifyContent:"center",
-    alignItems:"center",    
-    flexWrap:"wrap",
-    width:"80%",
+    justifyContent: "center",
+    alignItems: "center",
+    flexWrap: "wrap",
+    width: "80%",
     height: "fit-content",
     marginBottom: 8,
   },

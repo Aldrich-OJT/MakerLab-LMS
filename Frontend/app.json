@@ -2,6 +2,9 @@
   "expo": {
     "name": "Frontend",
     "slug": "Frontend",
+    "permissions": [
+      "INTERNET"
+    ],
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -27,7 +30,10 @@
       "favicon": "./assets/favicon.png"
     },
     "plugins": [
-      "expo-font"
+      
+      [
+        "expo-font"
+      ]
     ]
   }
 }

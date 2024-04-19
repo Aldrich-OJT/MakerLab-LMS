@@ -15,20 +15,20 @@ const editScoreURL = "/api/user/data/update/"
 const contentType = "application/json"
 
 
-export default function Assess({route, navigation}) {
+export default function Quiz({route, navigation}) {
   const { userData } = useContext(AuthContext)
   //console.log(userData)
   const [score, setScore] = useState(0)
   const [isloading, setLoading] = useState(false)
-  const [answeredQuestion, setAnsweredQuestion] = useState(0)
   const [errorMessage,setErrorMessage ] = useState("")
   const [questionNumber, setQuestionNumber] = useState(0)
   const param = route.params.item
   const [modalVisible, setModalVisible] = useState(false);
   const [submitModalVisible, setSubmitModalVisible] = useState(false);
   const [refresh, setRefresh] = useState(true);
-
+  const [singleScore, setSingleScore] = useState(0)
   const [quizData, setQuizData] = useState([])
+  const [selectedData, setSelectedData] =  useState()
   const [quizForm, setQuizForm] = useState({
     quizScores: {
       postId: param._id,
@@ -47,6 +47,25 @@ export default function Assess({route, navigation}) {
     }))
   }, [score])
 
+  useEffect(() => {
+    let newScore = score
+    //initial value of score is zero, so this code prevents from subtracting at the inital value
+    const setNewScore = ()=>{
+      if (singleScore === 0 && score != 0) {
+        // console.log("change")
+        // console.log(props.singleScore)
+  
+        newScore -= 1
+      } else {
+        newScore += singleScore
+      }
+      setScore(newScore)
+    }
+
+    setNewScore()
+  }, [singleScore])
+  
+ 
 
   useEffect(() => {
     //console.log(param)
@@ -96,13 +115,15 @@ export default function Assess({route, navigation}) {
     <QuizItem
       ID={item._id}
       item={item}
-      postID={param._id}
-      setScore={setScore}
+      setModalVisible = {()=>setModalVisible(true)}
+      //setScore={setScore}
+      setSelectedData= {setSelectedData}
       setRefresh={()=>setRefresh(true)}
-      setAnsweredQuestion={setAnsweredQuestion}
       setQuestionNumber={setQuestionNumber}
       setErrorMessage={setErrorMessage}
       score={score}
+      setSingleScore={setSingleScore}
+      singleScore={singleScore}
       itemNumber={index + 1}
     />
   );
@@ -125,15 +146,20 @@ export default function Assess({route, navigation}) {
   // console.log("number of answered question is",answeredQuestion)
   //console.log(quizData)
   //console.log(param._id)
-  console.log("total",questionNumber)
+  console.log(selectedData)
+ 
+  //console.log("this is selected number",selectedNumber)
   return (
     <View style={styles.mainContainer}>
-      <QuizModal 
+      {selectedData ? (<QuizModal 
         setRefresh={() => setRefresh(true)} 
         visibility={modalVisible} 
+        postID={param._id}
+        selectedData={selectedData}
+        setSelectedData={setSelectedData}
         setModalVisible={() => setModalVisible(false)}>
-        Upload Question
-      </QuizModal>
+        {selectedData == "true" ? "Upload Question" : "Edit Question"}
+      </QuizModal>): ""}
 
       <LearnHeader title={param.title} navigation={navigation} />
       
@@ -176,7 +202,7 @@ export default function Assess({route, navigation}) {
       </View>
 
       {userData.role === 'admin' && (
-        <Pressable style={styles.addButton} onPress={() => setModalVisible(true)}>
+        <Pressable style={styles.addButton} onPress={() => {setModalVisible(true), setSelectedData("true")}}>
           <Text style={styles.buttonText} >
             +
           </Text>
@@ -199,7 +225,7 @@ export default function Assess({route, navigation}) {
               <Text style={[styles.scoreText, { fontSize: 20 }]}>{quizForm.quizScores.passed ? "Good Job!" : "Better luck next time."}</Text>
             </View>
 
-            <Pressable style={[styles.submitButton, { width: '90%', marginBottom: 0, }]} onPress={navigation.goBack}>
+            <Pressable style={[styles.submitButton, { width: '90%', marginBottom: 15, }]} onPress={navigation.goBack}>
               <Text style={styles.submitText}>Back to lessons</Text>
             </Pressable>
           </View>

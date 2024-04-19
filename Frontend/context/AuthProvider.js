@@ -32,7 +32,7 @@ const AuthProvider = ({children})=>{
         logout: logout
         
     }
-    console.log(userData)
+    //console.log(userData)
     return (
         <AuthContext.Provider value={value}>
             {children}

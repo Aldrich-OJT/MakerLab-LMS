@@ -1,4 +1,4 @@
-import React, { useCallback, useContext, useEffect, useState } from "react";
+import React, {  useContext, useEffect, useState } from "react";
 import { StyleSheet, View, FlatList, Pressable,Text } from "react-native";
 import { axiosGet } from "../../utils/axios";
 import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs';
@@ -8,7 +8,6 @@ import { AuthContext } from "../../context/AuthProvider";
 //import Header from "../../components/Header";
 import Colors from "../../constants/Colors";
 import LessonCards from "../../components/LearnComponent/LessonCards";
-import Learn from "./Learn";
 import LessonModal from "../../components/LearnComponent/LessonModal";
 
 const getCategoryURL = "/api/categories/"
@@ -19,9 +18,12 @@ export default function Lessons({ navigation }) {
   const [lessonData, setLessonData] = useState([]);
   const [refresh, setRefresh] = useState(true);
   const [modalVisible, setModalVisible] = useState(false);
+  const [selectedData, setSelectedData] = useState("") 
+ 
 
   useEffect(() => {
     const fetchLessonData = async () => {
+      setLessonData([])
       try {
         const data = await axiosGet(getCategoryURL, userData.token);
         //console.log(data)
@@ -44,16 +46,19 @@ export default function Lessons({ navigation }) {
   const handleNavigation = (param) => {
     navigation.navigate('templearn', { param });
   };
- 
+ console.log(selectedData)
  
   return (
     <View style={[styles.mainContainer,{marginBottom:tabBarHeight}]}>
-      <LessonModal 
+      {selectedData ? (<LessonModal 
         setRefresh={() => setRefresh(true)} 
+        selectedData= {selectedData}
+        setSelectedData={()=>setSelectedData(null)}
         visibility={modalVisible} 
-        onPress={() => setModalVisible(false)}>
-        Upload Lesson
-      </LessonModal>
+        setModalVisible={() => setModalVisible(false)}>
+       {selectedData == "true" ? "Upload Lesson" : "Edit Lesson"}
+      </LessonModal>) : ""}
+      
       
       <View style={styles.mainContainer}>
         {lessonData ? (
@@ -64,10 +69,12 @@ export default function Lessons({ navigation }) {
               <LessonCards
                 onPress={() => handleNavigation(item)}
                 title={item.title}
+                setModalVisible={setModalVisible}
                 ID={item._id}
                 description={item.description}
                 setRefresh={setRefresh}
                 index={index}
+                setSelectedData={setSelectedData}
                 // modalVisible={modalVisible}
                 // setModalVisible={setModalVisible}
               />
@@ -84,7 +91,7 @@ export default function Lessons({ navigation }) {
       </View>
 
       {userData.role === 'admin' && (
-        <Pressable style={styles.addButton} onPress={() => setModalVisible(true)}>
+        <Pressable style={styles.addButton} onPress={() => {setModalVisible(true),setSelectedData("true")}}>
           <Text style={styles.buttonText} >
             +
           </Text>

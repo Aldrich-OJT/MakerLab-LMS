@@ -1,7 +1,6 @@
 import { Text, Pressable, StyleSheet, View, Alert } from "react-native";
 import Colors from "../constants/Colors";
 import { useContext, useEffect, useState } from "react";
-
 import { axiosDelete } from "../utils/axios";
 import { AuthContext } from "../context/AuthProvider";
 import QuizModal from "./QuizModal";
@@ -12,10 +11,9 @@ const deleteQuestionURL = "/api/question/delete/"
 export default function QuizItem(props) {
   const [menuVisible, setMenuVisible] = useState(false);
   const { userData } = useContext(AuthContext)
-  const [modalVisible, setModalVisible] = useState(false)
+  const [selectedNumber, setSelectedNumber] = useState(0)
   const [selected, setSelected] = useState(null);
-  const [selectednumber, setSelectedNumber] = useState(0)
-  const [singleScore, setSingleScore] = useState(0)
+
 
   
   const handleChoiceSelection = (choice) => {
@@ -30,41 +28,30 @@ export default function QuizItem(props) {
       return prevState; 
     });
     props.setErrorMessage("")
-    props.setAnsweredQuestion(prevState => prevState + 1)
+    //props.setAnsweredQuestion(prevState => prevState + 1)
     //prevent multiple selection if user clicks the selected option again
     if (selected === choice) {
       //console.log("i am selected again")
       setSelected(null)
-      setSingleScore(0)
+      props.setSingleScore(0)
 
-      props.setAnsweredQuestion(prevState => prevState - 1)
+      props.setQuestionNumber( prevState => prevState - 1)
       setSelectedNumber(prevState => prevState - 1)
       
 
     } else if (props.item.options[choice] === props.item.answer) {//adds 1 to singleScore state if choice is equal to answer else reset to  0
-      setSingleScore(prevState => prevState + 1)
+      props.setSingleScore(prevState => prevState + 1)
      
     } else {
-      setSingleScore(0)
-      
+      props.setSingleScore(0)
     }
 
 
   };
   //only checks if state changes from 0 to 1 or vice versa, do not check if already 0
-  useEffect(() => {
+  
 
-    //initial value of score is zero, so this code prevents from subtracting at the inital value
-    if (singleScore === 0 && props.score != 0) {
-      // console.log("change")
-      // console.log(singleScore)
-
-      props.setScore(prevState => prevState - 1)
-    } else {
-      props.setScore(prevState => prevState + singleScore)
-    }
-
-  }, [singleScore])
+  
   const createTwoButtonAlert = () => {
     Alert.alert("Delete Question?", "Are you sure you want to delete this question?", [
       {
@@ -78,24 +65,25 @@ export default function QuizItem(props) {
       },
     ])
   }
+
   const deleteQuestion = async () => {
     const data = await axiosDelete(`${deleteQuestionURL}${props.ID}`, userData.token)
     //console.log(data)
     props.setRefresh()
   }
 
-  //   console.log(props.score)
-  console.log("this is selected number",selectednumber)
+  //console.log(props.selectedNumber)
+  
   return (
     <View style={styles.itemcontainer}>
-      { modalVisible && <QuizModal
+      {/* { modalVisible && <QuizModal
         visibility={modalVisible}
         item={props.item}
         postID={props.postID}
         setModalVisible={() => setModalVisible(false)}
         setRefresh={props.setRefresh}
+      >Edit Question</QuizModal>} */}
 
-      >Edit Question</QuizModal>}
       <View style={styles.questioncontainer}>
         <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
           <Text style={styles.questionNumberText}>Question {props.itemNumber} </Text>
@@ -109,8 +97,10 @@ export default function QuizItem(props) {
                     <Text style={{ fontFamily: 'icon', fontSize: 22, color: Colors.bgPurple, alignSelf: 'flex-end', marginRight: 5 }}> </Text>
                   </Pressable>
                 }>
-                <Menu.Item onPress={() => setModalVisible(true)} title={<Text style={{ fontFamily: 'icon', fontSize: 16, color: Colors.bgDarkGray, textAlign: 'center' }}> Edit</Text>} />
-                <Menu.Item onPress={createTwoButtonAlert} title={<Text style={{ fontFamily: 'icon', fontSize: 16, color: Colors.bgDarkGray, textAlign: 'center' }}> Delete</Text>} />
+                <Menu.Item onPress={() => {props.setSelectedData({
+                  ...props.item
+                }),props.setModalVisible(true)}} title={<Text style={{ fontFamily: 'icon', fontSize: 16, color: Colors.bgDarkGray, textAlign: "left" }}> Edit</Text>} />
+                <Menu.Item onPress={createTwoButtonAlert} title={<Text style={{ fontFamily: 'icon', fontSize: 16, color: Colors.bgDarkGray, textAlign: "left" }}> Delete</Text>} />
               </Menu>
             )}
           </View>

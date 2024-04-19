@@ -1,6 +1,5 @@
 import { View, Text, StyleSheet, Pressable } from "react-native"
 import Colors from "../../constants/Colors"
-import { useState } from "react";
 
 export default function Templearncards({ id, title, description, onPress, lessoncount, pressQuiz,pressLearn }) {
 

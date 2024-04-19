@@ -36,7 +36,7 @@ export default function Templearn({ route, navigation }) {
         setContentLoading(true);
 
         const data = await axiosGet(`${getPostURL}${param._id}`, userData.token);
-        //console.log("i am trying to get something")
+        console.log("i am trying to get something")
         setVideoData(data);
 
         if (data) {

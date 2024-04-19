@@ -16,18 +16,18 @@ const POSTURL = "/api/categories/add"
 const EDITURL = "/api/categories/update/"
 const contentType = "application/json"
 
-//FIX ON DOCUMENT BLANK ERROR
-export default function LessonModal({ visibility, onPress, title, description, children, setRefresh, ID }) {
+
+export default function LessonModal({ visibility,selectedData, setSelectedData,setModalVisible, children, setRefresh }) {
   const { userData } = useContext(AuthContext)
   //const navigation = useNavigation()
   const [errorMessage, setErrorMessage] = useState("");
 
   const formInitialData = {
-    title: title ?? "",
-    description: description ?? "",
+    title: selectedData?.title,
+    description: selectedData?.description,
   }
   const [formData, setFormData] = useState(formInitialData)
-
+  console.log(formData)
   const handleForm = (inputName, inputValue) => {
     setFormData(prevData => ({
       ...prevData,
@@ -37,9 +37,10 @@ export default function LessonModal({ visibility, onPress, title, description, c
   }
   //console.log(ID)
   const cancelForm = () => {
-    onPress();
+    setModalVisible();
     setFormData(formInitialData);
     setErrorMessage("");
+    setSelectedData("");
   }
 
   const submitForm = async () => {
@@ -50,7 +51,7 @@ export default function LessonModal({ visibility, onPress, title, description, c
         const data = await axiosPost(POSTURL, formData, contentType, userData.token)
         console.log("success")
       } else {
-        const data = await axiosPut(`${EDITURL}${ID}`, formData, contentType, userData.token)
+        const data = await axiosPut(`${EDITURL}${selectedData.ID}`, formData, contentType, userData.token)
         console.log("success")
       }
       cancelForm()
@@ -67,10 +68,10 @@ export default function LessonModal({ visibility, onPress, title, description, c
     <Modal
       animationType="fade"
       visible={visibility}
-      onRequestClose={onPress}
+      onRequestClose={setModalVisible}
       transparent={true}
     >
-      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+      <TouchableWithoutFeedback onPress={Keyboard.dismiss && setModalVisible}>
         <View style={styles.mainContainer} >
           <KeyboardAvoidingView behavior={Platform.OS === "ios" ? "padding" : "height"}>
             <View style={styles.inputContainer}>
