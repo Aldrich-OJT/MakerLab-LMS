@@ -2,7 +2,6 @@ import { useContext, useState } from 'react';
 import { Text, Pressable, StyleSheet, View, Modal, Dimensions, TouchableWithoutFeedback, KeyboardAvoidingView, Keyboard } from "react-native";
 import { TextInput, RadioButton } from "react-native-paper"
 import Colors from "../constants/Colors";
-import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { axiosPost, axiosPut } from '../utils/axios';
 import { AuthContext } from '../context/AuthProvider';
 
@@ -11,22 +10,20 @@ const deviceWidth = dimensions.width;
 
 const postquestionURL = "/api/question/add"
 const updateQuestionURL = "/api/question/update/"
-const contentType =  "application/json"
+const contentType = "application/json"
 
-export default function QuizModal({ item, setRefresh, visibility, setModalVisible, children, postID,  }) {
-  //console.log(postID,"ITEM I?T")
-  const {userData} = useContext(AuthContext)
+export default function QuizModal({ item, selectedData,setSelectedData ,setRefresh, visibility, setModalVisible, children, postID, }) {
+  const { userData } = useContext(AuthContext)
   const [errorMessage, setErrorMessage] = useState("")
-  const [checked, setChecked] = useState(item?.answer);
+  const [checked, setChecked] = useState(selectedData?.answer);
   const questionFormInitialValue = {
-    question: item?.question ?? "",
-    options: item?.options ? [...item.options] : [ "", "", "", ""],
-    answer: item?.answer ?? "",
+    question: selectedData?.question ?? "",
+    options: selectedData?.options ? [...selectedData.options] : ["", "", "", ""],
+    answer: selectedData?.answer ?? "",
     postID: postID
   }
-  const [questionForm, setQuestionForm] = useState(questionFormInitialValue) 
+  const [questionForm, setQuestionForm] = useState(questionFormInitialValue)
   const handleForm = (inputName, inputValue, indx) => {
-
     setQuestionForm(prevData => ({
       ...prevData,
       // If inputName is "options", it will add the inputValue into the array instead of replacing the value
@@ -37,31 +34,36 @@ export default function QuizModal({ item, setRefresh, visibility, setModalVisibl
     setModalVisible();
     setQuestionForm(questionFormInitialValue);
     setErrorMessage("");
-  
+    setSelectedData(null)
+
   }
+  // useEffect(()=>{
+  //   console.log("i am rendered")
+  // },[])
 
-const addQuestion = async () => {
-  console.log("click")
-  try {
+  const submitQuestion = async () => {
+    console.log("click")
+    try {
 
-    if(children.split(" ")[0] === "Upload"){
-      const data = await axiosPost(postquestionURL, questionForm, contentType, userData.token);
-      console.log(data);
-     
-    }else if (children.split(" ")[0] === "Edit"){
-      const data = await axiosPut(`${updateQuestionURL}${item?._id}`, questionForm, contentType, userData.token);
-      console.log("ssuccess");
-      
+      if (children.split(" ")[0] === "Upload") {
+        const data = await axiosPost(postquestionURL, questionForm, contentType, userData.token);
+        console.log(data);
+
+      } else if (children.split(" ")[0] === "Edit") {
+        const data = await axiosPut(`${updateQuestionURL}${selectedData?._id}`, questionForm, contentType, userData.token);
+        console.log("ssuccess");
+
+      }
+      setRefresh()
+      cancelForm()
+    } catch (error) {
+      console.log("error occured")
+      console.log(error.data.message);
+      setErrorMessage(error?.data?.message);
     }
-    setRefresh()
-    cancelForm()
-  } catch (error) {
-    console.log("error occured")
-    console.log(error.data.message);
-    setErrorMessage(error?.data?.message);
-  }
- 
-};
+
+  };
+
 
   //console.log(questionForm)
   return (
@@ -98,6 +100,7 @@ const addQuestion = async () => {
                     <RadioButton.Android
                       style={{}}
                       color={Colors.bgDarkViolet}
+
                       value={checked}
                       status={checked === option && option.length > 0 ? 'checked' : 'unchecked'}
                       onPress={() => (handleForm("answer", option, setChecked(option)))}
@@ -114,15 +117,14 @@ const addQuestion = async () => {
                 ))}
               </View>
               {errorMessage && <Text style={styles.errorMessage}>{errorMessage}</Text>}
-
               <View style={styles.buttonContainer}>
-              <Pressable style={[styles.submitButton, { borderWidth: 2, borderColor: Colors.bgPurple, backgroundColor: 'white' }]} onPress={cancelForm}>
+                <Pressable style={[styles.submitButton, { borderWidth: 2, borderColor: Colors.bgPurple, backgroundColor: 'white' }]} onPress={cancelForm}>
                   <Text style={[styles.submitText, { color: Colors.bgPurple }]}>
                     Cancel
                   </Text>
                 </Pressable>
 
-                <Pressable style={[styles.submitButton]} onPress={addQuestion}>
+                <Pressable style={[styles.submitButton]} onPress={submitQuestion}>
                   <Text style={styles.submitText}>
                     {children.split(" ")[0]} Question
                   </Text>
@@ -197,15 +199,15 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontFamily: 'PTSans-Bold',
   },
-  radiobuttonContainer:{
-    flexDirection: 'row', 
-    justifyContent:"center", 
-    alignItems:"center"
+  radiobuttonContainer: {
+    flexDirection: 'row',
+    justifyContent: "center",
+    alignItems: "center"
   },
-  errorMessage:{
-    textAlign:"center",
+  errorMessage: {
+    textAlign: "center",
     fontFamily: "PTSans-Bold",
-    color:Colors.bgError
+    color: Colors.bgError
   }
 });
 

@@ -2,7 +2,7 @@ import React, { useContext, useState, useEffect } from 'react';
 import { StyleSheet, Text, View, TouchableWithoutFeedback, Keyboard, KeyboardAvoidingView, Platform } from 'react-native';
 import { TextInput } from 'react-native-paper';
 import { useNavigation } from '@react-navigation/native';
-import { axiosPost } from '../../utils/axios';
+import { axiosGet, axiosPost } from '../../utils/axios';
 import Colors from '../../constants/Colors';
 import Title from '../../components/auths/Title';
 import AuthButton from '../../components/auths/AuthButton';
@@ -11,6 +11,7 @@ import { AuthContext } from '../../context/AuthProvider';
 
 const loginURL = "/api/user/login"
 const contentType = "application/json"
+const getuserdataURL = "/api/user/data/"
 
 export default function Login() {
   const navigation = useNavigation()
@@ -39,11 +40,14 @@ export default function Login() {
 
     try {
       console.log("trying to log in")
-      const data = await axiosPost(loginURL, textInputs,contentType)
+      const data = await axiosPost(loginURL, textInputs)
+      
       if (data) {
+        const userdata = await axiosGet(`${getuserdataURL}${data._id}`, data.token)
+        console.log(data)
+        data.progress = parseFloat(userdata.progress.$numberDecimal);
         console.log(data)
         authContext.authenticate(data)
-       
       }
     } catch (error) {
       
@@ -57,7 +61,6 @@ export default function Login() {
       setInputInvalid(false) 
 		}
 	}, [textInputs]);
-  console.log(textInputs)
   return (
     <KeyboardAvoidingView style={styles.container} behavior={Platform.OS === "ios" ? "padding" : "height"}>
       <TouchableWithoutFeedback onPress={() => {Keyboard.dismiss(); setTextInputFocused(false);}}>

@@ -2,13 +2,14 @@ const Post = require("../models/postModel");
 const asyncHandler = require("express-async-handler");
 const Category = require("../models/postCategoryModel");
 const fs = require("fs");
+const path = require("path");
 
 const getposts = asyncHandler(async (req, res) => {
     const categoryID = req.params.categoryID;
 
-    const posts = await Post.find({ category: categoryID });
+    const posts = await Post.find({ category: categoryID }).lean().exec();
 
-    if (posts == 0) {
+    if (!posts) {
         res.status(400).json({ message: "no post found" });
         return;
 
@@ -16,11 +17,17 @@ const getposts = asyncHandler(async (req, res) => {
 
     res.status(200).json(posts);
 });
+const getallpostcount = asyncHandler(async (req, res) => {
+    const count = await Post.countDocuments();
+    res.status(200).json(count);
+});
 
-const getpost = asyncHandler(async (req, res) => {
+const getpostfile = asyncHandler(async (req, res) => {
     const id = req.params.id;
-
     const post = await Post.findById(id);
+
+    const filePath = path.join(__dirname, "..", post.documentPath)
+
 
     if (!post) {
         res.status(400).json({ message: "no post found" });
@@ -28,14 +35,34 @@ const getpost = asyncHandler(async (req, res) => {
 
     }
 
-    res.status(200).json(post);
+    res.status(200).download(filePath, (err) => {
+        if (err) {
+            res.status(400).json({ message: "error downloading file" })
+        }
+    });
+});
+const getpost = asyncHandler(async (req, res) => {
+    const id = req.params.id;
+    const post = await Post.findById(id);
+    
+    
+    
+    
+    if (!post) {
+        res.status(400).json({ message: "no post found" });
+        return;
+        
+    }
+
+    res.status(200).json(post)
 });
 
 const addpost = asyncHandler(async (req, res) => {
     const { title, categoryID, description } = req.body;
     const document = req.file;
 
-
+    
+    console.log(document)
     if (!document || !title || !description) {
         res.status(400).json({ message: "Fill all data" });
         return;
@@ -45,7 +72,7 @@ const addpost = asyncHandler(async (req, res) => {
     const documentExist = await Post.findOne({ documentName: document.filename });
 
     if (documentExist) {
-        res.status(400).json({ message: "document Already Exist" });
+       return res.status(400).json({ message: "document Already Exist" });
 
     }
 
@@ -115,16 +142,12 @@ const deletepost = asyncHandler(async (req, res) => {
     const post = await Post.findById(id);
 
     if (!post) {
-        res.status(400).json({ message: "no post found" });
-        return;
-
+        return res.status(400).json({ message: "no post found" });
     }
     const filePath = post.documentPath;
     fs.unlink(filePath, (err) => {
         if (err) {
-            res.status(400).json({ message: `Error deleting document file ${err}` });
-            return;
-
+            return res.status(400).json({ message: `Error deleting document file ${err}` });
         } else {
             console.log(`${filePath} deleted successfully`);
         }
@@ -136,7 +159,9 @@ const deletepost = asyncHandler(async (req, res) => {
 });
 
 module.exports = {
+    getpostfile,
     getposts,
+    getallpostcount,
     getpost,
     addpost,
     updatepost,

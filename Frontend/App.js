@@ -17,9 +17,9 @@ import LearnDetails from './screens/Learn/LearnDetails';
 import Colors from './constants/Colors';
 import LoadingScreen from './screens/LoadingScreen';
 import { useFonts } from 'expo-font';
-import Questions from './screens/Assess/Questions';
+import Questions from './screens/Assess/Quiz';
 import Templearn from './screens/Learn/templearn';
-import LearnHeader from './components/LearnComponent/LearnHeader';
+
 
 const Stack = createNativeStackNavigator()
 const LearnStack = createNativeStackNavigator()

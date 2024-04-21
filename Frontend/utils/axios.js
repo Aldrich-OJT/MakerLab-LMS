@@ -1,15 +1,16 @@
 import axios from 'axios';
 
-const baseURL = 'http://192.168.1.7:5000';
+const baseURL = 'http://192.168.100.93:5000';
 
-const axiosRequest = async (method, URL, token, data, contentType) => {
+const axiosRequest = async (method, URL, token, data, contentType, responseType) => {
   try {
     const config = {
       method,
       url: `${baseURL}${URL}`,
       headers: {
-        'Content-Type': contentType,
+        'Content-Type': contentType ?? "application/json",
       },
+      responseType:responseType,
       withCredentials: true,
     };
 
@@ -37,8 +38,8 @@ export const axiosPost = async (URL, data, contentType, token) => {
   return await axiosRequest('post', URL, token, data, contentType);
 };
 
-export const axiosGet = async (URL, token) => {
-  return await axiosRequest('get', URL, token);
+export const axiosGet = async (URL, token, responseType) => {
+  return await axiosRequest('get', URL, token, responseType);
 };
 
 export const axiosPut = async (URL, data, contentType, token) => {

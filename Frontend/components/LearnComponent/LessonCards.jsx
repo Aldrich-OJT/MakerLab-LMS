@@ -1,6 +1,6 @@
 import React, { useContext, useState } from "react";
 import { StyleSheet, View, Text, Pressable, Alert, ImageBackground } from "react-native";
-import { axiosDelete, axiosGet, axiosPut } from "../../utils/axios";
+import { axiosDelete, } from "../../utils/axios";
 import { AuthContext } from "../../context/AuthProvider";
 import { Menu } from 'react-native-paper';
 import LessonModal from "./LessonModal";
@@ -8,83 +8,91 @@ import Colors from "../../constants/Colors";
 
 const deleteCategoryURL = "/api/categories/delete/"
 
-export default function LessonCards ({title, description, onPress, ID,setRefresh,index,length}) {
-  const {userData} = useContext(AuthContext)
-  const [modalVisible,setModalVisible] = useState(false)
- 
+export default function LessonCards({ title, description, setModalVisible, ID, setRefresh, onPress, index, setSelectedData }) {
+  const { userData } = useContext(AuthContext)
+  const [menuVisible, setMenuVisible] = useState(false);
+
+
   const [showDescription, setShowDescription] = useState(false);
 
   const showDescriptionHandler = () => {
-      setShowDescription(!showDescription);
+    setShowDescription(!showDescription);
   };
   const createTwoButtonAlert = () =>
-  Alert.alert('Warning', 'Do you really want to delete this category?', [
+    Alert.alert('Warning', 'Do you really want to delete this category?', [
       {
-          text: 'Cancel',
-          //onPress: () => console.log('Cancel Pressed'),
-          style: 'cancel',
+        text: 'Cancel',
+        //onPress: () => console.log('Cancel Pressed'),
+        style: 'cancel',
       },
       { text: 'YES', onPress: deletePost },
-  ]);
-  const deletePost= ()=>{
+    ]);
+  const deletePost = () => {
 
-    const res = axiosDelete(`${deleteCategoryURL}${ID}`,userData.token)
+    const res = axiosDelete(`${deleteCategoryURL}${ID}`, userData.token)
     //console.log(res, "deleted")
     setRefresh(true)
   }
   //console.log(title)
-  const [menuVisible, setMenuVisible] = useState(false);
-    return (
-      <Pressable style={[
-        styles.lessonContainer,
-        {marginBottom:
-          (userData.role === 'admin' && index === length - 1 ? 70 :
-          (userData.role === 'user' && index === length - 1 ? 20 : 0))
-        }]} onPress={onPress}
-      >
-        <LessonModal
-          onPress={()=>setModalVisible(false)}
-          visibility={modalVisible}
-          setRefresh={setRefresh}
-          title={title}
-          description={description}
-          ID={ID}>
-          Edit Lesson
-        </LessonModal>
 
-        <ImageBackground 
-          source={require('../../assets/lesson-image.png')} 
-          style={styles.imageContainer}>
-        
-          <View style={styles.purpleTint}>
-            <View style={styles.titleContainer}>
-              <Text style={{fontFamily: 'icon', fontSize:23, color: Colors.bgPurple, marginTop:2}}></Text> 
-              <Text style={styles.title}>{title}</Text>
+  return (
+    <Pressable style={[
+      styles.lessonContainer,
+      {marginBottom:
+        (userData.role === 'admin' && index === length - 1 ? 70 :
+        (userData.role === 'user' && index === length - 1 ? 20 : 0))
+      }]} onPress={onPress}>
+      {/* <LessonModal
+        setModalVisibility={() => setModalVisible(false)}
+        visibility={modalVisible}
+        setRefresh={setRefresh}
+        title={title}
+        description={description}
+        ID={ID}>
+        Edit Lesson
+      </LessonModal> */}
 
-              {userData.role === 'admin' && (
-                <Menu
-                  visible={menuVisible}
-                  onDismiss={()=>setMenuVisible(false)}
-                  anchor={
-                  <Pressable style={{width:50,height:30}} onPress={()=>(setMenuVisible(true))}>
-                    <Text style={{fontFamily: 'icon', fontSize:22, color:Colors.bgPurple, alignSelf:'flex-end', marginRight:5}}> </Text>
+      <ImageBackground
+        source={require('../../assets/lesson-image.png')}
+        style={styles.imageContainer}>
+
+        <View style={styles.purpleTint}>
+          <View style={styles.titleContainer}>
+            <Text style={{ fontFamily: 'icon', fontSize: 23, color: Colors.bgPurple, marginTop: 2 }}></Text>
+            <Text style={styles.title}>{title}</Text>
+
+            {userData.role === 'admin' && (
+              <Menu
+                visible={menuVisible}
+                onDismiss={() => setMenuVisible(false)}
+                anchor={
+                  <Pressable style={{ width: 50, height: 30 }} onPress={() => (setMenuVisible(true))}>
+                    <Text style={{ fontFamily: 'icon', fontSize: 22, color: Colors.bgPurple, alignSelf: 'flex-end', marginRight: 5 }}> </Text>
                   </Pressable>
                 }>
-                  <Menu.Item onPress={()=>setModalVisible(true)} title={<Text style={{fontFamily: 'icon', fontSize:16, color:Colors.bgDarkGray, textAlign:'center'}}> Edit</Text>} />
-                  <Menu.Item onPress={createTwoButtonAlert} title={<Text style={{fontFamily: 'icon', fontSize:16, color:Colors.bgDarkGray, textAlign:'center'}}> Delete</Text>} />
-                </Menu>
-              )}
-            </View>
+                <Menu.Item onPress={() => {
+                  setModalVisible(true),
+                  setSelectedData({
+
+                    title,
+                    description,
+                    ID 
+                  })
+                }} title={<Text style={{ fontFamily: 'icon', fontSize: 16, color: Colors.bgDarkGray, textAlign: "left" }}> Edit</Text>} />
+                <Menu.Item onPress={createTwoButtonAlert} title={<Text style={{ fontFamily: 'icon', fontSize: 16, color: Colors.bgDarkGray, textAlign: "left" }}> Delete</Text>} />
+              </Menu>
+            )}
           </View>
-        </ImageBackground>
-        
-          <View>            
-            <Text 
-              numberOfLines={showDescription ? undefined : 2}
-              style={styles.lessonDescription}>
-              {description}
-            </Text>
-          </View>
+        </View>
+      </ImageBackground>
+
+      <View>
+        <Text
+          numberOfLines={showDescription ? undefined : 2}
+          style={styles.lessonDescription}>
+          {description}
+        </Text>
+      </View>
 
           {description.length > 100 && (
             <Pressable onPress={showDescriptionHandler}>

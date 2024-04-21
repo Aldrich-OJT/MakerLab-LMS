@@ -10,15 +10,18 @@
   },
   "dependencies": {
     "@expo-google-fonts/dongle": "^0.2.3",
+    "@expo-google-fonts/pt-sans": "^0.2.3",
     "@react-native-async-storage/async-storage": "^1.21.0",
     "@react-navigation/native": "^6.1.16",
     "@react-navigation/native-stack": "^6.9.25",
     "axios": "^1.6.8",
     "expo": "~50.0.14",
     "expo-document-picker": "~11.10.1",
-    "expo-file-system": "~16.0.8",
+    "expo-file-system": "^16.0.9",
     "expo-font": "~11.10.3",
+    "expo-linking": "~6.2.2",
     "expo-router": "^3.4.8",
+    "expo-sharing": "^11.10.0",
     "expo-status-bar": "~1.11.1",
     "react": "18.2.0",
     "react-native": "0.73.6",
@@ -27,7 +30,9 @@
     "react-native-reanimated": "~3.6.2",
     "react-native-safe-area-context": "4.8.2",
     "react-native-screens": "~3.29.0",
-    "react-native-web": "^0.19.10"
+    "react-native-video": "^5.2.1",
+    "react-native-web": "^0.19.10",
+    "expo-av": "~13.10.5"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0"

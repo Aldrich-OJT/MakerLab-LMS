@@ -4,7 +4,7 @@ const UserData = require("../models/userDataModel");
 const getuserData = asyncHandler(async (req, res) => {
     const id = req.params.userID;
 
-    const user = await UserData.find({ user: id });
+    const user = await UserData.findOne({ user: id });
 
     if (!user) {
         res.status(400).json({ message: "No user found" });
@@ -32,18 +32,29 @@ const updateuserData = asyncHandler(async (req, res) => {
     id = req.params.userID;
     const { avatar, progress, quizScores } = req.body;
 
-    console.log(id)
+    console.log(quizScores)
 
     const data = await UserData.findOne({ user: id });
 
     console.log(data)
+
+    const calculateProgress = ()=>{
+        let newprogress = 0
+        if (quizScores.passed === true) {
+            newprogress = (parseFloat(data.progress) + parseFloat(progress))
+        }else{
+            newprogress = (parseFloat(data.progress) - parseFloat(progress))
+        }
+        console.log(newprogress)
+        return newprogress
+    }
 
     const updatedUserData = await UserData.findByIdAndUpdate(
         data._id,
         {
             user: data.user,
             avatar: avatar ? avatar : data.avatar,
-            progress: progress ? progress : data.progress,
+            progress: progress ? calculateProgress() : data.progress,
             quizScores: quizScores ? quizScores : data.quizScores,
         },
         { new: true }

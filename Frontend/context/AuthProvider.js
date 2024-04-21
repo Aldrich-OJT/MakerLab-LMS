@@ -2,24 +2,27 @@ import { useState, createContext, useEffect } from "react";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export const AuthContext = createContext({
-    userData:null,
+    userData: null,
     isAuthenticated: false,
-    authenticate: (userData)=>{},
-    logout: ()=>{}
+    authenticate: (userData) => { },
+    logout: () => { }
 })
 
 
 
-const AuthProvider = ({children})=>{
+const AuthProvider = ({ children }) => {
     const [userData, setUserData] = useState(null)
     //const [userRole, setUserRole] = useState(null)
 
 
-    const authenticate = (userData)=>{
-        setUserData(userData)
-        AsyncStorage.setItem('userData',JSON.stringify(userData))
+    const authenticate = (newUserData) => {
+        setUserData(prevUserData => ({
+            ...prevUserData,
+            ...newUserData 
+        }));
+        AsyncStorage.setItem('userData', JSON.stringify(newUserData));
     }
-    const logout = ()=>{
+    const logout = () => {
         console.log("logout called")
         setUserData(null)
         AsyncStorage.removeItem('userData')
@@ -30,7 +33,7 @@ const AuthProvider = ({children})=>{
         isAuthenticated: !!userData,
         authenticate: authenticate,
         logout: logout
-        
+
     }
     console.log(userData)
     return (

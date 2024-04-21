@@ -24,18 +24,18 @@ const addQuestion = asyncHandler(async (req, res) => {
     });
 
     if (!options.includes(answer)) {
-        res.status(400).json({ message: "Answer is not included in the options" });
-        return;
+        return res.status(400).json({ message: "Answer is not included in the options" });
+        
     }
 
     if (new Set(options).size !== options.length) {
-        res.status(400).json({ message: "There are duplicate options" });
-        return;
+        return res.status(400).json({ message: "There are duplicate options" });
+        
     }
 
     if (!question || !options || !answer) {
-        res.status(400).json({ message: "Please provide all fields" });
-        return;
+        return res.status(400).json({ message: "Please provide all fields" });
+        
     }
 
     const newQuestion = await Question.create({
@@ -89,7 +89,7 @@ const editQuestion = asyncHandler(async (req, res) => {
     }
     options.forEach(element => {
         if (element.length < 1) {
-            res.status(400).json({ message: "Please fill blank fields" });
+           return res.status(400).json({ message: "Please fill blank fields" });
         }
     });
 

@@ -1,8 +1,8 @@
 import { TextInput } from "react-native-paper"
 import { View, Pressable, Text, StyleSheet, Modal, KeyboardAvoidingView, TouchableWithoutFeedback, Keyboard, Dimensions } from "react-native"
-import { useContext, useEffect, useState } from "react"
+import { useContext, useState } from "react"
 import { axiosPost, axiosPut } from "../../utils/axios";
-import { MaterialCommunityIcons } from '@expo/vector-icons';
+
 import { AuthContext } from "../../context/AuthProvider";
 //import { SafeAreaView } from "react-native-safe-area-context";
 import { useNavigation } from '@react-navigation/native';
@@ -17,20 +17,21 @@ const PUTURL = "/api/post/update/"
 const contentType = "multipart/form-data"
 const mimeTypes = [
   "application/pdf",
-  "application/vnd.openxmlformats-officedocument.presentationml.presentation"
+  "application/vnd.openxmlformats-officedocument.presentationml.presentation",
+  "video/mp4"
 ]
 
 //FIX ON DOCUMENT BLANK ERROR
 export default function ModalContent({documentName,title, description, visibility, onPress,children,id, setRefresh}) {
   const {userData} = useContext(AuthContext)
-  const navigation = useNavigation()
+  //const navigation = useNavigation()
   const [errorMessage, setErrorMessage] = useState("");
   
 
   const formInitialData = {
     title: title ?? "",
     description: description ?? "",
-    document:null
+    document: documentName ??  null
   }
   const [formData, setFormData] = useState(formInitialData)
 
@@ -41,14 +42,6 @@ export default function ModalContent({documentName,title, description, visibilit
     }))
 
   }
-  // useEffect(() => {
-  //   console.log(title,description)
-  //   formInitialData ={
-  //     title: title,
-  //     description: description,
-  //     document:documentName ?? ""
-  //   }
-  // }, []);
 //Function that lets you pick documents on your device
 const pickDocument = async () => {
   try {
@@ -87,14 +80,13 @@ const pickDocument = async () => {
    
     if(children.split(" ")[0] === "Upload"){
       formDataToSend.append('categoryID', id)
-      console.log(formDataToSend._parts)
       try {
         const data = await axiosPost(POSTURL,formDataToSend,contentType,userData.token)
         console.log(data)
       } catch (error) {
         console.log(error.data.message)
         setErrorMessage(error?.data?.message)
-        console.log(errorMessage)
+        //console.log(errorMessage)
         return
       }
     }else if (children.split(" ")[0] === "Edit"){
@@ -126,7 +118,7 @@ const pickDocument = async () => {
         onRequestClose={onPress}
         transparent={true}
       >
-        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+        <TouchableWithoutFeedback onPress={Keyboard.dismiss && onPress}>
           <View style={styles.mainContainer} >
             <View style={styles.inputContainer}>
               <View style={styles.titleContainer}>
@@ -154,7 +146,7 @@ const pickDocument = async () => {
                 <Text style={styles.selectButton}>
                   <Text style={{fontFamily: 'PTSans-Bold', color: Colors.bgDarkGray}}>
                     <Text style={{fontFamily: 'icon', fontSize:20}}></Text>
-                    {formData.document ? `${formData.document.name}` : " Upload File"}
+                    {formData.document ? `${formData.document}` : " Upload File"}
                     {/* formData.document ? `${formData.document.name}` :  */}
                   </Text>
                 </Text>

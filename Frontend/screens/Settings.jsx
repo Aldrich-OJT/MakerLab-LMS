@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect, useCallback } from "react";
 import { View, Text, StyleSheet, Dimensions, Image, Modal, Pressable, ScrollView } from "react-native";
 import ProgressBar from 'react-native-progress/Bar';
 import Colors from "../constants/Colors";
@@ -8,40 +8,74 @@ import avatar1 from '../assets/avatars/avatar1.png';
 import avatar2 from '../assets/avatars/avatar2.png';
 import avatar3 from '../assets/avatars/avatar3.png';
 import avatar4 from '../assets/avatars/avatar4.png';
-
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { axiosGet } from "../utils/axios";
+import { useFocusEffect } from "@react-navigation/native";
+import { ActivityIndicator } from "react-native-paper";
 const dimensions = Dimensions.get('window');
 const deviceWidth = dimensions.width;
 const deviceHeight = dimensions.height;
+const getuserDataURL = "/api/user/data/"
 
-const avatarChoices= [avatar1,avatar2,avatar3,avatar4]
+const avatarChoices = [avatar1, avatar2, avatar3, avatar4]
 
 
 export default function Settings() {
-
-   console.log('Avatar choices:', avatarChoices);
+  const tabBarHeight = useBottomTabBarHeight();
   const [avatarModalVisible, setAvatarModalVisible] = useState(false);
-  const [avatar, setAvatar] = useState(0);
+  const [avatar, setAvatar] = useState(2);
+  const [user, setUser] = useState()
+  const [loading, setLoading] = useState(false)
+  const [refresh, setRefresh] = useState(false)
   const { logout, userData } = useContext(AuthContext);
+  const [progress, setProgress] = useState()
 
-  // const avatarChoices = [
-  //   require('../assets/avatars/avatar1.png'),
-  //   require('../assets/avatars/avatar2.png'),
-  //   require('../assets/avatars/avatar3.png'),
-  //   require('../assets/avatars/avatar4.png'),
-  // ]
+  const saveAvatar = (index) => {
+    setAvatarModalVisible(false)
+    setAvatar(index)
+    AsyncStorage.setItem("Avatar", index.toString())
+  }
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        if (refresh) {
+          setLoading(true);
+          const data = await axiosGet(`${getuserDataURL}${userData._id}`, userData.token)
+          console.log(data)
+          setProgress(parseFloat(data.progress.$numberDecimal))
+          setUser(data)
+          const userAvatar = await AsyncStorage.getItem("Avatar");
+
+          if (userAvatar) {
+            setAvatar(userAvatar);
+          }
+          setLoading(false);
+          setRefresh(false)
+        }
+      } catch (error) {
+        console.log(error)
+      }
+    };
+    fetchData();
+
+  }, [refresh]);
 
   const badges = [
     require('../assets/badges/badge-makerlab.png'),
     require('../assets/badges/badge-coding.png'),
-    require('../assets/badges/badge-3dprinting.png'), '',
-    '', '', '', ''
+    require('../assets/badges/badge-3dprinting.png')
   ];
+  //refresh the page when focus goes back on this tab
+  useFocusEffect(
+    useCallback(() => {
+      setRefresh(true)
+    }, [])
+  );
 
-  const tabBarHeight = useBottomTabBarHeight();
-
+  //console.log(progress);
   return (
     <ScrollView showsVerticalScrollIndicator={false}>
-      <View style={[styles.mainContainer,{marginBottom:tabBarHeight}]}>
+      <View style={[styles.mainContainer, { marginBottom: tabBarHeight }]}>
         <Modal
           animationType="fade"
           transparent={true}
@@ -55,10 +89,9 @@ export default function Settings() {
               </View>
 
               <View style={styles.imageContainer}>
-                {avatarChoices.map((avatar, index) => (
-                  <Pressable key={index} onPress={() => { setAvatarModalVisible(false) }}>
-                    <Image source={avatar} style={styles.avatar} />
-
+                {avatarChoices.map((item, index) => (
+                  <Pressable key={index} onPress={() => saveAvatar(index)}>
+                    <Image source={item} style={styles.avatar} />
                   </Pressable>
                 ))}
               </View>
@@ -72,17 +105,21 @@ export default function Settings() {
           </View>
         </Modal>
 
-        <View style={styles.innerContainer}>
+        {loading ? (<ActivityIndicator
+          animating={true}
+          style={{ top: 20 }}
+          size={60}
+        />) : (<View style={styles.innerContainer}>
           <Text style={[styles.editButton, { fontFamily: 'icon', fontSize: 20, color: Colors.bgGray }]}
             onPress={() => setAvatarModalVisible(true)}></Text>
           <Image source={avatarChoices[avatar]} style={styles.avatar}></Image>
           <Text style={styles.nameText}>{userData.name}</Text>
           <View style={styles.progressContainer}>
-            <Text style={styles.progressText}>Progress: 68%</Text>
+            <Text style={styles.progressText}>Progress {parseInt(progress * 100)}%</Text>
             <View style={styles.progressBar}>
               <ProgressBar
                 animated={true}
-                progress={.68}
+                progress={progress}
                 width={270}
                 height={10}
                 borderRadius={10}
@@ -92,9 +129,9 @@ export default function Settings() {
               />
             </View>
           </View>
-        </View>
+        </View>)}
 
-        <View style={styles.innerContainer}>
+        {user && <View style={styles.innerContainer}>
           <Text style={styles.nameText}>My badges</Text>
           <View style={styles.badgesContainer}>
             {badges.map((badge, index) => (
@@ -108,7 +145,7 @@ export default function Settings() {
               </View>
             ))}
           </View>
-        </View>
+        </View>}
 
         <Pressable style={[styles.logoutButton, { bottom: tabBarHeight }]} onPress={logout}>
           <Text style={styles.logoutText}>
@@ -149,12 +186,12 @@ const styles = StyleSheet.create({
     position: 'absolute',
     top: 10,
     right: 10,
-    padding:10,
+    padding: 10,
   },
   avatar: {
     height: deviceWidth * .26,
     width: deviceWidth * .26,
-    borderRadius: 50,
+    borderRadius: 1000,
     borderColor: Colors.bgGray,
     borderWidth: 5,
   },
@@ -207,7 +244,7 @@ const styles = StyleSheet.create({
     shadowRadius: 3.84,
 
     elevation: 5,
-    
+
   },
   logoutText: {
     color: Colors.bgError,
@@ -242,10 +279,10 @@ const styles = StyleSheet.create({
   imageContainer: {
     gap: 10,
     flexDirection: 'row',
-    justifyContent:"center",
-    alignItems:"center",    
-    flexWrap:"wrap",
-    width:"80%",
+    justifyContent: "center",
+    alignItems: "center",
+    flexWrap: "wrap",
+    width: "80%",
     height: "fit-content",
     marginBottom: 8,
   },
