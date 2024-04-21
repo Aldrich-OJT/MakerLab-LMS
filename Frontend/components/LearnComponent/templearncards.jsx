@@ -1,11 +1,8 @@
 import { View, Text, StyleSheet, Pressable } from "react-native"
 import Colors from "../../constants/Colors"
-<<<<<<< HEAD
 import { useState } from "react";
 import { AuthContext } from "../../context/AuthProvider";
 import React, { useContext } from "react";
-=======
->>>>>>> 17822494ae984039c7428904d28ca7b98fa80da3
 
 export default function Templearncards({ id, title, description, onPress, pressQuiz,pressLearn, index, length }) {
   const {userData} = useContext(AuthContext)
