@@ -103,10 +103,8 @@ export default function Signup() {
 			// Make a POST request to the signup API endpoint with form data
 			const user = await axiosPost(signupURL, textInputs, contentType)
 			const userdata = await axiosPost(`${adduserdataURL}${user._id}`, textInputs, contentType)
-			console.log(user);
-			console.log(userdata); 
+			user.progress = parseFloat(userdata.progress.$numberDecimal); 
 			authContext.authenticate(user)
-			console.log(user);
 		} catch (error) {
 			console.error(error.status);
 			console.error(error);

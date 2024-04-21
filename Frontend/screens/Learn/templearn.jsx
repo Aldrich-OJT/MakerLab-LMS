@@ -11,48 +11,29 @@ import LearnHeader from "../../components/LearnComponent/LearnHeader";
 import Templearncards from "../../components/LearnComponent/templearncards";
 import { axiosGet } from "../../utils/axios";
 import { AuthContext } from "../../context/AuthProvider";
-import { useFocusEffect, useNavigation } from '@react-navigation/native';
-// import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs';
+import { useFocusEffect } from '@react-navigation/native';
 import ModalContent from "../../components/LearnComponent/ModalContent";
 import { ActivityIndicator} from 'react-native-paper';
 
 const getPostURL = "/api/post/category/";
 
 export default function Templearn({ route, navigation }) {
-  //const tabBarHeight = useBottomTabBarHeight()
-  //const { navigate } = useNavigation()
   const [modalVisible, setModalVisible] = useState(false);
   const { param } = route.params;
   const {userData} = useContext(AuthContext);
-  const [videoData, setVideoData] = useState(null);
+  const [postData, setpostData] = useState([]);
   const [contentLoading, setContentLoading] = useState(false)
-  const [nocontent, setNoContent] = useState(false)
   const [refresh, setRefresh] = useState(false)
 
   useEffect(() => {
     const fetchData = async () => {
-      //console.log(param);
       try {
         setContentLoading(true);
-
         const data = await axiosGet(`${getPostURL}${param._id}`, userData.token);
-        console.log("i am trying to get something")
-        setVideoData(data);
+        setpostData(data);
 
-        if (data) {
-          setNoContent(false)
-        }
-        // else {
-        //   setNoContent(true)
-        // }
-        //console.log(videoData)
       } catch (error) {
-        setNoContent(true)
-        // Handle the error here, you can log it or show an error message to the user
-        // console.log(error.message)
-        // if (error.status === 404) {
-        //   setNoContent(true)
-        // }
+        console.log(error)
 
       } finally {
         setRefresh(false)
@@ -93,15 +74,15 @@ export default function Templearn({ route, navigation }) {
               size={60}
             />
           ) : (
-            nocontent ? (
-              <Text style={{fontFamily: 'PTSans-Bold'}}>
+            postData.length == 0 ? (
+              <Text style={{fontFamily: 'PTSans-Bold', textAlign:"center"}}>
                 No contents found
               </Text>
             ) : (
               <FlatList
                 showsVerticalScrollIndicator={false}
                 keyExtractor={(item) => item._id}
-                data={videoData}
+                data={postData}
                 renderItem={({ item, index }) => (
                   <Templearncards
                     title={item.title}
@@ -109,7 +90,7 @@ export default function Templearn({ route, navigation }) {
                     pressLearn={() => showLearnDetail(item)}
                     pressQuiz={() => showQuestion(item)}
                     index={index}
-                    length={videoData.length}
+                    length={postData.length}
                   />
                 )}
               />
@@ -140,7 +121,6 @@ export default function Templearn({ route, navigation }) {
 const styles = StyleSheet.create({
   maincontainer: {
     flex: 1,
-    flexDirection: 'column',
   },
   bottomsheet: {
     backgroundColor: Colors.bgOffWhite,
@@ -164,7 +144,7 @@ const styles = StyleSheet.create({
   },
   FlatListContainer: {
     flex: 1,
-    alignItems: "center",
+    //alignItems: "center",
     borderRadius: 10,
     //overflow:"hidden"
 

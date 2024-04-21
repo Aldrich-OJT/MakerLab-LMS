@@ -3,7 +3,6 @@ import { StyleSheet, View, Text, Pressable, Alert, ImageBackground } from "react
 import { axiosDelete, } from "../../utils/axios";
 import { AuthContext } from "../../context/AuthProvider";
 import { Menu } from 'react-native-paper';
-import { Menu } from 'react-native-paper';
 import LessonModal from "./LessonModal";
 import Colors from "../../constants/Colors";
 

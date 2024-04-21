@@ -8,42 +8,56 @@ import { Menu } from "react-native-paper";
 
 const deleteQuestionURL = "/api/question/delete/"
 
+
+
 export default function QuizItem(props) {
+  const indexToUpdate = props.itemNumber
+  const singleScore =  props.singleScore
+  const numberQuestionsAnswered = props.numberQuestionsAnswered
   const [menuVisible, setMenuVisible] = useState(false);
   const { userData } = useContext(AuthContext)
-  const [selectedNumber, setSelectedNumber] = useState(0)
   const [selected, setSelected] = useState(null);
 
 
   
   const handleChoiceSelection = (choice) => {
-    //console.log(props.quizNumber)
-    setSelected(choice);
-    setSelectedNumber((prevState) => {
-      if (prevState != 1) {
-        props.setQuestionNumber( prevState => prevState + 1)
-        
-        return prevState + 1;
-      }
-      return prevState; 
-    });
     props.setErrorMessage("")
-    //props.setAnsweredQuestion(prevState => prevState + 1)
+    setSelected(choice);
+   
+    let updatednumberQuestionsAnsweredArray = [...numberQuestionsAnswered]
+    updatednumberQuestionsAnsweredArray[indexToUpdate] = 1
+  
+  
+    props.setnumberQuestionsAnswered(updatednumberQuestionsAnsweredArray)
+
+
     //prevent multiple selection if user clicks the selected option again
     if (selected === choice) {
-      //console.log("i am selected again")
       setSelected(null)
-      props.setSingleScore(0)
+         
+      let updatedscoreArray = [...singleScore]
+      updatedscoreArray[indexToUpdate] = 0
+    
+      props.setSingleScore(updatedscoreArray)
 
-      props.setQuestionNumber( prevState => prevState - 1)
-      setSelectedNumber(prevState => prevState - 1)
-      
+      let updatednumberQuestionsAnsweredArray = [...numberQuestionsAnswered]
+      updatednumberQuestionsAnsweredArray[indexToUpdate] = 0
+      props.setnumberQuestionsAnswered(updatednumberQuestionsAnsweredArray)
 
-    } else if (props.item.options[choice] === props.item.answer) {//adds 1 to singleScore state if choice is equal to answer else reset to  0
-      props.setSingleScore(prevState => prevState + 1)
+    } else if (props.item.options[choice] === props.item.answer) {
+     
+      let updatedArray = [...singleScore]
+      updatedArray[indexToUpdate] = 1
+    
+      props.setSingleScore(updatedArray)
+
      
     } else {
-      props.setSingleScore(0)
+       let updatedArray = [...singleScore]
+       updatedArray[indexToUpdate] =  0
+
+
+      props.setSingleScore(updatedArray)
     }
 
 
@@ -51,7 +65,7 @@ export default function QuizItem(props) {
   //only checks if state changes from 0 to 1 or vice versa, do not check if already 0
   
 
-  
+ 
   const createTwoButtonAlert = () => {
     Alert.alert("Delete Question?", "Are you sure you want to delete this question?", [
       {
@@ -97,7 +111,7 @@ export default function QuizItem(props) {
                     <Text style={{ fontFamily: 'icon', fontSize: 22, color: Colors.bgPurple, alignSelf: 'flex-end', marginRight: 5 }}> </Text>
                   </Pressable>
                 }>
-                <Menu.Item onPress={() => {props.setSelectedData({
+                <Menu.Item onPress={() => {setSelectedData({
                   ...props.item
                 }),props.setModalVisible(true)}} title={<Text style={{ fontFamily: 'icon', fontSize: 16, color: Colors.bgDarkGray, textAlign: "left" }}> Edit</Text>} />
                 <Menu.Item onPress={createTwoButtonAlert} title={<Text style={{ fontFamily: 'icon', fontSize: 16, color: Colors.bgDarkGray, textAlign: "left" }}> Delete</Text>} />

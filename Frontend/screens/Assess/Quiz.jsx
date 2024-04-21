@@ -12,6 +12,7 @@ import { ActivityIndicator, Modal } from "react-native-paper";
 
 const getQuizzesURL = "/api/question/"
 const editScoreURL = "/api/user/data/update/"
+const getposttotalcountURL = "/api/post/count"
 const contentType = "application/json"
 
 
@@ -21,51 +22,65 @@ export default function Quiz({route, navigation}) {
   const [score, setScore] = useState(0)
   const [isloading, setLoading] = useState(false)
   const [errorMessage,setErrorMessage ] = useState("")
-  const [questionNumber, setQuestionNumber] = useState(0)
+  const [numberQuestionsAnswered, setnumberQuestionsAnswered] = useState([])
   const param = route.params.item
   const [modalVisible, setModalVisible] = useState(false);
   const [submitModalVisible, setSubmitModalVisible] = useState(false);
   const [refresh, setRefresh] = useState(true);
-  const [singleScore, setSingleScore] = useState(0)
+  const [singleScore, setSingleScore] = useState([])
   const [quizData, setQuizData] = useState([])
+  const [totalQuizzes, setTotalQuizzes] = useState([])
+  //const [selectedNumber, setSelectedNumber] = useState(0)
+
+
   const [selectedData, setSelectedData] =  useState()
   const [quizForm, setQuizForm] = useState({
     quizScores: {
       postId: param._id,
       score: score,
       passed: false
-    }
+    },
+    progress: 0
   })
-  useEffect(() => {
-    setQuizForm(prevstate => ({
-      ...prevstate,
-      quizScores: {
-        ...prevstate.quizScores,
-        score: score,
-        passed: score < Math.round(quizData.length * .6) ? false : true
-      }
-    }))
-  }, [score])
+  // useEffect(() => {
+  //   setQuizForm(prevstate => ({
+  //     ...prevstate,
+  //     quizScores: {
+  //       ...prevstate.quizScores,
+  //       score: score,
+  //       passed: score < Math.round(quizData.length * .6) ? false : true
+  //     }
+  //   }))
+  // }, [score])
 
-  useEffect(() => {
-    let newScore = score
-    //initial value of score is zero, so this code prevents from subtracting at the inital value
-    const setNewScore = ()=>{
-      if (singleScore === 0 && score != 0) {
-        // console.log("change")
-        // console.log(props.singleScore)
-  
-        newScore -= 1
-      } else {
-        newScore += singleScore
-      }
-      setScore(newScore)
-    }
+  // useEffect(() => {
+   
+  //   let newScore = score
 
-    setNewScore()
-  }, [singleScore])
+  //   const setNewScore = ()=>{
+  //     console.log("score befroe setscore",score)
+  //     console.log("singlescore befroe setscore",singleScore)
+  //     if (singleScore === 0 && score > 0) {
+  //       // console.log("change")
+  //       // console.log(props.singleScore)
   
- 
+  //       newScore -= 1
+  //     } else {
+  //       newScore += singleScore
+  //     }
+  //     setScore(newScore)
+  //     setSingleScore(0)
+  //   }
+
+  //   setNewScore()
+  // }, [singleScore])
+  
+  const setscoreinitialvalue=(data)=>{
+    let newArray = data.map(() => 0);
+    setnumberQuestionsAnswered(newArray);
+    setSingleScore(newArray);
+    
+  }
 
   useEffect(() => {
     //console.log(param)
@@ -74,11 +89,18 @@ export default function Quiz({route, navigation}) {
       setLoading(true)
       console.log("fetch rerendered")
       const data = await axiosGet(`${getQuizzesURL}${param._id}`, userData.token)
+      const totalcount = await axiosGet(getposttotalcountURL, userData.token)
+
+      setTotalQuizzes(totalcount)
+      
+      setscoreinitialvalue(data)
+      //setSingleScore(Array.from({ length: data.length }, () => 0));
       setQuizData(data)
       //setQuizNumber(data.length)
       setRefresh(false)
       //console.log(data.length)
       setLoading(false)
+
     }
 
     if (refresh) {
@@ -110,6 +132,7 @@ export default function Quiz({route, navigation}) {
 
 
   }, [navigation]);
+  
 
   const renderQuizItem = ({ item, index }) => (
     <QuizItem
@@ -119,19 +142,65 @@ export default function Quiz({route, navigation}) {
       //setScore={setScore}
       setSelectedData= {setSelectedData}
       setRefresh={()=>setRefresh(true)}
-      setQuestionNumber={setQuestionNumber}
+      numberQuestionsAnswered={numberQuestionsAnswered}
+      setnumberQuestionsAnswered={setnumberQuestionsAnswered}
       setErrorMessage={setErrorMessage}
       score={score}
       setSingleScore={setSingleScore}
       singleScore={singleScore}
-      itemNumber={index + 1}
+      itemNumber={index}
+      //selectedNumber={selectedNumber}
+      //setSelectedNumber={setSelectedNumber}
+      // selected={selected}
+      // setSelected={setSelected}
     />
   );
+  const getTotalScore = (array)=>{
+    let totalScore = 0
 
+    for (let index = 0; index < singleScore.length; index++) {
+      totalScore += array[index];
+      
+    }
+    setScore(totalScore)
+  }
+
+
+  const getProgress = (score, quizData, totalQuizzes) => {
+    const thresholdScore = Math.round(quizData.length * 0.6);
+    console.log("safaklsljkjbfad",score,thresholdScore,totalQuizzes)
+    if (score >= thresholdScore) {
+      return 1/totalQuizzes;
+    }else{
+      return 0
+    }
+  };
+
+  useEffect(()=>{
+    getTotalScore(singleScore)
+    
+  },[singleScore])
+  useEffect(()=>{
+    console.log("score before putting",score)
+    setQuizForm(prevstate => ({
+      ...prevstate,
+      quizScores: {
+        ...prevstate.quizScores,
+        score: score,
+        passed: score < Math.round(quizData.length * .6) ? false : true
+      },
+      progress: getProgress(score, quizData, totalQuizzes)
+    }))
+  },[score])
   const handleSubmit = async () => {
-    if (questionNumber === quizData.length) {
+    if (numberQuestionsAnswered.every(number => number === 1)) {
+    
+      console.log("scooooooooore",score)
+   
+      //console.log(quizForm)
       try {
-        const data = await axiosPut(editScoreURL + userData._id, quizForm, contentType, userData.token);
+        const data = await axiosPut(`${editScoreURL}${userData._id}`, quizForm, contentType, userData.token);
+
         console.log(data);
       } catch (error) {
         console.error("Error in handleSubmit:", error);
@@ -140,14 +209,14 @@ export default function Quiz({route, navigation}) {
     } else {
       setErrorMessage("Answer all questions!");
     }
-    console.log("total", questionNumber);
+
   };
-  //console.log(quizForm)
+  //console.log(quiz  Form)
   // console.log("number of answered question is",answeredQuestion)
-  //console.log(quizData)
-  //console.log(param._id)
-  console.log(selectedData)
- 
+  console.log("scores",singleScore)
+  //console.log(selectedNumber)
+  //console.log("total number of selected ooptions",numberQuestionsAnswered)
+  console.log(quizForm)
   //console.log("this is selected number",selectedNumber)
   return (
     <View style={styles.mainContainer}>
@@ -171,7 +240,7 @@ export default function Quiz({route, navigation}) {
               style={{ top: 20 }}
               size={60}
             />
-          ) : quizData.length > 0 ? (
+          ) : quizData.length > 0 && singleScore ? (
             <FlatList
               showsVerticalScrollIndicator={false}
               data={quizData}

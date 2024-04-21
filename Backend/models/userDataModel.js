@@ -12,7 +12,10 @@ const quizScoreSchema = new mongoose.Schema({
     passed:{
         type: Boolean,
         default: false
-    }
+    },
+    completedAt: {
+        type: Date,
+      }
 });
 
 const userDataSchema = new mongoose.Schema({
@@ -25,9 +28,18 @@ const userDataSchema = new mongoose.Schema({
         type: String,
     },
     progress: {
-        type: Number,
+        type: mongoose.Decimal128,
         default: 0
     },
+    badges:[{
+        type: String
+    }],
+    completedAssessments:[{
+
+    }],
+    finishedLessons:[{
+
+    }],
     quizScores: [quizScoreSchema]
 
 });

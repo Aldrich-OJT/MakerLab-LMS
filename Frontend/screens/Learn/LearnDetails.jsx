@@ -1,25 +1,20 @@
-import { useContext, useEffect, useLayoutEffect, useRef, useState } from "react";
-import { View, Text, Image, StyleSheet, Pressable, Alert, Dimensions, ScrollView } from "react-native";
+import { useContext, useEffect, useLayoutEffect, useState } from "react";
+import { View, Text, StyleSheet, Pressable, Alert, ScrollView } from "react-native";
 import Colors from "../../constants/Colors";
-import { axiosDelete, axiosGet, axiosPut } from "../../utils/axios";
+import { axiosDelete, axiosGet, } from "../../utils/axios";
 import ModalContent from "../../components/LearnComponent/ModalContent";
 import { AuthContext } from "../../context/AuthProvider";
-import { ActivityIndicator } from 'react-native-paper';
-import axios from "axios";
-import * as FileSystem from 'expo-file-system';
-import { shareAsync } from 'expo';
-import { Platform } from 'react-native';
+import { ActivityIndicator, Portal } from 'react-native-paper';
+// import * as FileSystem from 'expo-file-system';
+// import { shareAsync } from 'expo';
 import * as Linking from 'expo-linking';
-import { Video, ResizeMode } from 'expo-av';
-
-
+import { Video } from 'expo-av';
 import { Menu } from 'react-native-paper';
 
 const deleteURL = "/api/post/delete/"
-const postURL = "/api/post/"
-const getFileURL = "/api/post/download/"
-const deviceWidth = Dimensions.get("window")
-//let fileUri
+const postURL = "/api/post/id/"
+// const getFileURL = "/api/post/download/"
+// const deviceWidth = Dimensions.get("window")
 
 export default function LearnDetails({ route, navigation }) {
     const [modalVisible, setModalVisible] = useState(false);
@@ -32,7 +27,6 @@ export default function LearnDetails({ route, navigation }) {
 
 
     useEffect(() => {
-        console.log("effect")
 
 
         const fetchData = async () => {
@@ -40,6 +34,8 @@ export default function LearnDetails({ route, navigation }) {
             try {
                 const data = await axiosGet(`${postURL}${_id}`, postData.token)
                 console.log(data)
+
+                //fetch the file itself
                 // const response = await axios.get(`http://192.168.100.93:5000${getFileURL}${_id}`, {
                 //     responseType: "blob"
                 // })
@@ -68,7 +64,7 @@ export default function LearnDetails({ route, navigation }) {
     }, [postData])
 
     const createTwoButtonAlert = () =>
-        Alert.alert('Warning', 'Do you really really really want to delete this file?', [
+        Alert.alert('Delete Post', 'This will delete all the files and questions attached with this section. do you want to continue?', [
             {
                 text: 'Cancel',
                 onPress: () => console.log('Cancel Pressed'),
@@ -79,7 +75,6 @@ export default function LearnDetails({ route, navigation }) {
 
     const deleteData = async () => {
         try {
-            console.log("trying to delete something")
             const deleteddata = await axiosDelete(`${deleteURL}${_id}`, postData.token)
             console.log(`${deleteddata._id} deleted`)
             navigation.goBack()
@@ -90,52 +85,44 @@ export default function LearnDetails({ route, navigation }) {
     //console.log(postData)
 
 
-    async function saveFile(uri, filename, mimetype) {
-        if (Platform.OS === "android") {
+    // async function saveFile(uri, filename, mimetype) {
+    //     if (Platform.OS === "android") {
 
-            const permissions = await FileSystem.StorageAccessFramework.requestDirectoryPermissionsAsync();
+    //         const permissions = await FileSystem.StorageAccessFramework.requestDirectoryPermissionsAsync();
 
-            if (permissions.granted) {
-                const base64 = await FileSystem.readAsStringAsync(uri, { encoding: FileSystem.EncodingType.Base64 });
-
-
-                await FileSystem.StorageAccessFramework.createFileAsync(permissions.directoryUri, filename, mimetype)
-                    .then(async (uri) => {
-                        await FileSystem.writeAsStringAsync(uri, base64, { encoding: FileSystem.EncodingType.Base64 });
-                        console.log("this is the uriiii", uri)
-                        // const supported = await Linking.canOpenURL(data);
-                        // if (!supported) {
-                        //     console.log("file not supported")
-                        //     return
-                        // }
-                        //await Linking.openURL(uri);
-
-                    })
-                    .catch(e => console.log(e));
-            } else {
-                shareAsync(uri);
-            }
-        } else {
-            shareAsync(uri);
-        }
-    }
+    //         if (permissions.granted) {
+    //             const base64 = await FileSystem.readAsStringAsync(uri, { encoding: FileSystem.EncodingType.Base64 });
+    //             await FileSystem.StorageAccessFramework.createFileAsync(permissions.directoryUri, filename, mimetype)
+    //                 .then(async (uri) => {
+    //                     await FileSystem.writeAsStringAsync(uri, base64, { encoding: FileSystem.EncodingType.Base64 });
 
 
+    //                 })
+    //                 .catch(e => console.log(e));
+    //         } else {
+    //             shareAsync(uri);
+    //         }
+    //     } else {
+    //         shareAsync(uri);
+    //     }
+    // }
 
-    async function download(filename) {
-        console.log("clicked")
-        const fileUri = `${FileSystem.documentDirectory}${filename}`
-        try {
-            const result = await FileSystem.downloadAsync(
-                `http://192.168.100.93:5000/api/documents/${filename}`,
-                fileUri
-            );
-            console.log(result.uri)
-            saveFile(result.uri, filename, result.headers["Content-Type"]);
-        } catch (error) {
-            console.log(error)
-        }
-    }
+
+// download file code
+    // async function download(filename) {
+    //     console.log("clicked")
+    //     const fileUri = `${FileSystem.documentDirectory}${filename}`
+    //     try {
+    //         const result = await FileSystem.downloadAsync(
+    //             `http://192.168.100.93:5000/api/documents/${filename}`,
+    //             fileUri
+    //         );
+    //         console.log(result.uri)
+    //         saveFile(result.uri, filename, result.headers["Content-Type"]);
+    //     } catch (error) {
+    //         console.log(error)
+    //     }
+    // }
 
     const openpdf = async () => {
         try {
@@ -147,75 +134,80 @@ export default function LearnDetails({ route, navigation }) {
 
 
     return (
+        <Portal.Host>
+            <Portal>
+                <View style={styles.mainContainer}>
+                    {(postData && Object.keys(postData).length > 0) ? (
+                        <ModalContent
+                            setRefresh={() => setRefresh(true)}
+                            documentName={postData?.documentName}
+                            title={postData.title}
+                            description={postData.description}
+                            id={postData._id}
+                            visibility={modalVisible}
+                            onPress={() => setModalVisible(false)}
+                        >
+                            Edit Document
+                        </ModalContent>
+                    ) : ""}
 
-        <View style={styles.mainContainer}>
-            {(postData && Object.keys(postData).length > 0) ? (
-                <ModalContent
-                    setRefresh={() => setRefresh(true)}
-                    documentName={postData.documentName}
-                    title={postData.title}
-                    description={postData.description}
-                    id={postData._id}
-                    visibility={modalVisible}
-                    onPress={() => setModalVisible(false)}
-                >
-                    Edit Document
-                </ModalContent>
-            ) : (<ActivityIndicator
-                animating={true}
-                style={{ top: 20 }}
-                size={60}
-            />)}
+                    <View style={styles.lessonContainer}>
+                        <View style={styles.purpleTint}>
+                            <View style={styles.titleContainer}>
 
-            <View style={styles.lessonContainer}>
-                <View style={styles.purpleTint}>
-                    <View style={styles.titleContainer}>
-                        <Text style={styles.title}>{postData.title} </Text>
-                        {userData.role === 'admin' && (
-                            <Menu
-                                visible={menuVisible}
-                                onDismiss={() => setMenuVisible(false)}
-                                anchor={
-                                    <Pressable style={{ width: 50, height: 30 }} onPress={() => (setMenuVisible(true))}>
-                                        <Text style={{ fontFamily: 'icon', fontSize: 22, color: Colors.bgPurple, alignSelf: 'flex-end' }}> </Text>
-                                    </Pressable>
-                                }>
-                                <Menu.Item onPress={() => setModalVisible(true)} title={<Text style={{ fontFamily: 'icon', fontSize: 16, color: Colors.bgDarkGray, textAlign: 'center' }}> Edit</Text>} />
-                                <Menu.Item onPress={createTwoButtonAlert} title={<Text style={{ fontFamily: 'icon', fontSize: 16, color: Colors.bgDarkGray, textAlign: 'center' }}> Delete</Text>} />
-                            </Menu>
-                        )}
+                                <Text style={styles.title}>{postData.title} </Text>
+                                {userData.role === 'admin' && (
+                                    <Menu
+                                        style={{position:"absolute", top:40}}
+                                        visible={menuVisible}
+                                        onDismiss={() => setMenuVisible(false)}
+                                        anchor={
+                                            <Pressable style={{ width: 50, height: 30 }} onPress={() => (setMenuVisible(true))}>
+                                                <Text style={{ fontFamily: 'icon', fontSize: 22, color: Colors.bgPurple, alignSelf: 'flex-end' }}> </Text>
+                                            </Pressable>
+                                        }>
+
+                                        <Menu.Item onPress={() => setModalVisible(true)} title={<Text style={{ fontFamily: 'icon', fontSize: 16, color: Colors.bgDarkGray, textAlign: 'left' }}> Edit</Text>} />
+                                        <Menu.Item onPress={createTwoButtonAlert} title={<Text style={{ fontFamily: 'icon', fontSize: 16, color: Colors.bgDarkGray, textAlign: 'left' }}> Delete</Text>} />
+                                    </Menu>
+
+                                )}
+
+                            </View>
+
+                        </View>
+
+                        <ScrollView showsVerticalScrollIndicator={false}>
+
+
+                            <View style={styles.attachmentContainer}>
+
+                                {postData.documentType == "application/pdf" ? (<Pressable style={{ flexDirection: "row" }} onPress={openpdf}>
+
+
+
+                                    <Text>{postData.documentName}</Text><Text style={{ fontFamily: 'icon', fontSize: 18 }}></Text>
+                                </Pressable>) : postData.documentType == "video/mp4" && (
+                                    <Video
+                                        source={{
+                                            uri: `http://192.168.100.93:5000/api/videos/${postData.documentName}`,
+                                        }}
+                                        resizeMode="contain"
+                                        style={styles.video}
+                                        useNativeControls>
+                                    </Video>)
+                                }
+                            </View>
+                            <View style={styles.textcontainer}>
+                                <Text style={styles.description}>
+                                    {postData.description}
+                                </Text>
+                            </View>
+                        </ScrollView>
                     </View>
                 </View>
-
-                <ScrollView showsVerticalScrollIndicator={false}>
-                    <Text style={styles.attachmentText}>Attachments
-                        <Text style={{ fontFamily: 'icon', fontSize: 18 }}></Text>
-                    </Text>
-
-                    <View style={styles.attachmentContainer}>
-                        <View>
-                            {postData.documentType == "application/pdf" ? (<Pressable style={{ backgroundColor: "green" }} onPress={openpdf}>
-                                <Text>CLICK THIS TO GET THE FUCKING PDF</Text>
-                            </Pressable>) : postData.documentType == "video/mp4" && (
-                                <Video
-                                    source={{
-                                        uri: `http://192.168.100.93:5000/api/videos/${postData.documentName}`,
-                                    }}
-                                    resizeMode="contain"
-                                    style={styles.video}
-                                    useNativeControls>
-                                </Video>)
-                            }
-                        </View>
-                    </View>
-                    <View style={styles.textcontainer}>
-                        <Text style={styles.description}>
-                            {postData.description}
-                        </Text>
-                    </View>
-                </ScrollView>
-            </View>
-        </View>
+            </Portal>
+        </Portal.Host >
     )
 }
 
@@ -269,7 +261,9 @@ const styles = StyleSheet.create({
     attachmentContainer: {
         backgroundColor: Colors.bgOffWhite,
         alignItems: 'center',
+        height: "fit-content",
         marginHorizontal: 20,
+        marginTop: 10,
         padding: 10,
         borderRadius: 10,
         gap: 5,
@@ -280,5 +274,9 @@ const styles = StyleSheet.create({
         fontFamily: 'PTSans-Bold',
         fontSize: 16,
         textAlign: 'center'
+    },
+    video: {
+        height: 200,
+        width: "100%"
     }
 })

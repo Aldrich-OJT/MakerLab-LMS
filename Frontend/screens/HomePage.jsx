@@ -5,9 +5,8 @@ import ProgressBar from 'react-native-progress/Bar';
 import Colors from "../constants/Colors";
 
 export default function HomePage() {
-  const { authContext, userData } = useContext(AuthContext);
+  const {  userData } = useContext(AuthContext);
 
-  //console.log(authContext)
   return (
     <View style={styles.container}>
       <View style={styles.bottomSheet}>

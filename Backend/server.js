@@ -8,6 +8,7 @@ const categoryRoute = require("./routes/categoryRoutes")
 const { errorHandler } = require('./middleware/errorMiddleware')
 const questionRoute = require("./routes/questionRoute")
 const postRoute = require("./routes/postRoute")
+const { protect } = require("./middleware/authMiddleware")
 
 
 
@@ -22,6 +23,8 @@ app.use(express.urlencoded({ extended: false }))
 app.use('/api/user',userRoute)
 app.use('/api/post', postRoute)
 app.use('/api/question', questionRoute)
+app.use("/api/documents",express.static("Documents"))
+app.use("/api/videos",express.static("Videos"))
 app.use('/api/categories',categoryRoute)
 //app.use('/api/post',videoRoute)
 

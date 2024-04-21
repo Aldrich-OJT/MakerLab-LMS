@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect } from "react";
+import React, { useState, useContext, useEffect, useCallback } from "react";
 import { View, Text, StyleSheet, Dimensions, Image, Modal, Pressable, ScrollView } from "react-native";
 import ProgressBar from 'react-native-progress/Bar';
 import Colors from "../constants/Colors";
@@ -9,21 +9,26 @@ import avatar2 from '../assets/avatars/avatar2.png';
 import avatar3 from '../assets/avatars/avatar3.png';
 import avatar4 from '../assets/avatars/avatar4.png';
 import AsyncStorage from "@react-native-async-storage/async-storage";
-
+import { axiosGet } from "../utils/axios";
+import { useFocusEffect } from "@react-navigation/native";
+import { ActivityIndicator } from "react-native-paper";
 const dimensions = Dimensions.get('window');
 const deviceWidth = dimensions.width;
 const deviceHeight = dimensions.height;
+const getuserDataURL = "/api/user/data/"
 
 const avatarChoices = [avatar1, avatar2, avatar3, avatar4]
 
 
 export default function Settings() {
-
   const tabBarHeight = useBottomTabBarHeight();
   const [avatarModalVisible, setAvatarModalVisible] = useState(false);
   const [avatar, setAvatar] = useState(2);
+  const [user, setUser] = useState()
   const [loading, setLoading] = useState(false)
+  const [refresh, setRefresh] = useState(false)
   const { logout, userData } = useContext(AuthContext);
+  const [progress, setProgress] = useState()
 
   const saveAvatar = (index) => {
     setAvatarModalVisible(false)
@@ -32,25 +37,42 @@ export default function Settings() {
   }
   useEffect(() => {
     const fetchData = async () => {
-      setLoading(true);
-      const userAvatar = await AsyncStorage.getItem("Avatar");
-      if (userAvatar){
-        setAvatar(userAvatar);
+      try {
+        if (refresh) {
+          setLoading(true);
+          const data = await axiosGet(`${getuserDataURL}${userData._id}`, userData.token)
+          console.log(data)
+          setProgress(parseFloat(data.progress.$numberDecimal))
+          setUser(data)
+          const userAvatar = await AsyncStorage.getItem("Avatar");
+
+          if (userAvatar) {
+            setAvatar(userAvatar);
+          }
+          setLoading(false);
+          setRefresh(false)
+        }
+      } catch (error) {
+        console.log(error)
       }
-      setLoading(false);
     };
     fetchData();
-  
-  }, []);
+
+  }, [refresh]);
 
   const badges = [
     require('../assets/badges/badge-makerlab.png'),
     require('../assets/badges/badge-coding.png'),
     require('../assets/badges/badge-3dprinting.png')
   ];
+  //refresh the page when focus goes back on this tab
+  useFocusEffect(
+    useCallback(() => {
+      setRefresh(true)
+    }, [])
+  );
 
-  
-  console.log('Avatar choiced:', avatarChoices[avatar], avatar);
+  //console.log(progress);
   return (
     <ScrollView showsVerticalScrollIndicator={false}>
       <View style={[styles.mainContainer, { marginBottom: tabBarHeight }]}>
@@ -83,17 +105,21 @@ export default function Settings() {
           </View>
         </Modal>
 
-        <View style={styles.innerContainer}>
+        {loading ? (<ActivityIndicator
+          animating={true}
+          style={{ top: 20 }}
+          size={60}
+        />) : (<View style={styles.innerContainer}>
           <Text style={[styles.editButton, { fontFamily: 'icon', fontSize: 20, color: Colors.bgGray }]}
             onPress={() => setAvatarModalVisible(true)}></Text>
           <Image source={avatarChoices[avatar]} style={styles.avatar}></Image>
           <Text style={styles.nameText}>{userData.name}</Text>
           <View style={styles.progressContainer}>
-            <Text style={styles.progressText}>Progress: 68%</Text>
+            <Text style={styles.progressText}>Progress {parseInt(progress * 100)}%</Text>
             <View style={styles.progressBar}>
               <ProgressBar
                 animated={true}
-                progress={.68}
+                progress={progress}
                 width={270}
                 height={10}
                 borderRadius={10}
@@ -103,9 +129,9 @@ export default function Settings() {
               />
             </View>
           </View>
-        </View>
+        </View>)}
 
-        <View style={styles.innerContainer}>
+        {user && <View style={styles.innerContainer}>
           <Text style={styles.nameText}>My badges</Text>
           <View style={styles.badgesContainer}>
             {badges.map((badge, index) => (
@@ -119,7 +145,7 @@ export default function Settings() {
               </View>
             ))}
           </View>
-        </View>
+        </View>}
 
         <Pressable style={[styles.logoutButton, { bottom: tabBarHeight }]} onPress={logout}>
           <Text style={styles.logoutText}>
@@ -160,7 +186,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     top: 10,
     right: 10,
-    padding:10,
+    padding: 10,
   },
   avatar: {
     height: deviceWidth * .26,
@@ -218,7 +244,7 @@ const styles = StyleSheet.create({
     shadowRadius: 3.84,
 
     elevation: 5,
-    
+
   },
   logoutText: {
     color: Colors.bgError,

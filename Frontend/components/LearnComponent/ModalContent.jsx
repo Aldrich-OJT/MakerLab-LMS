@@ -31,7 +31,7 @@ export default function ModalContent({documentName,title, description, visibilit
   const formInitialData = {
     title: title ?? "",
     description: description ?? "",
-    document :documentName ??  null
+    document: documentName ??  null
   }
   const [formData, setFormData] = useState(formInitialData)
 
@@ -80,14 +80,13 @@ const pickDocument = async () => {
    
     if(children.split(" ")[0] === "Upload"){
       formDataToSend.append('categoryID', id)
-      console.log(formDataToSend._parts)
       try {
         const data = await axiosPost(POSTURL,formDataToSend,contentType,userData.token)
         console.log(data)
       } catch (error) {
         console.log(error.data.message)
         setErrorMessage(error?.data?.message)
-        console.log(errorMessage)
+        //console.log(errorMessage)
         return
       }
     }else if (children.split(" ")[0] === "Edit"){
@@ -147,7 +146,7 @@ const pickDocument = async () => {
                 <Text style={styles.selectButton}>
                   <Text style={{fontFamily: 'PTSans-Bold', color: Colors.bgDarkGray}}>
                     <Text style={{fontFamily: 'icon', fontSize:20}}></Text>
-                    {formData.document ? `${formData.document.name}` : " Upload File"}
+                    {formData.document ? `${formData.document}` : " Upload File"}
                     {/* formData.document ? `${formData.document.name}` :  */}
                   </Text>
                 </Text>
