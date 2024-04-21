@@ -8,7 +8,7 @@ import Colors from "../../constants/Colors";
 
 const deleteCategoryURL = "/api/categories/delete/"
 
-export default function LessonCards({ title, description, setModalVisible, ID, setRefresh, onPress, index, setSelectedData }) {
+export default function LessonCards({ title, description, setModalVisible, ID, setRefresh, onPress, index, setSelectedData, length }) {
   const { userData } = useContext(AuthContext)
   const [menuVisible, setMenuVisible] = useState(false);
 
