@@ -35,7 +35,13 @@ export default function LessonCards ({title, description, onPress, ID,setRefresh
   //console.log(title)
   const [menuVisible, setMenuVisible] = useState(false);
     return (
-      <Pressable style={[styles.lessonContainer, {marginBottom: index === length-1 ? 70 : 0}]} onPress={onPress}>
+      <Pressable style={[
+        styles.lessonContainer,
+        {marginBottom:
+          (userData.role === 'admin' && index === length - 1 ? 70 :
+          (userData.role === 'user' && index === length - 1 ? 20 : 0))
+        }]} onPress={onPress}
+      >
         <LessonModal
           onPress={()=>setModalVisible(false)}
           visibility={modalVisible}

@@ -1,11 +1,19 @@
 import { View, Text, StyleSheet, Pressable } from "react-native"
 import Colors from "../../constants/Colors"
 import { useState } from "react";
+import { AuthContext } from "../../context/AuthProvider";
+import React, { useContext } from "react";
 
 export default function Templearncards({ id, title, description, onPress, pressQuiz,pressLearn, index, length }) {
-
+  const {userData} = useContext(AuthContext)
   return (
-    <Pressable style={[styles.container, { marginBottom: index === length-1 ? 70 : 0 }]} onPress={pressLearn}>
+    <Pressable style={[
+      styles.container,
+      {marginBottom:
+        (userData.role === 'admin' && index === length - 1 ? 70 :
+        (userData.role === 'user' && index === length - 1 ? 20 : 0))
+      }]} onPress={pressLearn}
+    >
       
       <View style={styles.purpleTint}>
         <View style={styles.titleContainer} numberOfLines={1}>
