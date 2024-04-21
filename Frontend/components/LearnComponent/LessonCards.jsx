@@ -8,7 +8,7 @@ import Colors from "../../constants/Colors";
 
 const deleteCategoryURL = "/api/categories/delete/"
 
-export default function LessonCards({ title, description, setModalVisible, ID, setRefresh, onPress, index, setSelectedData }) {
+export default function LessonCards({ title, description, setModalVisible, ID, setRefresh, onPress, index, setSelectedData, length }) {
   const { userData } = useContext(AuthContext)
   const [menuVisible, setMenuVisible] = useState(false);
 
@@ -35,9 +35,13 @@ export default function LessonCards({ title, description, setModalVisible, ID, s
   }
   //console.log(title)
 
-
   return (
-    <Pressable style={[styles.lessonContainer, { marginTop: index === 0 ? 20 : 10 }]} onPress={onPress}>
+    <Pressable style={[
+      styles.lessonContainer,
+      {marginBottom:
+        (userData.role === 'admin' && index === length - 1 ? 70 :
+        (userData.role === 'user' && index === length - 1 ? 20 : 0))
+      }]} onPress={onPress}>
       {/* <LessonModal
         setModalVisibility={() => setModalVisible(false)}
         visibility={modalVisible}

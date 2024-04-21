@@ -79,8 +79,17 @@ const generateToken = (id) => {
     });
 }
 
+const getalluserData = asyncHandler(async (req, res) => {
+    const users = await User.find({ role: 'user' }, 'name email');
+
+    if (!users || users.length === 0){
+        res.status (400).json({message: "No users found"})
+    }
+    res.status(200).json(users);
+})
 module.exports = {
     userLogin,
     userRegister,
     getUser,
+    getalluserData,
 };
