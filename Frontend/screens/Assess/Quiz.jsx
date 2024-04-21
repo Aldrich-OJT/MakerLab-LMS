@@ -37,6 +37,7 @@ export default function Quiz({route, navigation}) {
   const [quizForm, setQuizForm] = useState({
     quizScores: {
       postId: param._id,
+      postName: param.title,
       score: score,
       passed: false
     },
@@ -178,7 +179,6 @@ export default function Quiz({route, navigation}) {
 
   useEffect(()=>{
     getTotalScore(singleScore)
-    
   },[singleScore])
   useEffect(()=>{
     console.log("score before putting",score)
@@ -187,7 +187,8 @@ export default function Quiz({route, navigation}) {
       quizScores: {
         ...prevstate.quizScores,
         score: score,
-        passed: score < Math.round(quizData.length * .6) ? false : true
+        passed: score < Math.round(quizData.length * .6) ? false : true,
+        completedAt: new Date().toJSON()
       },
       progress: getProgress(score, quizData, totalQuizzes)
     }))
