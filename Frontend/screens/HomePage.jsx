@@ -6,7 +6,7 @@ import Colors from "../constants/Colors";
 import HomeUserModal from "../components/HomePageComponent/HomeUsersModal";
 import HomeLessonsModal from "../components/HomePageComponent/HomeLessonsModal";
 import Shortcut from "../components/HomePageComponent/Shortcuts";
-
+import { axiosGet } from "../utils/axios";
 export default function HomePage() {
   
   const { userData } = useContext(AuthContext);
@@ -14,12 +14,15 @@ export default function HomePage() {
   const [ userListModalVisible, setUserListModalVisible] = useState(false)
   const [ refresh, setRefresh]  = useState(true)
   const [ users, setUsers ] = useState([]);
+  const [ userScores, setUserScores] =  useState([]); 
 
   useEffect(() => {
     const fetchData = async () => {
       console.log("effect")
         const data = await axiosGet('/api/user')
-        console.log(data) 
+        const userdata = await axiosGet(`/api/user/data/${userData._id}`)
+        setUserScores(userdata)
+        console.log("this is userdata",userdata.quizScores) 
         setUsers(data)
         setRefresh(false)
     }
@@ -37,13 +40,13 @@ export default function HomePage() {
       onPress: () => setUserListModalVisible(true),
     },
     {
-      role: 'admin',
+      role: 'user',
       icon: '',
       text: 'Placeholder\nText',
       onPress: () => {},
     },
     {
-      role: 'user',
+      role: 'admin',
       icon: '',
       text: 'Finished\nLessons',
       onPress: () => setGradeModalVisible(true),

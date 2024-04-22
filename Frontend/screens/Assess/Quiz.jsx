@@ -29,13 +29,14 @@ export default function Quiz({route, navigation}) {
   const [refresh, setRefresh] = useState(true);
   const [singleScore, setSingleScore] = useState([])
   const [quizData, setQuizData] = useState([])
-  const [totalQuizzes, setTotalQuizzes] = useState([])
+  const [totalQuizzes, setTotalQuizzes] = useState(0)
   //const [selectedNumber, setSelectedNumber] = useState(0)
 
-
+  //console.log(param)
   const [selectedData, setSelectedData] =  useState()
   const [quizForm, setQuizForm] = useState({
     quizScores: {
+      categoryId: param.category,
       postId: param._id,
       postName: param.title,
       score: score,
@@ -169,7 +170,7 @@ export default function Quiz({route, navigation}) {
   const getProgress = (score, quizData, totalQuizzes) => {
     const thresholdScore = Math.round(quizData.length * 0.6);
     console.log("safaklsljkjbfad",score,thresholdScore,totalQuizzes)
-    if (score >= thresholdScore) {
+    if (score >= thresholdScore && totalQuizzes != 0) {
       return 1/totalQuizzes;
     }else{
       return 0
@@ -192,6 +193,7 @@ export default function Quiz({route, navigation}) {
       progress: getProgress(score, quizData, totalQuizzes)
     }))
   },[score])
+
   const handleSubmit = useCallback(async () => {
     if (numberQuestionsAnswered.every(number => number === 1)) {
     

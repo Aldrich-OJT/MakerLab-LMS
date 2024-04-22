@@ -9,7 +9,7 @@ const dimensions = Dimensions.get('window');
 const deviceWidth = dimensions.width;
 
 export default function HomeUserModal({ visibility, setModalVisible, users }) {
-  const [refresh, setRefresh] = useState(true)
+  // const [refresh, setRefresh] = useState(true)
   const [page, setPage] = useState(0);
 
 const itemsPerPage = 5;
@@ -95,8 +95,7 @@ const styles = StyleSheet.create({
         padding: 10,
         alignItems: 'center',
         borderRadius: 10,
-        maxHeight:'63%',
-        minHeight:'63%'
+        maxHeight:'80%'
       },
       titleContainer: {
         flexDirection: 'row',
