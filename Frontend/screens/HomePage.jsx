@@ -13,6 +13,21 @@ export default function HomePage() {
   const [ gradeModalVisible, setGradeModalVisible] = useState(false)
   const [ userListModalVisible, setUserListModalVisible] = useState(false)
   const [ refresh, setRefresh]  = useState(true)
+  const [ users, setUsers ] = useState([]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      console.log("effect")
+        const data = await axiosGet('/api/user')
+        console.log(data) 
+        setUsers(data)
+        setRefresh(false)
+    }
+
+    if (refresh) {
+        fetchData()
+    }
+}, [refresh])
 
   const shortcuts = [
     {
@@ -45,7 +60,8 @@ export default function HomePage() {
     <View style={styles.container}>
 
       <HomeUserModal 
-        visibility={userListModalVisible} 
+        visibility={userListModalVisible}
+        users={users}
         setModalVisible={() => setUserListModalVisible(false)}
       />
 

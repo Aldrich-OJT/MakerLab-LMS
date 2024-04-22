@@ -8,23 +8,9 @@ import {  axiosGet } from "../../utils/axios";
 const dimensions = Dimensions.get('window');
 const deviceWidth = dimensions.width;
 
-export default function HomeUserModal({ visibility, setModalVisible }) {
-    const [refresh, setRefresh] = useState(true)
-    const [users, setUsers] = useState([]);
-    const [page, setPage] = useState(0);
-useEffect(() => {
-    const fetchData = async () => {
-      console.log("effect")
-        const data = await axiosGet('/api/user')
-        console.log(data) 
-        setUsers(data)
-        setRefresh(false)
-    }
-
-    if (refresh) {
-        fetchData()
-    }
-}, [refresh])
+export default function HomeUserModal({ visibility, setModalVisible, users }) {
+  const [refresh, setRefresh] = useState(true)
+  const [page, setPage] = useState(0);
 
 const itemsPerPage = 5;
 const numberOfPages = Math.ceil(users.length / itemsPerPage);
