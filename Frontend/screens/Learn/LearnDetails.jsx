@@ -55,9 +55,9 @@ export default function LearnDetails({ route, navigation }) {
 
     useLayoutEffect(() => {
         if (postData.title) {
-            const truncatedTitle = postData.title.length > 30 ? postData.title.slice(0, 30) + "..." : postData.title;
             navigation.setOptions({
-                headerTitle: truncatedTitle,
+                headerTintColor: Colors.bgYellow,
+                headerTitle: ''
             });
         }
     }, [postData])
