@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const baseURL = 'http:/192.168.1.7:5000';
+const baseURL = 'http:/192.168.1.118:5000';
 
 const axiosRequest = async (method, URL, token, data, contentType, responseType) => {
   try {
