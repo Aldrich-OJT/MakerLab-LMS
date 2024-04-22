@@ -1,10 +1,11 @@
-import React, { useContext, useState } from "react";
+import React, { useCallback, useContext, useState } from "react";
 import { StyleSheet, View, Text, Pressable, Alert, ImageBackground } from "react-native";
 import { axiosDelete, } from "../../utils/axios";
 import { AuthContext } from "../../context/AuthProvider";
 import { Menu } from 'react-native-paper';
 import LessonModal from "./LessonModal";
 import Colors from "../../constants/Colors";
+import background from "../../assets/lesson-image.png"
 
 const deleteCategoryURL = "/api/categories/delete/"
 
@@ -18,21 +19,22 @@ export default function LessonCards({ title, description, setModalVisible, ID, s
   const showDescriptionHandler = () => {
     setShowDescription(!showDescription);
   };
-  const createTwoButtonAlert = () =>
-    Alert.alert('Warning', 'Do you really want to delete this category?', [
-      {
-        text: 'Cancel',
-        //onPress: () => console.log('Cancel Pressed'),
-        style: 'cancel',
-      },
-      { text: 'YES', onPress: deletePost },
-    ]);
-  const deletePost = () => {
+  const createTwoButtonAlert = useCallback(() =>
+  Alert.alert('Warning', 'Do you really want to delete this category?', [
+    {
+      text: 'Cancel',
+      //onPress: () => console.log('Cancel Pressed'),
+      style: 'cancel',
+    },
+    { text: 'YES', onPress: deletePost },
+  ]),[]) 
+
+  const deletePost = useCallback(() => {
 
     const res = axiosDelete(`${deleteCategoryURL}${ID}`, userData.token)
     //console.log(res, "deleted")
     setRefresh(true)
-  }
+  },[])
   //console.log(title)
 
   return (
@@ -53,7 +55,7 @@ export default function LessonCards({ title, description, setModalVisible, ID, s
       </LessonModal> */}
 
       <ImageBackground
-        source={require('../../assets/lesson-image.png')}
+        source={background}
         style={styles.imageContainer}>
 
         <View style={styles.purpleTint}>

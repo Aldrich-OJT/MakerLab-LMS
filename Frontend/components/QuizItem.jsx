@@ -100,7 +100,7 @@ export default function QuizItem(props) {
 
       <View style={styles.questioncontainer}>
         <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-          <Text style={styles.questionNumberText}>Question {props.itemNumber} </Text>
+          <Text style={styles.questionNumberText}>Question {props.itemNumber + 1} </Text>
           <View style={styles.buttonsContainer}>
             {userData.role === 'admin' && (
               <Menu

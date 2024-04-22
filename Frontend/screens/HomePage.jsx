@@ -6,14 +6,18 @@ import ProgressBar from 'react-native-progress/Bar';
 import Colors from "../constants/Colors";
 import {  axiosGet } from "../utils/axios";
 
+
 const dimensions = Dimensions.get('window');
 const deviceWidth = dimensions.width;
+const deviceHeight = dimensions.height;
 
-export default function HomePage(navigation) {
-  const { authContext, userData } = useContext(AuthContext);
+export default function HomePage() {
+  
+  const { userData } = useContext(AuthContext);
   const [ gradeModalVisible, setGradeModalVisible] = useState(false)
   const [ userListModalVisible, setUserListModalVisible] = useState(false)
   const [users, setUsers] = useState([]);
+  const [userScores, setUserScores] = useState()
   const [refresh, setRefresh] = useState(true)
   const [page, setPage] = useState(0);
 
@@ -21,8 +25,10 @@ export default function HomePage(navigation) {
     const fetchData = async () => {
       console.log("effect")
         const data = await axiosGet('/api/user')
+        const userdata = await axiosGet(`/api/user/data/${userData._id}`, userData.token)
         console.log(data) 
         setUsers(data)
+        setUserScores(userdata.quizScores)
         setRefresh(false)
     }
 
@@ -36,6 +42,15 @@ export default function HomePage(navigation) {
     {
       title: 'Makerlab',
       lessons: [
+        { title: 'Lesson 1 title', score: '10' },
+        { title: 'Lesson 2 title', score: '6' },
+        { title: 'Lesson 3 title', score: '3' },
+        { title: 'Lesson 1 title', score: '10' },
+        { title: 'Lesson 2 title', score: '6' },
+        { title: 'Lesson 3 title', score: '3' },
+        { title: 'Lesson 1 title', score: '10' },
+        { title: 'Lesson 2 title', score: '6' },
+        { title: 'Lesson 3 title', score: '3' },
         { title: 'Lesson 1 title', score: '10' },
         { title: 'Lesson 2 title', score: '6' },
         { title: 'Lesson 3 title', score: '3' },
@@ -125,9 +140,9 @@ export default function HomePage(navigation) {
         onRequestClose={() => setUserListModalVisible(false)}>
 
         <View style={styles.modalMainContainer}>
-          <View style={[styles.modalContentContainer, {height:'63%'}]}>
+          <View style={[styles.modalContentContainer, {height:'fit-content'}]}>
             <View style={styles.titleContainer}>
-              <Text style={[styles.modalText, {color: Colors.bgDarkGray, fontSize:18}]}>List of Users</Text>
+              <Text style={[styles.modalText, {color: Colors.bgDarkGray, fontSize:18}]}>List of Students</Text>
             </View>
             
             <DataTable style={[styles.listAccordion, {height:340}]}>
@@ -159,6 +174,7 @@ export default function HomePage(navigation) {
                   Close
                 </Text>
               </Pressable>
+              
           </View>
         </View>
       </Modal>
@@ -176,7 +192,7 @@ export default function HomePage(navigation) {
               </Text>
               </View>
           </View>
-          {userData.role === 'user' && (
+          {/* {userData.role === 'user' && (
           <ProgressBar 
             animated={true}
             progress={.68} 
@@ -187,14 +203,13 @@ export default function HomePage(navigation) {
             borderWidth={0}
             color={Colors.bgPurple}
           />
-          )}
+          )} */}
         </View>
 
         <View style={styles.shortcutContainer}>
 
           {userData.role === 'admin' && (
              <Pressable style={styles.shortcuts} onPress={() => setUserListModalVisible(true)}> 
-              {/* onPress={() => navigation.navigate('ListofUsers')}> */}
               <Text style={{fontFamily: 'icon', fontSize:70, color:Colors.bgGray}}></Text>
 
               <View style={styles.shortcutTextContainer}>
@@ -204,7 +219,7 @@ export default function HomePage(navigation) {
             </Pressable>
             )}
 
-          {userData.role === 'user' && (
+          {userData.role === 'admin' && (
             <Pressable style={styles.shortcuts}  onPress={() => setGradeModalVisible(true)}> 
               <Text style={{fontFamily: 'icon', fontSize:70, color:Colors.bgGray}}></Text>
 
@@ -215,7 +230,7 @@ export default function HomePage(navigation) {
             </Pressable>
             )}
 
-          {userData.role === 'admin' && (
+          {/* {userData.role === 'admin' && (
             <Pressable style={styles.shortcuts}>
               <Text style={{fontFamily: 'icon', fontSize:70, color:Colors.bgGray}}></Text>
 
@@ -224,7 +239,7 @@ export default function HomePage(navigation) {
                   <Text style={{fontFamily: 'icon', fontSize:30, color:Colors.bgGray}}></Text>
                 </Pressable>
             </Pressable>
-          )}
+          )} */}
 
           {userData.role === 'user' && (
             <Pressable style={styles.shortcuts}>
@@ -328,7 +343,8 @@ const styles = StyleSheet.create({
     padding: 10,
     alignItems: 'center',
     borderRadius: 10,
-    height: '80%',
+    maxHeight:deviceHeight
+
   },
   titleContainer: {
     flexDirection: 'row',
@@ -372,5 +388,8 @@ const styles = StyleSheet.create({
   },
   purpleTint:{
     backgroundColor: 'rgba(238, 227, 255, 0.90)'
+  },
+  modalstyle:{
+
   }
 })

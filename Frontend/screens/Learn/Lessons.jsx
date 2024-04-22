@@ -13,6 +13,7 @@ import LessonModal from "../../components/LearnComponent/LessonModal";
 const getCategoryURL = "/api/categories/"
 
 export default function Lessons({ navigation }) {
+  console.log("testing")
   const {userData,logout} = useContext(AuthContext);
   const  tabBarHeight  = useBottomTabBarHeight();
   const [lessonData, setLessonData] = useState([]);
@@ -26,7 +27,6 @@ export default function Lessons({ navigation }) {
       setLessonData([])
       try {
         const data = await axiosGet(getCategoryURL, userData.token);
-        //console.log(data)
         setLessonData(data);
         setRefresh(false)
       } catch (error) {
@@ -46,7 +46,7 @@ export default function Lessons({ navigation }) {
   const handleNavigation = (param) => {
     navigation.navigate('templearn', { param });
   };
- console.log(selectedData)
+ //console.log(selectedData)
  
   return (
     <View style={[styles.mainContainer,{marginBottom:tabBarHeight}]}>

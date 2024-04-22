@@ -1,4 +1,4 @@
-import { useContext, useState } from 'react';
+import { useCallback, useContext, useState } from 'react';
 import { Text, Pressable, StyleSheet, View, Modal, Dimensions, TouchableWithoutFeedback, KeyboardAvoidingView, Keyboard } from "react-native";
 import { TextInput, RadioButton } from "react-native-paper"
 import Colors from "../constants/Colors";
@@ -30,18 +30,18 @@ export default function QuizModal({ item, selectedData,setSelectedData ,setRefre
       [inputName]: inputName === "options" ? prevData.options.map((item, index) => indx === index ? inputValue : item) : inputValue
     }));
   };
-  const cancelForm = () => {
+  const cancelForm = useCallback(() => {
     setModalVisible();
     setQuestionForm(questionFormInitialValue);
     setErrorMessage("");
     setSelectedData(null)
 
-  }
+  },[])
   // useEffect(()=>{
   //   console.log("i am rendered")
   // },[])
 
-  const submitQuestion = async () => {
+  const submitQuestion = useCallback(async () => {
     console.log("click")
     try {
 
@@ -62,7 +62,7 @@ export default function QuizModal({ item, selectedData,setSelectedData ,setRefre
       setErrorMessage(error?.data?.message);
     }
 
-  };
+  },[selectedData, questionForm])
 
 
   //console.log(questionForm)

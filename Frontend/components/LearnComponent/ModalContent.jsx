@@ -1,6 +1,6 @@
 import { TextInput } from "react-native-paper"
 import { View, Pressable, Text, StyleSheet, Modal, KeyboardAvoidingView, TouchableWithoutFeedback, Keyboard, Dimensions } from "react-native"
-import { useContext, useState } from "react"
+import { useCallback, useContext, useState } from "react"
 import { axiosPost, axiosPut } from "../../utils/axios";
 
 import { AuthContext } from "../../context/AuthProvider";
@@ -22,16 +22,16 @@ const mimeTypes = [
 ]
 
 //FIX ON DOCUMENT BLANK ERROR
-export default function ModalContent({documentName,title, description, visibility, onPress,children,id, setRefresh}) {
-  const {userData} = useContext(AuthContext)
+export default function ModalContent({ documentName, title, description, visibility, onPress, children, id, setRefresh }) {
+  const { userData } = useContext(AuthContext)
   //const navigation = useNavigation()
   const [errorMessage, setErrorMessage] = useState("");
-  
+
 
   const formInitialData = {
     title: title ?? "",
     description: description ?? "",
-    document: documentName ??  null
+    document: documentName
   }
   const [formData, setFormData] = useState(formInitialData)
 
@@ -42,46 +42,48 @@ export default function ModalContent({documentName,title, description, visibilit
     }))
 
   }
-//Function that lets you pick documents on your device
-const pickDocument = async () => {
-  try {
-    const result = await DocumentPicker.getDocumentAsync({
-      type: mimeTypes
-    });
-    if (result) {
-      console.log(result.assets[0]);
-      handleForm("document", result.assets[0]);
-    } else {
-      handleForm("document", null);
+  //Function that lets you pick documents on your device
+  const pickDocument = useCallback(async () => {
+    try {
+      const result = await DocumentPicker.getDocumentAsync({
+        type: mimeTypes
+      });
+      if (result) {
+        console.log(result.assets[0]);
+        handleForm("document", result.assets[0]);
+      } else {
+        handleForm("document", null);
+      }
+    } catch (err) {
+      console.log("error getting document", err);
     }
-  } catch (err) {
-    console.log("error getting document", err);
-  }
-}
-  const cancelForm = ()=>{
+  }, [])
+
+  const cancelForm = useCallback(() => {
     onPress();
     setFormData(formInitialData);
     setErrorMessage("");
-  }
+  }, [])
 
-  const submitForm = async()=>{
-    
+  const submitForm = useCallback(async () => {
+
     const formDataToSend = new FormData()
     formDataToSend.append('title', formData?.title)
     formDataToSend.append('description', formData?.description)
-    
-    if(formData.document != null){
-      formDataToSend.append('document', {
-      uri: formData.document.uri,
-      type: formData.document.mimeType, 
-      name: formData.document.name 
-    })}
 
-   
-    if(children.split(" ")[0] === "Upload"){
+    if (formData.document != null) {
+      formDataToSend.append('document', {
+        uri: formData.document.uri,
+        type: formData.document.mimeType,
+        name: formData.document.name
+      })
+    }
+
+
+    if (children.split(" ")[0] === "Upload") {
       formDataToSend.append('categoryID', id)
       try {
-        const data = await axiosPost(POSTURL,formDataToSend,contentType,userData.token)
+        const data = await axiosPost(POSTURL, formDataToSend, contentType, userData.token)
         console.log(data)
       } catch (error) {
         console.log(error.data.message)
@@ -89,22 +91,21 @@ const pickDocument = async () => {
         //console.log(errorMessage)
         return
       }
-    }else if (children.split(" ")[0] === "Edit"){
+    } else if (children.split(" ")[0] === "Edit") {
       try {
-        const data = await axiosPut(`${PUTURL}${id}`,formDataToSend,contentType,userData.token)
+        const data = await axiosPut(`${PUTURL}${id}`, formDataToSend, contentType, userData.token)
         console.log(data)
-        
+
       } catch (error) {
         setErrorMessage(error?.data?.message)
         return
       }
       console.log("done adding now will close modal")
     }
-    onPress()
+
     setRefresh(true)
-    setFormData(formInitialData)
-    setErrorMessage("");
-  }
+    cancelForm()
+  }, [id,children,formData])
   //console.log(formDataToSend)
   // console.log(selectedFile)
   // console.log(formData)
@@ -118,7 +119,7 @@ const pickDocument = async () => {
         onRequestClose={onPress}
         transparent={true}
       >
-        <TouchableWithoutFeedback onPress={Keyboard.dismiss && onPress}>
+        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
           <View style={styles.mainContainer} >
             <View style={styles.inputContainer}>
               <View style={styles.titleContainer}>
@@ -129,33 +130,33 @@ const pickDocument = async () => {
                 label="Title"
                 style={styles.textInput}
                 onChangeText={(inputvalue) => handleForm("title", inputvalue)}
-                mode="flat" 
+                mode="flat"
                 value={formData.title ? formData.title : ""}
               />
-                
+
               <TextInput
                 multiline={true}
                 label="Description"
                 style={styles.textInput}
                 onChangeText={(inputvalue) => handleForm("description", inputvalue)}
                 mode="flat"
-                value={formData.description ? formData.description : ""} 
+                value={formData.description ? formData.description : ""}
               />
-  
+
               <Pressable onPress={pickDocument}>
                 <Text style={styles.selectButton}>
-                  <Text style={{fontFamily: 'PTSans-Bold', color: Colors.bgDarkGray}}>
-                    <Text style={{fontFamily: 'icon', fontSize:20}}></Text>
-                    {formData.document ? `${formData.document}` : " Upload File"}
+                  <Text style={{ fontFamily: 'PTSans-Bold', color: Colors.bgDarkGray }}>
+                    <Text style={{ fontFamily: 'icon', fontSize: 20 }}></Text>
+                    {formData?.document?.name ? `${formData?.document?.name}` : formData?.document ? `${formData?.document}` : "Upload File"}
                     {/* formData.document ? `${formData.document.name}` :  */}
                   </Text>
                 </Text>
               </Pressable>
               {errorMessage && <Text style={styles.errorMessage}>{errorMessage}</Text>}
-    
+
               <View style={styles.buttonContainer}>
-                <Pressable style={[styles.submitButton, {borderWidth:2, borderColor: Colors.bgPurple, backgroundColor: 'white'}]} onPress={cancelForm}>
-                  <Text style={[styles.submitText, {color:Colors.bgPurple}]}>
+                <Pressable style={[styles.submitButton, { borderWidth: 2, borderColor: Colors.bgPurple, backgroundColor: 'white' }]} onPress={cancelForm}>
+                  <Text style={[styles.submitText, { color: Colors.bgPurple }]}>
                     Cancel
                   </Text>
                 </Pressable>
@@ -207,14 +208,14 @@ const styles = StyleSheet.create({
   closeButton: {
     position: 'absolute',
     right: 0,
-    top:0,
+    top: 0,
   },
   textInput: {
     width: "92%",
-    maxHeight:'50%',
+    maxHeight: '50%',
   },
   buttonContainer: {
-    flexDirection:"row",
+    flexDirection: "row",
     paddingBottom: 5,
     gap: 30,
   },
@@ -236,12 +237,12 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     textAlignVertical: 'center',
   },
-  submitText:{
+  submitText: {
     color: 'white',
     fontSize: 16,
     fontFamily: 'PTSans-Bold',
   },
-  cancelText:{
+  cancelText: {
     color: 'white',
     fontSize: 16,
     fontFamily: 'PTSans-Bold',

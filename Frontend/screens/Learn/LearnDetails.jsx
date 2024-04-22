@@ -1,4 +1,4 @@
-import { useContext, useEffect, useLayoutEffect, useState } from "react";
+import { useCallback, useContext, useEffect, useLayoutEffect, useState } from "react";
 import { View, Text, StyleSheet, Pressable, Alert, ScrollView } from "react-native";
 import Colors from "../../constants/Colors";
 import { axiosDelete, axiosGet, } from "../../utils/axios";
@@ -13,6 +13,7 @@ import { Menu } from 'react-native-paper';
 
 const deleteURL = "/api/post/delete/"
 const postURL = "/api/post/id/"
+const baseURL = "http://192.168.1.208:5000/"
 // const getFileURL = "/api/post/download/"
 // const deviceWidth = Dimensions.get("window")
 
@@ -27,8 +28,6 @@ export default function LearnDetails({ route, navigation }) {
 
 
     useEffect(() => {
-
-
         const fetchData = async () => {
             setPostData({})
             try {
@@ -63,17 +62,17 @@ export default function LearnDetails({ route, navigation }) {
         }
     }, [postData])
 
-    const createTwoButtonAlert = () =>
-        Alert.alert('Delete Post', 'This will delete all the files and questions attached with this section. do you want to continue?', [
-            {
-                text: 'Cancel',
-                onPress: () => console.log('Cancel Pressed'),
-                style: 'cancel',
-            },
-            { text: 'YES', onPress: deleteData },
-        ]);
+    const createTwoButtonAlert = useCallback(() =>
+    Alert.alert('Delete Post', 'This will delete all the files and questions attached with this section. do you want to continue?', [
+        {
+            text: 'Cancel',
+            onPress: () => console.log('Cancel Pressed'),
+            style: 'cancel',
+        },
+        { text: 'YES', onPress: deleteData },
+    ]),[])
 
-    const deleteData = async () => {
+    const deleteData = useCallback(async () => {
         try {
             const deleteddata = await axiosDelete(`${deleteURL}${_id}`, postData.token)
             console.log(`${deleteddata._id} deleted`)
@@ -81,7 +80,7 @@ export default function LearnDetails({ route, navigation }) {
         } catch (error) {
             console.log(error)
         }
-    }
+    },[])
     //console.log(postData)
 
 
@@ -95,7 +94,7 @@ export default function LearnDetails({ route, navigation }) {
     //             await FileSystem.StorageAccessFramework.createFileAsync(permissions.directoryUri, filename, mimetype)
     //                 .then(async (uri) => {
     //                     await FileSystem.writeAsStringAsync(uri, base64, { encoding: FileSystem.EncodingType.Base64 });
-
+                        
 
     //                 })
     //                 .catch(e => console.log(e));
@@ -108,13 +107,13 @@ export default function LearnDetails({ route, navigation }) {
     // }
 
 
-// download file code
+//download file code
     // async function download(filename) {
     //     console.log("clicked")
     //     const fileUri = `${FileSystem.documentDirectory}${filename}`
     //     try {
     //         const result = await FileSystem.downloadAsync(
-    //             `http://192.168.100.93:5000/api/documents/${filename}`,
+    //             `${baseURL}api/documents/${filename}`,
     //             fileUri
     //         );
     //         console.log(result.uri)
@@ -124,13 +123,13 @@ export default function LearnDetails({ route, navigation }) {
     //     }
     // }
 
-    const openpdf = async () => {
+    const openpdf = useCallback(async () => {
         try {
-            await Linking.openURL(`http://192.168.100.93:5000/api/documents/${postData.documentName}`);
+            await Linking.openURL(`${baseURL}api/documents/${postData.documentName}`);
         } catch (error) {
             console.error('Error opening PDF:', error);
         }
-    }
+    },[postData])
 
 
     return (
@@ -190,7 +189,7 @@ export default function LearnDetails({ route, navigation }) {
                                 </Pressable>) : postData.documentType == "video/mp4" && (
                                     <Video
                                         source={{
-                                            uri: `http://192.168.100.93:5000/api/videos/${postData.documentName}`,
+                                            uri: `${baseURL}api/Videos/${postData.documentName}`,
                                         }}
                                         resizeMode="contain"
                                         style={styles.video}

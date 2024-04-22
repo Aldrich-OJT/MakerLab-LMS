@@ -3,7 +3,7 @@ import Colors from "../../constants/Colors";
 import QuizItem from "../../components/QuizItem";
 import LearnHeader from "../../components/LearnComponent/LearnHeader";
 import QuizModal from "../../components/QuizModal";
-import { useContext, useEffect, useState } from "react";
+import { useCallback, useContext, useEffect, useState } from "react";
 import { FlatList } from "react-native";
 import {  axiosGet, axiosPut } from "../../utils/axios";
 import { AuthContext } from "../../context/AuthProvider";
@@ -76,11 +76,10 @@ export default function Quiz({route, navigation}) {
   //   setNewScore()
   // }, [singleScore])
   
-  const setscoreinitialvalue=(data)=>{
+  const setscoreinitialvalue = (data)=>{
     let newArray = data.map(() => 0);
     setnumberQuestionsAnswered(newArray);
-    setSingleScore(newArray);
-    
+    setSingleScore(newArray); 
   }
 
   useEffect(() => {
@@ -193,7 +192,7 @@ export default function Quiz({route, navigation}) {
       progress: getProgress(score, quizData, totalQuizzes)
     }))
   },[score])
-  const handleSubmit = async () => {
+  const handleSubmit = useCallback(async () => {
     if (numberQuestionsAnswered.every(number => number === 1)) {
     
       console.log("scooooooooore",score)
@@ -211,7 +210,7 @@ export default function Quiz({route, navigation}) {
       setErrorMessage("Answer all questions!");
     }
 
-  };
+  },[])
   //console.log(quiz  Form)
   // console.log("number of answered question is",answeredQuestion)
   console.log("scores",singleScore)

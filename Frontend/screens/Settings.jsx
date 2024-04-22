@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect, useCallback } from "react";
+import React, { useState, useContext, useEffect, useCallback, useRef } from "react";
 import { View, Text, StyleSheet, Dimensions, Image, Modal, Pressable, ScrollView } from "react-native";
 import ProgressBar from 'react-native-progress/Bar';
 import Colors from "../constants/Colors";
@@ -21,20 +21,24 @@ const avatarChoices = [avatar1, avatar2, avatar3, avatar4]
 
 
 export default function Settings() {
+  console.log("testing")
   const tabBarHeight = useBottomTabBarHeight();
   const [avatarModalVisible, setAvatarModalVisible] = useState(false);
-  const [avatar, setAvatar] = useState(2);
+  // const [avatar, setAvatar] = useState(2);
+  const avatarRef = useRef(0) 
   const [user, setUser] = useState()
   const [loading, setLoading] = useState(false)
   const [refresh, setRefresh] = useState(false)
   const { logout, userData } = useContext(AuthContext);
   const [progress, setProgress] = useState()
+  const [formdata, setFormdata] = useState()
 
   const saveAvatar = (index) => {
     setAvatarModalVisible(false)
-    setAvatar(index)
-    AsyncStorage.setItem("Avatar", index.toString())
+    avatarRef.current = index
+    
   }
+  
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -44,11 +48,11 @@ export default function Settings() {
           console.log(data)
           setProgress(parseFloat(data.progress.$numberDecimal))
           setUser(data)
-          const userAvatar = await AsyncStorage.getItem("Avatar");
+          // const userAvatar = await AsyncStorage.getItem("Avatar");
 
-          if (userAvatar) {
-            setAvatar(userAvatar);
-          }
+          // if (userAvatar) {
+          //   setAvatar(userAvatar);
+          // }
           setLoading(false);
           setRefresh(false)
         }
@@ -112,7 +116,7 @@ export default function Settings() {
         />) : (<View style={styles.innerContainer}>
           <Text style={[styles.editButton, { fontFamily: 'icon', fontSize: 20, color: Colors.bgGray }]}
             onPress={() => setAvatarModalVisible(true)}></Text>
-          <Image source={avatarChoices[avatar]} style={styles.avatar}></Image>
+          <Image source={avatarChoices[avatarRef.current]} style={styles.avatar}></Image>
           <Text style={styles.nameText}>{userData.name}</Text>
           <View style={styles.progressContainer}>
             <Text style={styles.progressText}>Progress {parseInt(progress * 100)}%</Text>
@@ -131,7 +135,7 @@ export default function Settings() {
           </View>
         </View>)}
 
-        {user && <View style={styles.innerContainer}>
+        <View style={styles.innerContainer}>
           <Text style={styles.nameText}>My badges</Text>
           <View style={styles.badgesContainer}>
             {badges.map((badge, index) => (
@@ -145,9 +149,8 @@ export default function Settings() {
               </View>
             ))}
           </View>
-        </View>}
-
-        <Pressable style={[styles.logoutButton, { bottom: tabBarHeight }]} onPress={logout}>
+        </View>
+        <Pressable style={styles.logoutButton} onPress={logout}>
           <Text style={styles.logoutText}>
             <Text style={{ fontFamily: 'icon', fontSize: 18 }}></Text>Logout</Text>
         </Pressable>
@@ -234,7 +237,6 @@ const styles = StyleSheet.create({
     width: '30%',
     height: '5%',
     borderRadius: 10,
-    position: 'absolute',
     shadowColor: "#000",
     shadowOffset: {
       width: 0,
@@ -242,7 +244,7 @@ const styles = StyleSheet.create({
     },
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
-
+    marginTop:10,
     elevation: 5,
 
   },

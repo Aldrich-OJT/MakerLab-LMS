@@ -1,6 +1,6 @@
 import { TextInput } from "react-native-paper"
 import { View, Pressable, Text, StyleSheet, Modal, KeyboardAvoidingView, TouchableWithoutFeedback, Keyboard, Dimensions, Platform } from "react-native"
-import { useContext, useState } from "react"
+import { useCallback, useContext, useState } from "react"
 import Colors from "../../constants/Colors";
 // import * as DocumentPicker from 'expo-document-picker';
 import { axiosPost, axiosPut } from "../../utils/axios";
@@ -36,22 +36,22 @@ export default function LessonModal({ visibility,selectedData, setSelectedData,s
 
   }
   //console.log(ID)
-  const cancelForm = () => {
+  const cancelForm = useCallback(() => {
     setModalVisible();
     setFormData(formInitialData);
     setErrorMessage("");
     setSelectedData("");
-  }
+  },[])
 
-  const submitForm = async () => {
+  const submitForm = useCallback(async () => {
     //console.log(formData)
 
     try {
       if (children.split(" ")[0] === "Upload") {
-        const data = await axiosPost(POSTURL, formData, contentType, userData.token)
+        await axiosPost(POSTURL, formData, contentType, userData.token)
         console.log("success")
       } else {
-        const data = await axiosPut(`${EDITURL}${selectedData.ID}`, formData, contentType, userData.token)
+       await axiosPut(`${EDITURL}${selectedData.ID}`, formData, contentType, userData.token)
         console.log("success")
       }
       cancelForm()
@@ -60,7 +60,7 @@ export default function LessonModal({ visibility,selectedData, setSelectedData,s
       setErrorMessage(error?.data?.message)
     }
   
-  }
+  },[formData, selectedData])
 
 
   return (
@@ -71,7 +71,7 @@ export default function LessonModal({ visibility,selectedData, setSelectedData,s
       onRequestClose={setModalVisible}
       transparent={true}
     >
-      <TouchableWithoutFeedback onPress={Keyboard.dismiss && setModalVisible}>
+      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
         <View style={styles.mainContainer} >
           <KeyboardAvoidingView behavior={Platform.OS === "ios" ? "padding" : "height"}>
             <View style={styles.inputContainer}>

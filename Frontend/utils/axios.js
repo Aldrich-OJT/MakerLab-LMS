@@ -1,8 +1,8 @@
 import axios from 'axios';
 
-const baseURL = 'http:/192.168.1.7:5000';
+const baseURL = 'http://192.168.1.208:5000';
 
-const axiosRequest = async (method, URL, token, data, contentType, responseType) => {
+const axiosRequest = async (method, URL, token, data, contentType) => {
   try {
     const config = {
       method,
@@ -10,9 +10,9 @@ const axiosRequest = async (method, URL, token, data, contentType, responseType)
       headers: {
         'Content-Type': contentType ?? "application/json",
       },
-      responseType:responseType,
       withCredentials: true,
     };
+  
 
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;

@@ -5,6 +5,7 @@ import {
   StyleSheet,
   FlatList,
   Pressable,
+  RefreshControl 
 } from "react-native";
 import Colors from "../../constants/Colors";
 import LearnHeader from "../../components/LearnComponent/LearnHeader";
@@ -13,42 +14,44 @@ import { axiosGet } from "../../utils/axios";
 import { AuthContext } from "../../context/AuthProvider";
 import { useFocusEffect } from '@react-navigation/native';
 import ModalContent from "../../components/LearnComponent/ModalContent";
-import { ActivityIndicator} from 'react-native-paper';
+import { ActivityIndicator } from 'react-native-paper';
 
 const getPostURL = "/api/post/category/";
 
 export default function Templearn({ route, navigation }) {
   const [modalVisible, setModalVisible] = useState(false);
   const { param } = route.params;
-  const {userData} = useContext(AuthContext);
+  const { userData } = useContext(AuthContext);
   const [postData, setpostData] = useState([]);
   const [contentLoading, setContentLoading] = useState(false)
   const [refresh, setRefresh] = useState(false)
 
+
+  const fetchData = useCallback(async () => {
+    try {
+      setContentLoading(true);
+      const data = await axiosGet(`${getPostURL}${param._id}`, userData.token);
+      setpostData(data);
+
+    } catch (error) {
+      console.log(error)
+
+    } finally {
+      setRefresh(false)
+      setContentLoading(false);
+    }
+  },[])
+
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        setContentLoading(true);
-        const data = await axiosGet(`${getPostURL}${param._id}`, userData.token);
-        setpostData(data);
-
-      } catch (error) {
-        console.log(error)
-
-      } finally {
-        setRefresh(false)
-        setContentLoading(false);
-      }
-    };
     fetchData()
   }, [refresh])
 
   //refresh the page when focus goes back on this tab
-  useFocusEffect(
-    useCallback(() => {
-      setRefresh(true)
-    }, [])
-  );
+  // useFocusEffect(
+  //   useCallback(() => {
+  //     setRefresh(true)
+  //   }, [])
+  // );
 
   const showLearnDetail = (item) => {
     //console.log(item)
@@ -63,38 +66,39 @@ export default function Templearn({ route, navigation }) {
   //console.log(refresh)
   return (
     <View style={styles.maincontainer}>
-      <LearnHeader title={param.title} navigation={navigation}/>
+      <LearnHeader title={param.title} navigation={navigation} />
 
       <View style={styles.bottomsheet}>
         <View style={styles.FlatListContainer}>
-          {contentLoading ? (
-            <ActivityIndicator 
-              animating={true} 
-              style={{top:20}}
-              size={60}
-            />
-          ) : (
-            postData.length == 0 ? (
-              <Text style={{fontFamily: 'PTSans-Bold', textAlign:"center"}}>
-                No contents found
-              </Text>
-            ) : (
-              <FlatList
-                showsVerticalScrollIndicator={false}
-                keyExtractor={(item) => item._id}
-                data={postData}
-                renderItem={({ item, index }) => (
-                  <Templearncards
-                    title={item.title}
-                    description={item.description}
-                    pressLearn={() => showLearnDetail(item)}
-                    pressQuiz={() => showQuestion(item)}
-                    index={index}
-                    length={postData.length}
-                  />
-                )}
-              />
-            )
+          {contentLoading ?
+            "" : (
+              postData.length == 0 ? (
+                <Text style={{ fontFamily: 'PTSans-Bold', textAlign: "center" }}>
+                  No contents found
+                </Text>
+              ) : (
+                <FlatList
+
+                  // refreshControl={ }
+                  refreshControl={<RefreshControl
+                    refreshing={refresh}
+                    onRefresh={fetchData}
+                  />}
+                  showsVerticalScrollIndicator={false}
+                  keyExtractor={(item) => item._id}
+                  data={postData}
+                  renderItem={({ item, index }) => (
+                    <Templearncards
+                      title={item.title}
+                      description={item.description}
+                      pressLearn={() => showLearnDetail(item)}
+                      pressQuiz={() => showQuestion(item)}
+                      index={index}
+                      length={postData.length}
+                    />
+                  )}
+                />
+              )
             )}
         </View>
 
@@ -106,10 +110,10 @@ export default function Templearn({ route, navigation }) {
           </Pressable>
         )}
       </View>
-      <ModalContent 
+      <ModalContent
         id={param._id}
-        setRefresh={() => setRefresh(true)} 
-        visibility={modalVisible} 
+        setRefresh={() => setRefresh(true)}
+        visibility={modalVisible}
         onPress={() => setModalVisible(false)}>
         Upload Lesson
       </ModalContent>
@@ -139,7 +143,7 @@ const styles = StyleSheet.create({
 
   },
   buttonText: {
-    color: Colors.bgYellow,   
+    color: Colors.bgYellow,
     fontSize: 25
   },
   FlatListContainer: {
