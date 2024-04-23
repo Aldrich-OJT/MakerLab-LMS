@@ -21,7 +21,7 @@ const avatarChoices = [avatar1, avatar2, avatar3, avatar4]
 
 
 export default function Settings() {
-  console.log("testing")
+  //console.log("testing")
   const tabBarHeight = useBottomTabBarHeight();
   const [avatarModalVisible, setAvatarModalVisible] = useState(false);
   // const [avatar, setAvatar] = useState(2);
@@ -45,7 +45,7 @@ export default function Settings() {
         if (refresh) {
           setLoading(true);
           const data = await axiosGet(`${getuserDataURL}${userData._id}`, userData.token)
-          console.log(data)
+         // console.log(data)
           setProgress(parseFloat(data.progress.$numberDecimal))
           setUser(data)
           // const userAvatar = await AsyncStorage.getItem("Avatar");
@@ -109,11 +109,7 @@ export default function Settings() {
           </View>
         </Modal>
 
-        {loading ? (<ActivityIndicator
-          animating={true}
-          style={{ top: 20 }}
-          size={60}
-        />) : (<View style={styles.innerContainer}>
+        {loading ? "" : (<View style={styles.innerContainer}>
           <Text style={[styles.editButton, { fontFamily: 'icon', fontSize: 20, color: Colors.bgGray }]}
             onPress={() => setAvatarModalVisible(true)}></Text>
           <Image source={avatarChoices[avatarRef.current]} style={styles.avatar}></Image>

@@ -25,6 +25,7 @@ export default function Templearn({ route, navigation }) {
   const [postData, setpostData] = useState([]);
   const [contentLoading, setContentLoading] = useState(false)
   const [refresh, setRefresh] = useState(false)
+  console.log(param)
 
 
   const fetchData = useCallback(async () => {

@@ -143,10 +143,9 @@ const Root = () => {
     const fetchData = async () => {
       try {
         const userData = await AsyncStorage.getItem('userData');
-
+        console.log("this is the userdata",userData)
         if (userData) {
           authContext.authenticate(JSON.parse(userData));
-          //console.log(userData)
         } else {
           console.log("no data found");
         }

@@ -15,15 +15,16 @@ const AuthProvider = ({ children }) => {
     //const [userRole, setUserRole] = useState(null)
 
 
-    const authenticate = (newUserData) => {
+    const authenticate = async (newUserData) => {
         setUserData(prevUserData => ({
             ...prevUserData,
             ...newUserData 
         }));
-        AsyncStorage.setItem('userData', JSON.stringify(newUserData));
+        //console.log("this will be my userdata",userData)
+        await AsyncStorage.setItem('userData', JSON.stringify(userData));
     }
     const logout = () => {
-        console.log("logout called")
+        console.log("logout called")    
         setUserData(null)
         AsyncStorage.removeItem('userData')
         console.log("logout success")
@@ -35,7 +36,7 @@ const AuthProvider = ({ children }) => {
         logout: logout
 
     }
-    console.log(userData)
+    //console.log(userData)
     return (
         <AuthContext.Provider value={value}>
             {children}

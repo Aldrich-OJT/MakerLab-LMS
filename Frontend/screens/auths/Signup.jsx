@@ -106,8 +106,7 @@ export default function Signup() {
 			user.progress = parseFloat(userdata.progress.$numberDecimal); 
 			authContext.authenticate(user)
 		} catch (error) {
-			console.error(error.status);
-			console.error(error);
+			
 		}
 	}
 
