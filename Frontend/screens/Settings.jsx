@@ -21,6 +21,10 @@ const avatarChoices = [avatar1, avatar2, avatar3, avatar4]
 
 
 export default function Settings() {
+<<<<<<< HEAD
+  //console.log("testing")
+=======
+>>>>>>> 0a5c50fd8d8c290e493a65c9cef9a92374dc7dc6
   const tabBarHeight = useBottomTabBarHeight();
   const [avatarModalVisible, setAvatarModalVisible] = useState(false);
   // const [avatar, setAvatar] = useState(2);
@@ -49,7 +53,7 @@ export default function Settings() {
         if (refresh) {
           setLoading(true);
           const data = await axiosGet(`${getuserDataURL}${userData._id}`, userData.token)
-          console.log(data)
+         // console.log(data)
           setProgress(parseFloat(data.progress.$numberDecimal))
           setUser(data)
           // const userAvatar = await AsyncStorage.getItem("Avatar");
@@ -122,6 +126,26 @@ export default function Settings() {
           </View>
         </Modal>
 
+<<<<<<< HEAD
+        {loading ? "" : (<View style={styles.innerContainer}>
+          <Text style={[styles.editButton, { fontFamily: 'icon', fontSize: 20, color: Colors.bgGray }]}
+            onPress={() => setAvatarModalVisible(true)}></Text>
+          <Image source={avatarChoices[avatarRef.current]} style={styles.avatar}></Image>
+          <Text style={styles.nameText}>{userData.name}</Text>
+          <View style={styles.progressContainer}>
+            <Text style={styles.progressText}>Progress {parseInt(progress * 100)}%</Text>
+            <View style={styles.progressBar}>
+              <ProgressBar
+                animated={true}
+                progress={progress}
+                width={270}
+                height={10}
+                borderRadius={10}
+                unfilledColor={Colors.bgOffWhite}
+                borderWidth={0}
+                color={Colors.bgPurple}
+              />
+=======
         {loading ? (<ActivityIndicator
           animating={true}
           style={{ top: 20 }}
@@ -160,6 +184,7 @@ export default function Settings() {
                   color={Colors.bgPurple}
                 />
               </View>
+>>>>>>> 0a5c50fd8d8c290e493a65c9cef9a92374dc7dc6
             </View>
           </View>
         )}

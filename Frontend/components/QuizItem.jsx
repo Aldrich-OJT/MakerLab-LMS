@@ -111,7 +111,7 @@ export default function QuizItem(props) {
                     <Text style={{ fontFamily: 'icon', fontSize: 22, color: Colors.bgPurple, alignSelf: 'flex-end', marginRight: 5 }}> </Text>
                   </Pressable>
                 }>
-                <Menu.Item onPress={() => {setSelectedData({
+                <Menu.Item onPress={() => {props.setSelectedData({
                   ...props.item
                 }),props.setModalVisible(true)}} title={<Text style={{ fontFamily: 'icon', fontSize: 16, color: Colors.bgDarkGray, textAlign: "left" }}> Edit</Text>} />
                 <Menu.Item onPress={createTwoButtonAlert} title={<Text style={{ fontFamily: 'icon', fontSize: 16, color: Colors.bgDarkGray, textAlign: "left" }}> Delete</Text>} />

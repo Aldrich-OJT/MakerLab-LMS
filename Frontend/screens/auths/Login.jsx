@@ -44,9 +44,9 @@ export default function Login() {
       
       if (data) {
         const userdata = await axiosGet(`${getuserdataURL}${data._id}`, data.token)
-        console.log(data)
+        //console.log(data)
         data.progress = parseFloat(userdata.progress.$numberDecimal);
-        console.log(data)
+        //console.log(data)
         authContext.authenticate(data)
       }
     } catch (error) {

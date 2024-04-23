@@ -1,14 +1,17 @@
 import { View, Text, StyleSheet} from "react-native";
-import { useContext, useState, useEffect} from "react";
 import {AuthContext, DarkModeContext} from "../context/AuthProvider";
+import { View, Text, StyleSheet, } from "react-native";
+import { useContext, useState, useEffect, useCallback } from "react";
+import { AuthContext } from "../context/AuthProvider";
 import ProgressBar from 'react-native-progress/Bar';
 import Colors from "../constants/Colors";
 import HomeUserModal from "../components/HomePageComponent/HomeUsersModal";
 import HomeLessonsModal from "../components/HomePageComponent/HomeLessonsModal";
 import Shortcut from "../components/HomePageComponent/Shortcuts";
 import { axiosGet } from "../utils/axios";
+import { useFocusEffect } from "@react-navigation/native";
 export default function HomePage() {
-  
+
   const { userData } = useContext(AuthContext);
   const { isDarkMode } = useContext(DarkModeContext);
   const [ gradeModalVisible, setGradeModalVisible] = useState(false)
@@ -19,20 +22,34 @@ export default function HomePage() {
 
   useEffect(() => {
     const fetchData = async () => {
-      console.log("effect")
+
+      try {
+        setLoading(true)
         const data = await axiosGet('/api/user')
-        const userdata = await axiosGet(`/api/user/data/${userData._id}`)
-        setUserScores(userdata)
-        console.log("this is userdata",userdata.quizScores) 
+        const userdata = await axiosGet(`/api/user/data/${userData._id}`, userData.token)
+        const categories = await axiosGet(`/api/categories/`, userData.token)
+        setUserScores(userdata.quizScores)
+        setProgress(parseFloat(userdata.progress.$numberDecimal))
+        setCategories(categories)
         setUsers(data)
         setRefresh(false)
+      } catch (error) {
+        console.log(error)
+      } finally {
+        setLoading(false)
+      }
     }
 
     if (refresh) {
-        fetchData()
+      fetchData()
     }
-}, [refresh])
+  }, [refresh])
 
+  useFocusEffect(
+    useCallback(() => {
+      setRefresh(true)
+    }, [])
+  );
   const shortcuts = [
     {
       role: 'admin',
@@ -44,34 +61,35 @@ export default function HomePage() {
       role: 'user',
       icon: '',
       text: 'Placeholder\nText',
-      onPress: () => {},
+      onPress: () => { },
     },
     {
-      role: 'admin',
+      role: 'user',
       icon: '',
       text: 'Finished\nLessons',
       onPress: () => setGradeModalVisible(true),
     },
     {
-      role: 'user',
+      role: 'admin',
       icon: '',
       text: 'Placeholder\nText',
-      onPress: () => {},
+      onPress: () => { },
     },
   ];
 
   return (
     <View style={[styles.container, {backgroundColor: Colors.bgOffWhite}]}>
-      <HomeUserModal 
+      {!loading && <HomeUserModal
         visibility={userListModalVisible}
         users={users}
         setModalVisible={() => setUserListModalVisible(false)}
-      />
+      />}
 
-      <HomeLessonsModal
-        visibility={gradeModalVisible} 
+      {filteredData && <HomeLessonsModal
+        data={filteredData}
+        visibility={gradeModalVisible}
         setModalVisible={() => setGradeModalVisible(false)}
-      />
+      />}
 
       <View style={[styles.bottomSheet, {backgroundColor: isDarkMode ? Colors.bgGray : Colors.bgOffWhite}]}>
         <View style={[styles.progressContainer, {backgroundColor: isDarkMode ?  Colors.bgDarkGray : 'white'}]}>
@@ -81,22 +99,22 @@ export default function HomePage() {
             <View style={styles.progressTextContainer}>
               <Text style={[styles.greetingText, {color: isDarkMode ? 'white' : Colors.bgDarkGray}]}>Hi {userData.name},</Text>
               <Text style={[styles.progressText, {color: isDarkMode ? 'white' : Colors.bgDarkGray}]}>
-                {userData.role === 'user' ? "You have finished 68% of the course. Good Job!" : "Welcome back!"}
+                {userData.role === 'user' ? `You have finished ${Math.floor(progress * 100)}% of the course. ${(progress*100) < 50 ? "Keep going!" :"Good job!"}` : "Welcome back!"}
               </Text>
-              </View>
+            </View>
           </View>
-        {userData.role === 'user' && (
-          <ProgressBar 
-            animated={true}
-            progress={.68} 
-            width={300} 
-            height={10}
-            borderRadius={10}
-            unfilledColor={isDarkMode ? Colors.bgLightGray : Colors.bgOffWhite}
-            borderWidth={0}
-            color={Colors.bgPurple}
-          />
-        )}
+          {userData.role === 'user' && !loading ? (
+            <ProgressBar
+              animated={true}
+              progress={progress}
+              width={300}
+              height={10}
+              borderRadius={10}
+              unfilledColor={isDarkMode ? Colors.bgLightGray : Colors.bgOffWhite}
+              borderWidth={0}
+              color={Colors.bgPurple}
+            />
+          ) : ""}
         </View>
 
         <View style={styles.shortcutContainer}>
@@ -109,7 +127,7 @@ export default function HomePage() {
                 text={shortcut.text}
                 onPress={shortcut.onPress}
               />
-          ))}
+            ))}
         </View>
       </View>
     </View>
@@ -130,7 +148,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     flexDirection: 'column',
     gap: 20,
-    alignItems:'center',
+    alignItems: 'center',
     shadowColor: "#000",
     shadowOffset: {
       width: 0,
@@ -138,14 +156,14 @@ const styles = StyleSheet.create({
     },
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
-    
+
     elevation: 5,
   },
-  icons:{
+  icons: {
     fontFamily: 'icon',
   },
-  progressTopContainer:{
-    flexDirection:'row',
+  progressTopContainer: {
+    flexDirection: 'row',
   },
   progressTextContainer: {
     flex: 1,

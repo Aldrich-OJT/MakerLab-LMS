@@ -3,7 +3,7 @@ import Colors from "../../constants/Colors";
 import QuizItem from "../../components/QuizItem";
 import LearnHeader from "../../components/LearnComponent/LearnHeader";
 import QuizModal from "../../components/QuizModal";
-import { useCallback, useContext, useEffect, useState } from "react";
+import { useCallback, useContext, useEffect, useRef, useState } from "react";
 import { FlatList } from "react-native";
 import {  axiosGet, axiosPut } from "../../utils/axios";
 import { AuthContext } from "../../context/AuthProvider";
@@ -30,6 +30,7 @@ export default function Quiz({route, navigation}) {
   const [singleScore, setSingleScore] = useState([])
   const [quizData, setQuizData] = useState([])
   const [totalQuizzes, setTotalQuizzes] = useState(0)
+  const finishedAnswering = useRef(false)
   //const [selectedNumber, setSelectedNumber] = useState(0)
 
   //console.log(param)
@@ -44,38 +45,7 @@ export default function Quiz({route, navigation}) {
     },
     progress: 0
   })
-  // useEffect(() => {
-  //   setQuizForm(prevstate => ({
-  //     ...prevstate,
-  //     quizScores: {
-  //       ...prevstate.quizScores,
-  //       score: score,
-  //       passed: score < Math.round(quizData.length * .6) ? false : true
-  //     }
-  //   }))
-  // }, [score])
 
-  // useEffect(() => {
-   
-  //   let newScore = score
-
-  //   const setNewScore = ()=>{
-  //     console.log("score befroe setscore",score)
-  //     console.log("singlescore befroe setscore",singleScore)
-  //     if (singleScore === 0 && score > 0) {
-  //       // console.log("change")
-  //       // console.log(props.singleScore)
-  
-  //       newScore -= 1
-  //     } else {
-  //       newScore += singleScore
-  //     }
-  //     setScore(newScore)
-  //     setSingleScore(0)
-  //   }
-
-  //   setNewScore()
-  // }, [singleScore])
   
   const setscoreinitialvalue = (data)=>{
     let newArray = data.map(() => 0);
@@ -88,7 +58,7 @@ export default function Quiz({route, navigation}) {
 
     const fetchData = async () => {
       setLoading(true)
-      console.log("fetch rerendered")
+      //console.log("fetch rerendered")
       const data = await axiosGet(`${getQuizzesURL}${param._id}`, userData.token)
       const totalcount = await axiosGet(getposttotalcountURL, userData.token)
 
@@ -113,25 +83,27 @@ export default function Quiz({route, navigation}) {
   useEffect(() => {
     if (userData.role === "admin") {
       return
-    } else if (userData.role === "user") {
+    } else if (userData.role === "user" && finishedAnswering.current === false) {
       const leaving = navigation.addListener('beforeRemove', (e) => {
-        e.preventDefault();
-        Alert.alert(
-          'Leave assessment?',
-          'Do you want to leave the asssessment? Your progress will be lost.',
-          [
-            { text: "Stay", style: "cancel", onPress: () => { } },
-            {
-              text: "Leave",
-              onPress: () => navigation.dispatch(e.data.action),
-            },
-          ]
-        );
+        if (finishedAnswering.current === false) {
+          e.preventDefault();
+          Alert.alert(
+            'Leave assessment?',
+            'Do you want to leave the asssessment? Your progress will be lost.',
+            [
+              { text: "Stay", style: "cancel", onPress: () => { } },
+              {
+                text: "Leave",
+                onPress: () => navigation.dispatch(e.data.action),
+              },
+            ]
+          );
+        }
       });
       return leaving;
+    } else{
+      return
     }
-
-
   }, [navigation]);
   
 
@@ -169,7 +141,7 @@ export default function Quiz({route, navigation}) {
 
   const getProgress = (score, quizData, totalQuizzes) => {
     const thresholdScore = Math.round(quizData.length * 0.6);
-    console.log("safaklsljkjbfad",score,thresholdScore,totalQuizzes)
+    //console.log("safaklsljkjbfad",score,thresholdScore,totalQuizzes)
     if (score >= thresholdScore && totalQuizzes != 0) {
       return 1/totalQuizzes;
     }else{
@@ -182,12 +154,14 @@ export default function Quiz({route, navigation}) {
   },[singleScore])
   useEffect(()=>{
     console.log("score before putting",score)
+    const passed = score > Math.round(quizData.length * .6) ? true : false
+    console.log("this is passed or not",passed)
     setQuizForm(prevstate => ({
       ...prevstate,
       quizScores: {
         ...prevstate.quizScores,
         score: score,
-        passed: score < Math.round(quizData.length * .6) ? false : true,
+        passed: passed,
         completedAt: new Date().toJSON()
       },
       progress: getProgress(score, quizData, totalQuizzes)
@@ -195,30 +169,36 @@ export default function Quiz({route, navigation}) {
   },[score])
 
   const handleSubmit = useCallback(async () => {
-    if (numberQuestionsAnswered.every(number => number === 1)) {
+    //console.log("before passing",numberQuestionsAnswered)
+    // if (numberQuestionsAnswered.every(number => number === 1)) {
     
-      console.log("scooooooooore",score)
+      //console.log("scooooooooore",score)
    
-      //console.log(quizForm)
-      try {
-        const data = await axiosPut(`${editScoreURL}${userData._id}`, quizForm, contentType, userData.token);
 
-        console.log(data);
+      try {
+        console.log(quizForm)
+        const data = await axiosPut(`${editScoreURL}${userData._id}`, quizForm, contentType, userData.token);
+        console.log("updatedData",data);
       } catch (error) {
         console.error("Error in handleSubmit:", error);
       }
       setSubmitModalVisible(true);
-    } else {
-      setErrorMessage("Answer all questions!");
-    }
+    // } else {
+    //   setErrorMessage("Answer all questions!");
+    // }
 
-  },[])
+    finishedAnswering.current = true
+    //console.log("after submit",finishedAnswering.current)
+
+  },[quizForm])
   //console.log(quiz  Form)
   // console.log("number of answered question is",answeredQuestion)
-  console.log("scores",singleScore)
+  //console.log("scores",singleScore)
   //console.log(selectedNumber)
   //console.log("total number of selected ooptions",numberQuestionsAnswered)
-  console.log(quizForm)
+  //console.log("every render",finishedAnswering.current)
+  //console.log(numberQuestionsAnswered)
+  
   //console.log("this is selected number",selectedNumber)
   return (
     <View style={styles.mainContainer}>
@@ -229,7 +209,7 @@ export default function Quiz({route, navigation}) {
         selectedData={selectedData}
         setSelectedData={setSelectedData}
         setModalVisible={() => setModalVisible(false)}>
-        {selectedData == "true" ? "Upload Question" : "Edit Question"}
+        {selectedData == "upload" ? "Upload Question" : "Edit Question"}
       </QuizModal>): ""}
 
       <LearnHeader title={param.title} navigation={navigation} />
@@ -273,7 +253,7 @@ export default function Quiz({route, navigation}) {
       </View>
 
       {userData.role === 'admin' && (
-        <Pressable style={styles.addButton} onPress={() => {setModalVisible(true), setSelectedData("true")}}>
+        <Pressable style={styles.addButton} onPress={() => {setModalVisible(true), setSelectedData("upload")}}>
           <Text style={styles.buttonText} >
             +
           </Text>
@@ -293,7 +273,7 @@ export default function Quiz({route, navigation}) {
 
             <View style={styles.scoreContainer}>
               <Text style={[styles.scoreText, { fontSize: 35 }]}>{score}/{quizData.length}</Text>
-              <Text style={[styles.scoreText, { fontSize: 20 }]}>{quizForm.quizScores.passed ? "Good Job!" : "Better luck next time."}</Text>
+              <Text style={[{ fontSize: 20, },styles.scoreText, ]}>{quizForm.quizScores.passed ? "Good Job!" : "Better luck next time."}</Text>
             </View>
 
             <Pressable style={[styles.submitButton, { width: '90%', marginBottom: 15, }]} onPress={navigation.goBack}>
