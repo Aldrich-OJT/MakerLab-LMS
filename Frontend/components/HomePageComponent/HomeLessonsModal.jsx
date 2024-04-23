@@ -148,6 +148,6 @@ const styles = StyleSheet.create({
       fontFamily: 'PTSans-Bold',
     },
     purpleTint:{
-      backgroundColor: 'rgba(238, 227, 255, 0.90)'
+      backgroundColor: Colors.bgPurpleTint
     },
 })

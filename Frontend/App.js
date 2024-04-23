@@ -6,7 +6,7 @@ import Welcome from './screens/auths/Welcome';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { PaperProvider } from 'react-native-paper';
-import AuthProvider, { AuthContext } from './context/AuthProvider';
+import AuthProvider, { AuthContext, DarkModeContext } from './context/AuthProvider';
 import { Text} from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Settings from './screens/Settings';
@@ -64,13 +64,13 @@ const TabGroup = () => {
             case 'Profile':
               iconName = <Text style={{fontFamily: 'icon', fontSize:30, color: focused ? Colors.bgDarkGray : Colors.bgYellow}}></Text>
               break;
-            case 'Lessons':
+            case 'Learn':
               iconName = <Text style={{fontFamily: 'icon', fontSize:30, color: focused ? Colors.bgDarkGray : Colors.bgYellow}}></Text>
               break;
             }
           return iconName;
         },
-        
+      
         tabBarActiveTintColor: "black",
         tabBarActiveBackgroundColor: Colors.bgYellow,
         tabBarHideOnKeyboard: true,
@@ -95,7 +95,7 @@ const TabGroup = () => {
       })}
       >
       <Tab.Screen options={{ headerStyle: {height: 105}, headerShown: true, headerTitle: '', headerBackground: ()=> (<Header/>) }} name='Home' component={HomePage} />  
-      <Tab.Screen options={{ headerStyle: {height: 105,}, headerShown: true, headerTitle: '', headerBackground: ()=> (<Header/>) }} name='Lessons' component={Lessons} />
+      <Tab.Screen options={{ headerStyle: {height: 105,}, headerShown: true, headerTitle: '', headerBackground: ()=> (<Header/>) }} name='Learn' component={Lessons} />
       {/* <Tab.Screen options={{ headerShown: false }} name='AssesStackGroup' component={AssesStackGroup} /> */}
       <Tab.Screen options={{ 
         headerStyle: {height: 105},

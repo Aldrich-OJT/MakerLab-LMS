@@ -1,6 +1,6 @@
-import { View, Text, StyleSheet, Pressable, Modal, ScrollView, Dimensions} from "react-native";
+import { View, Text, StyleSheet} from "react-native";
 import { useContext, useState, useEffect} from "react";
-import {AuthContext} from "../context/AuthProvider";
+import {AuthContext, DarkModeContext} from "../context/AuthProvider";
 import ProgressBar from 'react-native-progress/Bar';
 import Colors from "../constants/Colors";
 import HomeUserModal from "../components/HomePageComponent/HomeUsersModal";
@@ -10,6 +10,7 @@ import { axiosGet } from "../utils/axios";
 export default function HomePage() {
   
   const { userData } = useContext(AuthContext);
+  const { isDarkMode } = useContext(DarkModeContext);
   const [ gradeModalVisible, setGradeModalVisible] = useState(false)
   const [ userListModalVisible, setUserListModalVisible] = useState(false)
   const [ refresh, setRefresh]  = useState(true)
@@ -60,8 +61,7 @@ export default function HomePage() {
   ];
 
   return (
-    <View style={styles.container}>
-
+    <View style={[styles.container, {backgroundColor: Colors.bgOffWhite}]}>
       <HomeUserModal 
         visibility={userListModalVisible}
         users={users}
@@ -73,14 +73,14 @@ export default function HomePage() {
         setModalVisible={() => setGradeModalVisible(false)}
       />
 
-      <View style={styles.bottomSheet}>
-        <View style={styles.progressContainer}>
+      <View style={[styles.bottomSheet, {backgroundColor: isDarkMode ? Colors.bgGray : Colors.bgOffWhite}]}>
+        <View style={[styles.progressContainer, {backgroundColor: isDarkMode ?  Colors.bgDarkGray : 'white'}]}>
           <View style={styles.progressTopContainer}>
-            <Text style={[styles.icons, {fontSize:100}]}></Text>
+            <Text style={[styles.icons, {fontSize:100, color: isDarkMode ?  Colors.bgOffWhite : Colors.bgGray}]}></Text>
 
             <View style={styles.progressTextContainer}>
-              <Text style={styles.greetingText}>Hi {userData.name},</Text>
-              <Text style={styles.progressText}>
+              <Text style={[styles.greetingText, {color: isDarkMode ? 'white' : Colors.bgDarkGray}]}>Hi {userData.name},</Text>
+              <Text style={[styles.progressText, {color: isDarkMode ? 'white' : Colors.bgDarkGray}]}>
                 {userData.role === 'user' ? "You have finished 68% of the course. Good Job!" : "Welcome back!"}
               </Text>
               </View>
@@ -92,7 +92,7 @@ export default function HomePage() {
             width={300} 
             height={10}
             borderRadius={10}
-            unfilledColor={Colors.bgLightGray}
+            unfilledColor={isDarkMode ? Colors.bgLightGray : Colors.bgOffWhite}
             borderWidth={0}
             color={Colors.bgPurple}
           />
@@ -124,10 +124,8 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 20,
     gap: 20,
-    backgroundColor: Colors.bgOffWhite,
   },
   progressContainer: {
-    backgroundColor: 'white',
     padding: 20,
     borderRadius: 10,
     flexDirection: 'column',
@@ -145,7 +143,6 @@ const styles = StyleSheet.create({
   },
   icons:{
     fontFamily: 'icon',
-    color:Colors.bgGray,
   },
   progressTopContainer:{
     flexDirection:'row',

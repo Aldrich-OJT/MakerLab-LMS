@@ -1,7 +1,7 @@
 import React, { useCallback, useContext, useState } from "react";
 import { StyleSheet, View, Text, Pressable, Alert, ImageBackground } from "react-native";
 import { axiosDelete, } from "../../utils/axios";
-import { AuthContext } from "../../context/AuthProvider";
+import { AuthContext, DarkModeContext } from "../../context/AuthProvider";
 import { Menu } from 'react-native-paper';
 import LessonModal from "./LessonModal";
 import Colors from "../../constants/Colors";
@@ -12,7 +12,7 @@ const deleteCategoryURL = "/api/categories/delete/"
 export default function LessonCards({ title, description, setModalVisible, ID, setRefresh, onPress, index, setSelectedData, length }) {
   const { userData } = useContext(AuthContext)
   const [menuVisible, setMenuVisible] = useState(false);
-
+  const { isDarkMode } = useContext(DarkModeContext)
 
   const [showDescription, setShowDescription] = useState(false);
 
@@ -43,7 +43,7 @@ export default function LessonCards({ title, description, setModalVisible, ID, s
       {marginBottom:
         (userData.role === 'admin' && index === length - 1 ? 70 :
         (userData.role === 'user' && index === length - 1 ? 20 : 0))
-      }]} onPress={onPress}>
+      , backgroundColor: isDarkMode ? Colors.bgDarkGray : 'white'}]} onPress={onPress}>
       {/* <LessonModal
         setModalVisibility={() => setModalVisible(false)}
         visibility={modalVisible}
@@ -58,10 +58,10 @@ export default function LessonCards({ title, description, setModalVisible, ID, s
         source={background}
         style={styles.imageContainer}>
 
-        <View style={styles.purpleTint}>
+        <View style={{backgroundColor: isDarkMode ? Colors.bgDarkPurpleTint : Colors.bgPurpleTint}}>
           <View style={styles.titleContainer}>
-            <Text style={{ fontFamily: 'icon', fontSize: 23, color: Colors.bgPurple, marginTop: 2 }}></Text>
-            <Text style={styles.title}>{title}</Text>
+            <Text style={{ fontFamily: 'icon', fontSize: 23, color: isDarkMode ? Colors.bgPurpleTint : Colors.bgPurple, marginTop: 2 }}></Text>
+            <Text style={[styles.title, {color: isDarkMode ? Colors.bgPurpleTint : Colors.bgPurple}]}>{title}</Text>
 
             {userData.role === 'admin' && (
               <Menu
@@ -69,7 +69,7 @@ export default function LessonCards({ title, description, setModalVisible, ID, s
                 onDismiss={() => setMenuVisible(false)}
                 anchor={
                   <Pressable style={{ width: 50, height: 30 }} onPress={() => (setMenuVisible(true))}>
-                    <Text style={{ fontFamily: 'icon', fontSize: 22, color: Colors.bgPurple, alignSelf: 'flex-end', marginRight: 5 }}> </Text>
+                    <Text style={{ fontFamily: 'icon', fontSize: 22, color: isDarkMode ? Colors.bgPurpleTint : Colors.bgPurple, alignSelf: 'flex-end', marginRight: 5 }}> </Text>
                   </Pressable>
                 }>
                 <Menu.Item onPress={() => {
@@ -91,7 +91,7 @@ export default function LessonCards({ title, description, setModalVisible, ID, s
       <View>
         <Text
           numberOfLines={showDescription ? undefined : 2}
-          style={styles.lessonDescription}>
+          style={[styles.lessonDescription, {color: isDarkMode ? Colors.bgOffWhite : 'black'}]}>
           {description}
         </Text>
       </View>
@@ -110,7 +110,6 @@ export default function LessonCards({ title, description, setModalVisible, ID, s
 const styles = StyleSheet.create({
     lessonContainer: {
         flexDirection: 'column',
-        backgroundColor: 'white',
         borderRadius: 10,
         minHeight: 155,
         marginHorizontal: 20,
@@ -133,9 +132,6 @@ const styles = StyleSheet.create({
       borderTopLeftRadius: 10,
       borderTopRightRadius: 10,
       overflow:"hidden",
-    },
-    purpleTint:{
-      backgroundColor: 'rgba(238, 227, 255, 0.90)',
     },
     title:{
         color: Colors.bgPurple,

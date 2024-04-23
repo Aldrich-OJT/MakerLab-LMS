@@ -1,6 +1,6 @@
 import { View, Text, StyleSheet, Pressable, Modal, ScrollView, Dimensions} from "react-native";
 import { useContext, useState, useEffect} from "react";
-import { AuthContext } from "../../context/AuthProvider";
+import { AuthContext, DarkModeContext } from "../../context/AuthProvider";
 import { DataTable } from 'react-native-paper';
 import Colors from "../../constants/Colors";
 import {  axiosGet } from "../../utils/axios";
@@ -11,6 +11,7 @@ const deviceWidth = dimensions.width;
 export default function HomeUserModal({ visibility, setModalVisible, users }) {
   // const [refresh, setRefresh] = useState(true)
   const [page, setPage] = useState(0);
+  const {isDarkMode} = useContext(DarkModeContext)
 
 const itemsPerPage = 5;
 const numberOfPages = Math.ceil(users.length / itemsPerPage);
@@ -26,38 +27,38 @@ return (
    onRequestClose={() => visibility(false)}>
     
     <View style={styles.modalMainContainer}>
-      <View style={styles.modalContentContainer}>
+      <View style={[styles.modalContentContainer, {backgroundColor: isDarkMode ? Colors.bgDarkGray : 'white'}]}>
         <View style={styles.titleContainer}>
-          <Text style={styles.titleText}>List of Users</Text>
+          <Text style={[styles.titleText, {color: isDarkMode ? 'white' : Colors.bgDarkGray}]}>List of Users</Text>
         </View>
        
-        <DataTable style={styles.table}>
-          <DataTable.Header style={styles.purpleTint}>
+        <DataTable style={[styles.table, {backgroundColor: isDarkMode ? Colors.bgGray : 'white'}]}>
+          <DataTable.Header style={[styles.purpleTint, {backgroundColor: isDarkMode ? Colors.bgDarkPurpleTint : Colors.bgPurpleTint}]}>
             <DataTable.Title style={styles.idCell}>
-              <Text style={styles.headerText}>ID</Text>
+              <Text style={[styles.headerText, {color: isDarkMode ? Colors.bgPurpleTint : Colors.bgPurple}]}>ID</Text>
             </DataTable.Title>
 
             <DataTable.Title style={styles.nameCell}>
-              <Text style={styles.headerText}>Name</Text>
+              <Text style={[styles.headerText, {color: isDarkMode ? Colors.bgPurpleTint : Colors.bgPurple}]}>Name</Text>
             </DataTable.Title>
 
             <DataTable.Title style={styles.nameCell}>
-              <Text style={styles.headerText}>Email</Text>
+              <Text style={[styles.headerText, {color: isDarkMode ? Colors.bgPurpleTint : Colors.bgPurple}]}>Email</Text>
             </DataTable.Title>
           </DataTable.Header>
 
           {visibleItems.map((user, index) => (
             <DataTable.Row style={styles.tableRows} key={index}>
               <DataTable.Cell style={styles.idCell}>
-                <Text style={styles.item}>{startIndex + (index+1)}</Text>
+                <Text style={[styles.item, {color: isDarkMode ? Colors.bgLightGray : Colors.bgDarkGray}]}>{startIndex + (index+1)}</Text>
               </DataTable.Cell>
 
               <DataTable.Cell style={styles.nameCell}>
-                <Text style={styles.item}>{user.name}</Text>
+                <Text style={[, {color: isDarkMode ? Colors.bgLightGray: Colors.bgDarkGray}]}>{user.name}</Text>
               </DataTable.Cell>
 
               <DataTable.Cell style={styles.nameCell}>
-                <Text style={styles.item}>{user.email}</Text>
+                <Text style={[styles.item, {color: isDarkMode ? Colors.bgLightGray : Colors.bgDarkGray}]}>{user.email}</Text>
               </DataTable.Cell>
             </DataTable.Row>
           ))}
@@ -70,7 +71,7 @@ return (
                label = {`${page+1} of ${numberOfPages}`}
            />
         </DataTable>
-        <Pressable style={styles.cancelButton} onPress={()=>setModalVisible(false)}>
+        <Pressable style={[styles.cancelButton, {backgroundColor: isDarkMode ? Colors.bgDarkGray : 'white'}]} onPress={()=>setModalVisible(false)}>
             <Text style={styles.cancelText}>
               Close
             </Text>
@@ -90,7 +91,6 @@ const styles = StyleSheet.create({
       },
       modalContentContainer: {
         gap: 10,
-        backgroundColor: 'white',
         margin: 20,
         padding: 10,
         alignItems: 'center',
@@ -138,7 +138,7 @@ const styles = StyleSheet.create({
         fontFamily: 'PTSans-Bold',
       },
       purpleTint:{
-        backgroundColor: 'rgba(238, 227, 255, 0.90)'
+        backgroundColor: Colors.bgPurpleTint
       },
       idCell:{
         flex: 0.5
