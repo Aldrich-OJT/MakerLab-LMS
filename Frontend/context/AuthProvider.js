@@ -8,11 +8,15 @@ export const AuthContext = createContext({
     logout: () => { }
 })
 
-
+export const DarkModeContext = createContext({
+    isDarkMode: false,
+    setIsDarkMode: (isDark) => { },
+  });
 
 const AuthProvider = ({ children }) => {
     const [userData, setUserData] = useState(null)
     //const [userRole, setUserRole] = useState(null)
+    const [isDarkMode, setIsDarkMode] = useState(false)
 
 
     const authenticate = async (newUserData) => {
@@ -36,12 +40,15 @@ const AuthProvider = ({ children }) => {
         logout: logout
 
     }
-    //console.log(userData)
+    console.log(userData)
+
     return (
         <AuthContext.Provider value={value}>
+          <DarkModeContext.Provider value={{ isDarkMode, setIsDarkMode }}>
             {children}
+          </DarkModeContext.Provider>
         </AuthContext.Provider>
-    )
+      );
 }
 
 export default AuthProvider

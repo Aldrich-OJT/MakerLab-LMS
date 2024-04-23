@@ -65,84 +65,70 @@ export default function HomeLessonsModal({ visibility, setModalVisible, data }) 
 
 const styles = StyleSheet.create({
   modalMainContainer: {
-    backgroundColor: 'rgba(0,0,0,0.3)',
-    justifyContent: 'center',
-    alignContent: 'center',
-    flex: 1,
-  },
-  modalContentContainer: {
-    gap: 10,
-    backgroundColor: 'white',
-    margin: 20,
-    padding: 10,
-    alignItems: 'center',
-    borderRadius: 10,
-    maxHeight: '80%',
-    minHeight: '80%',
-  },
-  titleContainer: {
-    flexDirection: 'row',
-    padding: 5,
-  },
-  titleText: {
-    fontFamily: 'PTSans-Bold',
-    color: Colors.bgDarkGray,
-    fontSize: 18
-  },
-  listAccordion: {
-    width: '90%',
-    borderRadius: 10,
-    overflow: 'hidden'
-  },
-  listHeader: {
-    flexDirection: 'row',
-    width: '70%',
-    justifyContent: 'space-between',
-  },
-  listItemStyle: {
-    borderBottomWidth: 1,
-    borderColor: Colors.bgLightGray,
-    borderWidth: 1,
-    // justifyContent:"center",
-    // alignItems:"center"
-  },
-  coursesText: {
-    fontFamily: 'PTSans-Bold',
-    fontSize: 16,
-    textAlign: "center"
-  },
-  accordionitem:
-  {
-    width: 100,
-    padding: 10,
-  },
-
-  lessonsText: {
-    fontFamily: 'PTSans-Regular',
-    //width:10,
-   
-  },
-  accordionheader:{
-    fontFamily: 'PTSans-Regular',
-  },
-  cancelButton: {
-    backgroundColor: 'white',
-    justifyContent: "center",
-    alignItems: "center",
-    height: deviceWidth * .13,
-    width: deviceWidth * .34,
-    borderRadius: 10,
-    paddingVertical: 10,
-    marginVertical: 10,
-    borderColor: Colors.bgPurple,
-    borderWidth: 2,
-  },
-  cancelText: {
-    color: Colors.bgPurple,
-    fontSize: 16,
-    fontFamily: 'PTSans-Bold',
-  },
-  purpleTint: {
-    backgroundColor: 'rgba(238, 227, 255, 0.90)'
-  },
+      backgroundColor: 'rgba(0,0,0,0.3)',
+      justifyContent: 'center',
+      alignContent: 'center',
+      flex: 1,
+    },
+    modalContentContainer: {
+      gap: 10,
+      backgroundColor: 'white',
+      margin: 20,
+      padding: 10,
+      alignItems: 'center',
+      borderRadius: 10,
+      maxHeight: '80%',
+      minHeight: '80%',
+    },
+    titleContainer: {
+      flexDirection: 'row',
+      padding: 5,
+    },
+    titleText:{
+      fontFamily:'PTSans-Bold',
+      color: Colors.bgDarkGray,
+      fontSize:18
+    },
+    listAccordion:{
+      width:'90%',
+      borderRadius:10,
+      overflow:'hidden'
+    },
+    listHeader:{
+      flexDirection:'row',
+      width:'70%',
+      justifyContent:'space-between',
+    },
+    listItemStyle:{
+      borderBottomWidth:1, 
+      borderColor: Colors.bgLightGray,
+    },
+    coursesText:{
+      color:Colors.bgPurple,
+      fontFamily: 'PTSans-Bold',
+      fontSize: 16,
+    },
+    lessonsText:{
+      fontFamily: 'PTSans-Regular'
+    },
+    cancelButton: {
+      backgroundColor: 'white',
+      justifyContent: "center",
+      alignItems: "center",
+      height: deviceWidth * .13,
+      width: deviceWidth * .34,
+      borderRadius: 10,
+      paddingVertical: 10,
+      marginVertical: 10,
+      borderColor: Colors.bgPurple,
+      borderWidth: 2,
+    },
+    cancelText: {
+      color: Colors.bgPurple,
+      fontSize: 16,
+      fontFamily: 'PTSans-Bold',
+    },
+    purpleTint:{
+      backgroundColor: Colors.bgPurpleTint
+    },
 })

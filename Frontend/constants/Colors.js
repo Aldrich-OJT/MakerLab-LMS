@@ -9,6 +9,8 @@ const Colors = {
     bgGray: "#484848",
     bgLightGray: "#CBCBCB",
     bgDarkGray: "#1D1D1D",
+    bgPurpleTint: "rgba(238, 227, 255, 0.90)",
+    bgDarkPurpleTint: "rgba(143, 124, 255,0.90)"
 }
 
 export default Colors

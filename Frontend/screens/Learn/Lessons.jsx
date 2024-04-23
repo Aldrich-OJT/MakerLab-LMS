@@ -3,7 +3,7 @@ import { StyleSheet, View, FlatList, Pressable,Text } from "react-native";
 import { axiosGet } from "../../utils/axios";
 import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs';
 import { ActivityIndicator} from 'react-native-paper';
-import { AuthContext } from "../../context/AuthProvider";
+import { AuthContext, DarkModeContext } from "../../context/AuthProvider";
 //import { useNavigation } from '@react-navigation/native';
 //import Header from "../../components/Header";
 import Colors from "../../constants/Colors";
@@ -15,6 +15,7 @@ const getCategoryURL = "/api/categories/"
 export default function Lessons({ navigation }) {
   console.log("testing")
   const {userData,logout} = useContext(AuthContext);
+  const { isDarkMode } = useContext(DarkModeContext)
   const  tabBarHeight  = useBottomTabBarHeight();
   const [lessonData, setLessonData] = useState([]);
   const [refresh, setRefresh] = useState(true);
@@ -49,6 +50,7 @@ export default function Lessons({ navigation }) {
  //console.log(selectedData)
  
   return (
+    <View style={{flex:1, backgroundColor: isDarkMode ? Colors.bgGray : Colors.bgOffWhite}}>
     <View style={[styles.mainContainer,{marginBottom:tabBarHeight}]}>
       {selectedData ? (<LessonModal 
         setRefresh={() => setRefresh(true)} 
@@ -99,11 +101,12 @@ export default function Lessons({ navigation }) {
         </Pressable>
       )}
     </View>
+    </View>
   );
 }
 const styles = StyleSheet.create({
   mainContainer:{
-    flex:1,
+
   },
   addButton: {
     position: "absolute",

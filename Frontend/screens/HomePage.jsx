@@ -1,3 +1,5 @@
+import { View, Text, StyleSheet} from "react-native";
+import {AuthContext, DarkModeContext} from "../context/AuthProvider";
 import { View, Text, StyleSheet, } from "react-native";
 import { useContext, useState, useEffect, useCallback } from "react";
 import { AuthContext } from "../context/AuthProvider";
@@ -11,41 +13,12 @@ import { useFocusEffect } from "@react-navigation/native";
 export default function HomePage() {
 
   const { userData } = useContext(AuthContext);
-  const [gradeModalVisible, setGradeModalVisible] = useState(false)
-  const [userListModalVisible, setUserListModalVisible] = useState(false)
-  const [refresh, setRefresh] = useState(true)
-  const [loading, setLoading] = useState(false)
-  const [users, setUsers] = useState([]);
-  const [userScores, setUserScores] = useState([]);
-  const [filteredData, setfilteredData] = useState({})
-  const [categories, setCategories] = useState([])
-  const [progress, setProgress] = useState(null)
-
-
-
-  useEffect(() => {
-    const filteredData = {};
-
-    // Loop through categories
-    categories.forEach(categories => {
-
-      const categoryId = categories._id;
-      const categoryTitle = categories.title; // Store the category title
-
-      // Find matching data objects
-      const matchingData = userScores.filter(item => item.categoryId === categoryId);
-
-
-      // If there's matching data, create an object with category title and data
-      if (matchingData.length > 0) {
-        filteredData[categoryTitle] = matchingData;
-      }
-    });
-
-    setfilteredData(filteredData)
-
-
-  }, [userScores, categories])
+  const { isDarkMode } = useContext(DarkModeContext);
+  const [ gradeModalVisible, setGradeModalVisible] = useState(false)
+  const [ userListModalVisible, setUserListModalVisible] = useState(false)
+  const [ refresh, setRefresh]  = useState(true)
+  const [ users, setUsers ] = useState([]);
+  const [ userScores, setUserScores] =  useState([]); 
 
   useEffect(() => {
     const fetchData = async () => {
@@ -105,8 +78,7 @@ export default function HomePage() {
   ];
 
   return (
-    <View style={styles.container}>
-
+    <View style={[styles.container, {backgroundColor: Colors.bgOffWhite}]}>
       {!loading && <HomeUserModal
         visibility={userListModalVisible}
         users={users}
@@ -119,14 +91,14 @@ export default function HomePage() {
         setModalVisible={() => setGradeModalVisible(false)}
       />}
 
-      <View style={styles.bottomSheet}>
-        <View style={styles.progressContainer}>
+      <View style={[styles.bottomSheet, {backgroundColor: isDarkMode ? Colors.bgGray : Colors.bgOffWhite}]}>
+        <View style={[styles.progressContainer, {backgroundColor: isDarkMode ?  Colors.bgDarkGray : 'white'}]}>
           <View style={styles.progressTopContainer}>
-            <Text style={[styles.icons, { fontSize: 100 }]}></Text>
+            <Text style={[styles.icons, {fontSize:100, color: isDarkMode ?  Colors.bgOffWhite : Colors.bgGray}]}></Text>
 
             <View style={styles.progressTextContainer}>
-              <Text style={styles.greetingText}>Hi {userData.name},</Text>
-              <Text style={styles.progressText}>
+              <Text style={[styles.greetingText, {color: isDarkMode ? 'white' : Colors.bgDarkGray}]}>Hi {userData.name},</Text>
+              <Text style={[styles.progressText, {color: isDarkMode ? 'white' : Colors.bgDarkGray}]}>
                 {userData.role === 'user' ? `You have finished ${Math.floor(progress * 100)}% of the course. ${(progress*100) < 50 ? "Keep going!" :"Good job!"}` : "Welcome back!"}
               </Text>
             </View>
@@ -138,7 +110,7 @@ export default function HomePage() {
               width={300}
               height={10}
               borderRadius={10}
-              unfilledColor={Colors.bgLightGray}
+              unfilledColor={isDarkMode ? Colors.bgLightGray : Colors.bgOffWhite}
               borderWidth={0}
               color={Colors.bgPurple}
             />
@@ -170,10 +142,8 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 20,
     gap: 20,
-    backgroundColor: Colors.bgOffWhite,
   },
   progressContainer: {
-    backgroundColor: 'white',
     padding: 20,
     borderRadius: 10,
     flexDirection: 'column',
@@ -191,7 +161,6 @@ const styles = StyleSheet.create({
   },
   icons: {
     fontFamily: 'icon',
-    color: Colors.bgGray,
   },
   progressTopContainer: {
     flexDirection: 'row',
