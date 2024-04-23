@@ -15,61 +15,48 @@ import { ActivityIndicator } from "react-native-paper";
 const dimensions = Dimensions.get('window');
 const deviceWidth = dimensions.width;
 const deviceHeight = dimensions.height;
-const getuserDataURL = "/api/user/data/"
+const getuserDataURL = "/api/user/data/";
 
-const avatarChoices = [avatar1, avatar2, avatar3, avatar4]
+const avatarChoices = [avatar1, avatar2, avatar3, avatar4];
 
 
 export default function Settings() {
-<<<<<<< HEAD
-  //console.log("testing")
-=======
->>>>>>> 0a5c50fd8d8c290e493a65c9cef9a92374dc7dc6
   const tabBarHeight = useBottomTabBarHeight();
   const [avatarModalVisible, setAvatarModalVisible] = useState(false);
-  // const [avatar, setAvatar] = useState(2);
-  const avatarRef = useRef(0) 
-  const [user, setUser] = useState()
-  const [loading, setLoading] = useState(false)
-  const [refresh, setRefresh] = useState(false)
+  const avatarRef = useRef(0);
+  const [user, setUser] = useState();
+  const [loading, setLoading] = useState(false);
+  const [refresh, setRefresh] = useState(false);
   const { logout, userData } = useContext(AuthContext);
-  const { isDarkMode, setIsDarkMode} = useContext(DarkModeContext);
-  const [progress, setProgress] = useState()
-  const [formdata, setFormdata] = useState()
-  
-  const darkModeHandler = () =>{
+  const { isDarkMode, setIsDarkMode } = useContext(DarkModeContext);
+  const [progress, setProgress] = useState();
+  const [formdata, setFormdata] = useState();
+
+  const darkModeHandler = () => {
     setIsDarkMode(!isDarkMode);
-  }
+  };
 
   const saveAvatar = (index) => {
-    setAvatarModalVisible(false)
-    avatarRef.current = index
-    
-  }
-  
+    setAvatarModalVisible(false);
+    avatarRef.current = index;
+  };
+
   useEffect(() => {
     const fetchData = async () => {
       try {
         if (refresh) {
           setLoading(true);
-          const data = await axiosGet(`${getuserDataURL}${userData._id}`, userData.token)
-         // console.log(data)
-          setProgress(parseFloat(data.progress.$numberDecimal))
-          setUser(data)
-          // const userAvatar = await AsyncStorage.getItem("Avatar");
-
-          // if (userAvatar) {
-          //   setAvatar(userAvatar);
-          // }
+          const data = await axiosGet(`${getuserDataURL}${userData._id}`, userData.token);
+          setProgress(parseFloat(data.progress.$numberDecimal));
+          setUser(data);
           setLoading(false);
-          setRefresh(false)
+          setRefresh(false);
         }
       } catch (error) {
-        console.log(error)
+        console.log(error);
       }
     };
     fetchData();
-
   }, [refresh]);
 
   const badges = [
@@ -77,19 +64,18 @@ export default function Settings() {
     require('../assets/badges/badge-coding.png'),
     require('../assets/badges/badge-3dprinting.png')
   ];
-  //refresh the page when focus goes back on this tab
+
+  // Refresh the page when focus goes back on this tab
   useFocusEffect(
     useCallback(() => {
-      setRefresh(true)
+      setRefresh(true);
     }, [])
   );
- 
-  //console.log(progress);
+
   return (
     <ScrollView showsVerticalScrollIndicator={false}>
-      <View 
-        style={[styles.mainContainer, 
-        {backgroundColor: isDarkMode ? Colors.bgGray : Colors.bgOffWhite}]}
+      <View
+        style={[styles.mainContainer, { backgroundColor: isDarkMode ? Colors.bgGray : Colors.bgOffWhite }]}
       >
 
         <Modal
@@ -99,9 +85,9 @@ export default function Settings() {
           onRequestClose={() => setAvatarModalVisible(false)}
         >
           <View style={styles.modalMainContainer}>
-            <View style={[styles.modalContentContainer, {backgroundColor: isDarkMode ? Colors.bgDarkGray : 'white'}]}>
+            <View style={[styles.modalContentContainer, { backgroundColor: isDarkMode ? Colors.bgDarkGray : 'white' }]}>
               <View style={styles.titleContainer}>
-                <Text style={[styles.modalText,{color: isDarkMode ? 'white': Colors.bgDarkGray}]}>
+                <Text style={[styles.modalText, { color: isDarkMode ? 'white' : Colors.bgDarkGray }]}>
                   Select Avatar
                 </Text>
               </View>
@@ -109,13 +95,13 @@ export default function Settings() {
               <View style={styles.imageContainer}>
                 {avatarChoices.map((item, index) => (
                   <Pressable key={index} onPress={() => saveAvatar(index)}>
-                    <Image source={item} style={[styles.avatar, {borderColor: isDarkMode ? Colors.bgGray : Colors.bgLightGray}]} />
+                    <Image source={item} style={[styles.avatar, { borderColor: isDarkMode ? Colors.bgGray : Colors.bgLightGray }]} />
                   </Pressable>
                 ))}
               </View>
 
-              <Pressable 
-                style={[styles.cancelButton, {backgroundColor: isDarkMode ? Colors.bgDarkGray : 'white'}]} 
+              <Pressable
+                style={[styles.cancelButton, { backgroundColor: isDarkMode ? Colors.bgDarkGray : 'white' }]}
                 onPress={() => setAvatarModalVisible(false)}>
 
                 <Text style={styles.cancelText}>
@@ -126,14 +112,28 @@ export default function Settings() {
           </View>
         </Modal>
 
-<<<<<<< HEAD
-        {loading ? "" : (<View style={styles.innerContainer}>
-          <Text style={[styles.editButton, { fontFamily: 'icon', fontSize: 20, color: Colors.bgGray }]}
-            onPress={() => setAvatarModalVisible(true)}></Text>
-          <Image source={avatarChoices[avatarRef.current]} style={styles.avatar}></Image>
-          <Text style={styles.nameText}>{userData.name}</Text>
-          <View style={styles.progressContainer}>
-            <Text style={styles.progressText}>Progress {parseInt(progress * 100)}%</Text>
+        {loading ? "" : (
+          <View style={[styles.innerContainer, 
+            {backgroundColor: isDarkMode ? Colors.bgDarkGray : 'white'}]}>
+          <Text style={styles.modeButton} onPress={darkModeHandler}>{isDarkMode ? '' : ''}</Text>
+          
+          <Pressable onPress={() => setAvatarModalVisible(true)}>
+            <Image source={avatarChoices[avatarRef.current]} style={[styles.avatar, {borderColor: isDarkMode ? Colors.bgGray : Colors.bgLightGray}]}></Image>
+            <Text style={styles.editButton}></Text>
+          </Pressable>
+
+          <Text style={[styles.nameText, 
+            {color: isDarkMode ? Colors.bgOffWhite : 'black'}]}>
+            {userData.name}
+          </Text>
+
+          <View style={[styles.progressContainer, {backgroundColor: isDarkMode ? Colors.bgGray : Colors.bgOffWhite} ]}>
+
+            <Text style={[styles.progressText, 
+              {color: isDarkMode ? Colors.bgOffWhite : 'black'}]}>
+              Progress {parseInt(progress * 100)}%
+            </Text>
+
             <View style={styles.progressBar}>
               <ProgressBar
                 animated={true}
@@ -141,57 +141,18 @@ export default function Settings() {
                 width={270}
                 height={10}
                 borderRadius={10}
-                unfilledColor={Colors.bgOffWhite}
+                unfilledColor={isDarkMode ? Colors.bgOffWhite : 'white'}
                 borderWidth={0}
                 color={Colors.bgPurple}
               />
-=======
-        {loading ? (<ActivityIndicator
-          animating={true}
-          style={{ top: 20 }}
-          size={60}/>
-        ) : (
-          <View style={[styles.innerContainer, 
-              {backgroundColor: isDarkMode ? Colors.bgDarkGray : 'white'}]}>
-            <Text style={styles.modeButton} onPress={darkModeHandler}>{isDarkMode ? '' : ''}</Text>
-            
-            <Pressable onPress={() => setAvatarModalVisible(true)}>
-              <Image source={avatarChoices[avatarRef.current]} style={[styles.avatar, {borderColor: isDarkMode ? Colors.bgGray : Colors.bgLightGray}]}></Image>
-              <Text style={styles.editButton}></Text>
-            </Pressable>
-
-            <Text style={[styles.nameText, 
-              {color: isDarkMode ? Colors.bgOffWhite : 'black'}]}>
-              {userData.name}
-            </Text>
-
-            <View style={[styles.progressContainer, {backgroundColor: isDarkMode ? Colors.bgGray : Colors.bgOffWhite} ]}>
-
-              <Text style={[styles.progressText, 
-                {color: isDarkMode ? Colors.bgOffWhite : 'black'}]}>
-                Progress {parseInt(progress * 100)}%
-              </Text>
-
-              <View style={styles.progressBar}>
-                <ProgressBar
-                  animated={true}
-                  progress={progress}
-                  width={270}
-                  height={10}
-                  borderRadius={10}
-                  unfilledColor={isDarkMode ? Colors.bgOffWhite : 'white'}
-                  borderWidth={0}
-                  color={Colors.bgPurple}
-                />
-              </View>
->>>>>>> 0a5c50fd8d8c290e493a65c9cef9a92374dc7dc6
             </View>
           </View>
+        </View>
         )}
 
-        <View style={[styles.innerContainer, {backgroundColor: isDarkMode ? Colors.bgDarkGray : 'white'}]}>
-          <Text style={[styles.nameText, {color: isDarkMode ? Colors.bgOffWhite : 'black'}]}>My badges</Text>
-          <View style={[styles.badgesContainer, {backgroundColor: isDarkMode ? Colors.bgGray : Colors.bgOffWhite}]}>
+        <View style={[styles.innerContainer, { backgroundColor: isDarkMode ? Colors.bgDarkGray : 'white' }]}>
+          <Text style={styles.nameText}>My badges</Text>
+          <View style={[styles.badgesContainer, { backgroundColor: isDarkMode ? Colors.bgGray : Colors.bgOffWhite }]}>
             {badges.map((badge, index) => (
               <View key={index} style={styles.badge}>
                 {badge ? (
@@ -204,13 +165,12 @@ export default function Settings() {
             ))}
           </View>
         </View>
-        <Pressable style={[styles.logoutButton, {backgroundColor: isDarkMode ? Colors.bgDarkGray : 'white'}]} onPress={logout}>
+        <Pressable style={[styles.logoutButton, { backgroundColor: isDarkMode ? Colors.bgDarkGray : 'white' }]} onPress={logout}>
           <Text style={styles.logoutText}>
             <Text style={{ fontFamily: 'icon', fontSize: 18 }}></Text>Logout</Text>
         </Pressable>
       </View>
     </ScrollView>
-
   );
 }
 

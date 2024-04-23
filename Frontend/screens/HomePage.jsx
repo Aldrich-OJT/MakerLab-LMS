@@ -1,8 +1,6 @@
 import { View, Text, StyleSheet} from "react-native";
 import {AuthContext, DarkModeContext} from "../context/AuthProvider";
-import { View, Text, StyleSheet, } from "react-native";
 import { useContext, useState, useEffect, useCallback } from "react";
-import { AuthContext } from "../context/AuthProvider";
 import ProgressBar from 'react-native-progress/Bar';
 import Colors from "../constants/Colors";
 import HomeUserModal from "../components/HomePageComponent/HomeUsersModal";
@@ -19,6 +17,34 @@ export default function HomePage() {
   const [ refresh, setRefresh]  = useState(true)
   const [ users, setUsers ] = useState([]);
   const [ userScores, setUserScores] =  useState([]); 
+  const [loading, setLoading] = useState(false)
+  const [filteredData, setfilteredData] = useState({})
+  const [categories, setCategories] = useState([])
+  const [progress, setProgress] = useState(null)
+  
+  useEffect(() => {
+    const filteredData = {};
+
+    // Loop through categories
+    categories.forEach(categories => {
+
+      const categoryId = categories._id;
+      const categoryTitle = categories.title; // Store the category title
+
+      // Find matching data objects
+      const matchingData = userScores.filter(item => item.categoryId === categoryId);
+
+
+      // If there's matching data, create an object with category title and data
+      if (matchingData.length > 0) {
+        filteredData[categoryTitle] = matchingData;
+      }
+    });
+
+    setfilteredData(filteredData)
+
+
+  }, [userScores, categories])
 
   useEffect(() => {
     const fetchData = async () => {
