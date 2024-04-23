@@ -129,7 +129,7 @@ export default function Settings() {
         ) : (
           <View style={[styles.innerContainer, 
               {backgroundColor: isDarkMode ? Colors.bgDarkGray : 'white'}]}>
-            <Text style={styles.modeButton} onPress={darkModeHandler}>{isDarkMode ? '' : ''}</Text>
+            <Text style={styles.modeButton} onPress={darkModeHandler}>{isDarkMode ? '' : ''}</Text>
             
             <Pressable onPress={() => setAvatarModalVisible(true)}>
               <Image source={avatarChoices[avatarRef.current]} style={[styles.avatar, {borderColor: isDarkMode ? Colors.bgGray : Colors.bgLightGray}]}></Image>
