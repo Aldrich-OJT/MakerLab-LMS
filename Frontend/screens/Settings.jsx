@@ -85,7 +85,7 @@ export default function Settings() {
           onRequestClose={() => setAvatarModalVisible(false)}
         >
           <View style={styles.modalMainContainer}>
-            <View style={[styles.modalContentContainer, { backgroundColor: isDarkMode ? Colors.bgDarkGray : 'white' }]}>
+            <View style={[styles.modalContentContainer, { backgroundColor: isDarkMode ? Colors.bgGray : 'white' }]}>
               <View style={styles.titleContainer}>
                 <Text style={[styles.modalText, { color: isDarkMode ? 'white' : Colors.bgDarkGray }]}>
                   Select Avatar
@@ -95,13 +95,13 @@ export default function Settings() {
               <View style={styles.imageContainer}>
                 {avatarChoices.map((item, index) => (
                   <Pressable key={index} onPress={() => saveAvatar(index)}>
-                    <Image source={item} style={[styles.avatar, { borderColor: isDarkMode ? Colors.bgGray : Colors.bgLightGray }]} />
+                    <Image source={item} style={[styles.avatar, { borderColor: isDarkMode ? Colors.bgDarkGray : Colors.bgLightGray }]} />
                   </Pressable>
                 ))}
               </View>
 
               <Pressable
-                style={[styles.cancelButton, { backgroundColor: isDarkMode ? Colors.bgDarkGray : 'white' }]}
+                style={[styles.cancelButton, { backgroundColor: isDarkMode ? Colors.bgGray : 'white' }]}
                 onPress={() => setAvatarModalVisible(false)}>
 
                 <Text style={styles.cancelText}>
@@ -115,7 +115,7 @@ export default function Settings() {
         {loading ? "" : (
           <View style={[styles.innerContainer, 
             {backgroundColor: isDarkMode ? Colors.bgDarkGray : 'white'}]}>
-          <Text style={styles.modeButton} onPress={darkModeHandler}>{isDarkMode ? '' : ''}</Text>
+          <Text style={styles.modeButton} onPress={darkModeHandler}>{isDarkMode ? '' : ''}</Text>
           
           <Pressable onPress={() => setAvatarModalVisible(true)}>
             <Image source={avatarChoices[avatarRef.current]} style={[styles.avatar, {borderColor: isDarkMode ? Colors.bgGray : Colors.bgLightGray}]}></Image>
@@ -151,7 +151,7 @@ export default function Settings() {
         )}
 
         <View style={[styles.innerContainer, { backgroundColor: isDarkMode ? Colors.bgDarkGray : 'white' }]}>
-          <Text style={styles.nameText}>My badges</Text>
+          <Text style={[styles.nameText, { color: isDarkMode ? 'white' : Colors.bgDarkGray }]}>My badges</Text>
           <View style={[styles.badgesContainer, { backgroundColor: isDarkMode ? Colors.bgGray : Colors.bgOffWhite }]}>
             {badges.map((badge, index) => (
               <View key={index} style={styles.badge}>

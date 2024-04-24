@@ -4,6 +4,7 @@ import { TextInput, RadioButton } from "react-native-paper"
 import Colors from "../constants/Colors";
 import { axiosPost, axiosPut } from '../utils/axios';
 import { AuthContext } from '../context/AuthProvider';
+import { DarkModeContext } from '../context/AuthProvider';
 
 const dimensions = Dimensions.get("window");
 const deviceWidth = dimensions.width;
@@ -16,6 +17,8 @@ export default function QuizModal({ item, selectedData,setSelectedData ,setRefre
   const { userData } = useContext(AuthContext)
   const [errorMessage, setErrorMessage] = useState("")
   const [checked, setChecked] = useState(selectedData?.answer);
+  const {isDarkMode} = useContext(DarkModeContext)
+  
   const questionFormInitialValue = {
     question: selectedData?.question ?? "",
     options: selectedData?.options ? [...selectedData.options] : ["", "", "", ""],
@@ -76,9 +79,9 @@ export default function QuizModal({ item, selectedData,setSelectedData ,setRefre
       >
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
           <View style={styles.mainContainer} >
-            <View style={styles.inputContainer}>
+            <View style={[styles.inputContainer, {backgroundColor: isDarkMode ? Colors.bgGray : 'white'}]}>
               <View style={styles.titleContainer}>
-                <Text style={styles.textTitle}>{children}</Text>
+                <Text style={[styles.textTitle, {color: isDarkMode ? 'white' : 'black'}]}>{children}</Text>
               </View>
 
               <View style={styles.inputText}>
@@ -92,14 +95,13 @@ export default function QuizModal({ item, selectedData,setSelectedData ,setRefre
                 />
               </View>
 
-              <Text style={{ fontFamily: 'PTSans-Bold' }}>Input choices and select the correct answer.</Text>
+              <Text style={{ fontFamily: 'PTSans-Bold', color: isDarkMode ? Colors.bgOffWhite : 'black' }}>Input choices and select the correct answer.</Text>
 
               <View style={styles.inputChoicesContainer}>
                 {questionForm.options.map((option, i) => (
-                  <View key={i} style={styles.radiobuttonContainer}>
+                  <View key={i} style={[styles.radiobuttonContainer, {backgroundColor: isDarkMode ? Colors.bgDarkGray : 'white'}]}>
                     <RadioButton.Android
                       style={{}}
-                      color={Colors.bgDarkViolet}
 
                       value={checked}
                       status={checked === option && option.length > 0 ? 'checked' : 'unchecked'}
@@ -118,13 +120,13 @@ export default function QuizModal({ item, selectedData,setSelectedData ,setRefre
               </View>
               {errorMessage && <Text style={styles.errorMessage}>{errorMessage}</Text>}
               <View style={styles.buttonContainer}>
-                <Pressable style={[styles.submitButton, { borderWidth: 2, borderColor: Colors.bgPurple, backgroundColor: 'white' }]} onPress={cancelForm}>
+                <Pressable style={[styles.cancelButton, {backgroundColor: isDarkMode? Colors.bgGray : 'white'}]} onPress={cancelForm}>
                   <Text style={[styles.submitText, { color: Colors.bgPurple }]}>
                     Cancel
                   </Text>
                 </Pressable>
 
-                <Pressable style={[styles.submitButton]} onPress={submitQuestion}>
+                <Pressable style={[styles.submitButton, {backgrounColor: isDarkMode? Colors.bgDarkPurpleTint : Colors.bgPurple}]} onPress={submitQuestion}>
                   <Text style={styles.submitText}>
                     {children.split(" ")[0]} Question
                   </Text>
@@ -152,7 +154,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
     padding: 15,
     borderRadius: 10,
-    backgroundColor: 'white',
     height: "fit-content",
     gap: 10,
   },
@@ -186,13 +187,22 @@ const styles = StyleSheet.create({
     paddingBottom: 5,
   },
   submitButton: {
-    backgroundColor: Colors.bgPurple,
     justifyContent: "center",
     alignItems: "center",
     height: deviceWidth * .13,
     width: deviceWidth * .34,
     borderRadius: 10,
     paddingVertical: 10,
+  },
+  cancelButton:{
+    justifyContent: "center",
+    alignItems: "center",
+    height: deviceWidth * .13,
+    width: deviceWidth * .34,
+    borderRadius: 10,
+    paddingVertical: 10,
+    borderWidth: 2, 
+    borderColor: Colors.bgPurple, 
   },
   submitText: {
     color: 'white',

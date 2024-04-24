@@ -2,7 +2,7 @@ import { Text, Pressable, StyleSheet, View, Alert } from "react-native";
 import Colors from "../constants/Colors";
 import { useContext, useEffect, useState } from "react";
 import { axiosDelete } from "../utils/axios";
-import { AuthContext } from "../context/AuthProvider";
+import { AuthContext,DarkModeContext } from "../context/AuthProvider";
 import QuizModal from "./QuizModal";
 import { Menu } from "react-native-paper";
 
@@ -17,7 +17,7 @@ export default function QuizItem(props) {
   const [menuVisible, setMenuVisible] = useState(false);
   const { userData } = useContext(AuthContext)
   const [selected, setSelected] = useState(null);
-
+  const {isDarkMode} = useContext(DarkModeContext)
 
   
   const handleChoiceSelection = (choice) => {
@@ -89,7 +89,7 @@ export default function QuizItem(props) {
   //console.log(props.selectedNumber)
   
   return (
-    <View style={styles.itemcontainer}>
+    <View style={[styles.itemcontainer, {backgroundColor: isDarkMode ? Colors.bgDarkGray : 'white'}]}>
       {/* { modalVisible && <QuizModal
         visibility={modalVisible}
         item={props.item}
@@ -100,7 +100,7 @@ export default function QuizItem(props) {
 
       <View style={styles.questioncontainer}>
         <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-          <Text style={styles.questionNumberText}>Question {props.itemNumber + 1} </Text>
+          <Text style={[styles.questionNumberText, {backgroundColor: isDarkMode ? Colors.bgDarkPurpleTint : Colors.bgPurple}]}>Question {props.itemNumber + 1} </Text>
           <View style={styles.buttonsContainer}>
             {userData.role === 'admin' && (
               <Menu
@@ -119,7 +119,7 @@ export default function QuizItem(props) {
             )}
           </View>
         </View>
-        <Text style={styles.questiontext}>{props.item.question}</Text>
+        <Text style={[styles.questiontext, {color: isDarkMode ? Colors.bgOffWhite : 'black'}]}>{props.item.question}</Text>
       </View>
 
       <View style={styles.choicescontainer}>
@@ -128,14 +128,14 @@ export default function QuizItem(props) {
             <Pressable
               key={index}
               style={[
-                styles.choices,
+                [styles.choices, {backgroundColor: isDarkMode ? Colors.bgGray : Colors.bgOffWhite}],
                 selected === index && styles.selectedchoices
               ]}
               onPress={() => handleChoiceSelection(index)}
             >
               <Text
                 style={[
-                  styles.choicestext,
+                  [styles.choicestext, {color: isDarkMode ? Colors.bgOffWhite : 'black'}],
                   selected === index && { color: 'black' }
                 ]}
               >
@@ -151,7 +151,6 @@ export default function QuizItem(props) {
 
 const styles = StyleSheet.create({
   itemcontainer: {
-    backgroundColor: 'white',
     alignItems: "center",
     borderRadius: 10,
     marginBottom: 10,

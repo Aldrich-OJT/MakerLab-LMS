@@ -1,34 +1,36 @@
 import { View, Text, StyleSheet, Pressable } from "react-native"
 import Colors from "../../constants/Colors"
 import { useState } from "react";
-import { AuthContext } from "../../context/AuthProvider";
+import { AuthContext, DarkModeContext } from "../../context/AuthProvider";
 import React, { useContext } from "react";
 
 export default function Templearncards({ id, title, description, onPress, pressQuiz,pressLearn, index, length }) {
   const {userData} = useContext(AuthContext)
+  const {isDarkMode} = useContext(DarkModeContext)
   return (
     <Pressable style={[
       styles.container,
       {marginBottom:
         (userData.role === 'admin' && index === length - 1 ? 70 :
         (userData.role === 'user' && index === length - 1 ? 20 : 0))
-      }]} onPress={pressLearn}
+      }, {backgroundColor: isDarkMode ? Colors.bgDarkGray : 'white'}]} 
+      onPress={pressLearn}
     >
       
-      <View style={styles.purpleTint}>
+      <View style={[styles.purpleTint, {backgroundColor: isDarkMode ? Colors.bgDarkPurpleTint : Colors.bgPurpleTint}]}>
         <View style={styles.titleContainer} numberOfLines={1}>
-          <Text style={styles.title} numberOfLines={1}>{title} </Text>
+          <Text style={[styles.title, {color: isDarkMode ? Colors.bgPurpleTint : Colors.bgPurple}]} numberOfLines={1}>{title} </Text>
         </View>
-        <Text style={styles.lessonNumber}>Lesson {index+1}</Text>
+        <Text style={[styles.lessonNumber, {color: isDarkMode ? Colors.bgPurpleTint : Colors.bgPurple}]}>Lesson {index+1}</Text>
       </View>
 
         <View>
-          <Text numberOfLines={2} style={styles.description}>{description}</Text>
+          <Text numberOfLines={2} style={[styles.description, {color: isDarkMode ? Colors.bgOffWhite : 'black'}]}>{description}</Text>
         </View>
 
       <View style={styles.assessContainer}>
-        <Pressable style={styles.assessmentButton} onPress={pressQuiz}>
-          <Text style={styles.assessAddText}>
+        <Pressable style={[styles.assessmentButton, {backgroundColor: isDarkMode ? Colors.bgDarkPurpleTint : Colors.bgPurple}]} onPress={pressQuiz}>
+          <Text style={[styles.assessAddText, {color: isDarkMode ? Colors.bgPurpleTint : 'white'}]}>
             Assessment
           </Text>
           <Text style={{fontFamily: 'icon', fontSize:20, color: 'white'}}></Text> 
@@ -73,7 +75,8 @@ const styles = StyleSheet.create({
     fontFamily: 'PTSans-Bold',
   },
   purpleTint:{
-    backgroundColor: Colors.bgPurpleTint
+    borderTopRightRadius: 10,
+    borderTopLeftRadius: 10,
   },
   lessonNumber:{
     fontFamily: 'PTSans-Regular',

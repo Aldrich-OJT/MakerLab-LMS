@@ -2,8 +2,7 @@ import { TextInput } from "react-native-paper"
 import { View, Pressable, Text, StyleSheet, Modal, KeyboardAvoidingView, TouchableWithoutFeedback, Keyboard, Dimensions } from "react-native"
 import { useCallback, useContext, useState } from "react"
 import { axiosPost, axiosPut } from "../../utils/axios";
-
-import { AuthContext } from "../../context/AuthProvider";
+import { AuthContext, DarkModeContext } from "../../context/AuthProvider";
 //import { SafeAreaView } from "react-native-safe-area-context";
 import { useNavigation } from '@react-navigation/native';
 import Colors from "../../constants/Colors";
@@ -26,7 +25,7 @@ export default function ModalContent({ documentName, title, description, visibil
   const { userData } = useContext(AuthContext)
   //const navigation = useNavigation()
   const [errorMessage, setErrorMessage] = useState("");
-
+  const {isDarkMode} = useContext(DarkModeContext)
 
   const formInitialData = {
     title: title ?? "",
@@ -121,9 +120,9 @@ export default function ModalContent({ documentName, title, description, visibil
       >
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
           <View style={styles.mainContainer} >
-            <View style={styles.inputContainer}>
+            <View style={[styles.inputContainer,{backgroundColor: isDarkMode ? Colors.bgGray : 'white'}]}>
               <View style={styles.titleContainer}>
-                <Text style={styles.textTitle}>{children}</Text>
+                <Text style={[styles.textTitle, {color: isDarkMode ? Colors.bgOffWhite : 'black'}]}>{children}</Text>
               </View>
 
               <TextInput
@@ -155,13 +154,13 @@ export default function ModalContent({ documentName, title, description, visibil
               {errorMessage && <Text style={styles.errorMessage}>{errorMessage}</Text>}
 
               <View style={styles.buttonContainer}>
-                <Pressable style={[styles.submitButton, { borderWidth: 2, borderColor: Colors.bgPurple, backgroundColor: 'white' }]} onPress={cancelForm}>
+                <Pressable style={[styles.cancelButton, {backgroundColor: isDarkMode ? Colors.bgGray : 'white'}]} onPress={cancelForm}>
                   <Text style={[styles.submitText, { color: Colors.bgPurple }]}>
                     Cancel
                   </Text>
                 </Pressable>
 
-                <Pressable style={styles.submitButton} onPress={submitForm}>
+                <Pressable style={[styles.submitButton, {backgroundColor: isDarkMode ? Colors.bgDarkPurpleTint : Colors.bgPurple}]} onPress={submitForm}>
                   <Text style={styles.submitText}>
                     Submit
                   </Text>
@@ -181,7 +180,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "rgba(0,0,0,0.4)"
+    backgroundColor: "rgba(0,0,0,0.3)"
   },
   inputContainer: {
     maxheight: '30%',
@@ -190,7 +189,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
     padding: 15,
     borderRadius: 10,
-    backgroundColor: 'white',
     height: "fit-content",
     gap: 10,
   },
@@ -220,7 +218,6 @@ const styles = StyleSheet.create({
     gap: 30,
   },
   submitButton: {
-    backgroundColor: Colors.bgPurple,
     justifyContent: "center",
     alignItems: "center",
     height: deviceWidth * .13,
@@ -246,6 +243,18 @@ const styles = StyleSheet.create({
     color: 'white',
     fontSize: 16,
     fontFamily: 'PTSans-Bold',
+  },
+  cancelButton:{
+    borderWidth: 2, 
+    borderColor: Colors.bgPurple, 
+    backgroundColor: 'white' ,
+    justifyContent: "center",
+    alignItems: "center",
+    height: deviceWidth * .13,
+    width: deviceWidth * .34,
+    borderRadius: 10,
+    paddingVertical: 10,
+    marginTop: 10,
   },
   errorMessage: {
     alignSelf: "center",

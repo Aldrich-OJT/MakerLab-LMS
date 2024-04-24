@@ -59,13 +59,13 @@ const TabGroup = () => {
 
           switch (route.name) {
             case 'Home':
-              iconName = <Text style={{fontFamily: 'icon', fontSize:30, color: focused ? Colors.bgDarkGray : Colors.bgYellow}}></Text>
+              iconName = <Text style={{fontFamily: 'icon', fontSize:30, color: focused ? Colors.bgDarkerGray : Colors.bgYellow}}></Text>
               break;
             case 'Profile':
-              iconName = <Text style={{fontFamily: 'icon', fontSize:30, color: focused ? Colors.bgDarkGray : Colors.bgYellow}}></Text>
+              iconName = <Text style={{fontFamily: 'icon', fontSize:30, color: focused ? Colors.bgDarkerGray : Colors.bgYellow}}></Text>
               break;
             case 'Learn':
-              iconName = <Text style={{fontFamily: 'icon', fontSize:30, color: focused ? Colors.bgDarkGray : Colors.bgYellow}}></Text>
+              iconName = <Text style={{fontFamily: 'icon', fontSize:30, color: focused ? Colors.bgDarkerGray : Colors.bgYellow}}></Text>
               break;
             }
           return iconName;
@@ -76,7 +76,7 @@ const TabGroup = () => {
         tabBarHideOnKeyboard: true,
         tabBarInactiveTintColor: Colors.bgYellow,
         tabBarStyle: {
-          backgroundColor: Colors.bgDarkGray,
+          backgroundColor: Colors.bgDarkerGray,
           overflow: "hidden",
           borderTopLeftRadius: 20,
           borderTopRightRadius: 20,

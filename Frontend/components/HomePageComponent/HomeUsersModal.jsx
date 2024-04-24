@@ -27,12 +27,12 @@ return (
    onRequestClose={() => visibility(false)}>
     
     <View style={styles.modalMainContainer}>
-      <View style={[styles.modalContentContainer, {backgroundColor: isDarkMode ? Colors.bgDarkGray : 'white'}]}>
+      <View style={[styles.modalContentContainer, {backgroundColor: isDarkMode ? Colors.bgGray : 'white'}]}>
         <View style={styles.titleContainer}>
           <Text style={[styles.titleText, {color: isDarkMode ? 'white' : Colors.bgDarkGray}]}>List of Users</Text>
         </View>
        
-        <DataTable style={[styles.table, {backgroundColor: isDarkMode ? Colors.bgGray : 'white'}]}>
+        <DataTable style={[styles.table, {backgroundColor: isDarkMode ? Colors.bgLightGray : 'white'}]}>
           <DataTable.Header style={[styles.purpleTint, {backgroundColor: isDarkMode ? Colors.bgDarkPurpleTint : Colors.bgPurpleTint}]}>
             <DataTable.Title style={styles.idCell}>
               <Text style={[styles.headerText, {color: isDarkMode ? Colors.bgPurpleTint : Colors.bgPurple}]}>ID</Text>
@@ -50,15 +50,15 @@ return (
           {visibleItems.map((user, index) => (
             <DataTable.Row style={styles.tableRows} key={index}>
               <DataTable.Cell style={styles.idCell}>
-                <Text style={[styles.item, {color: isDarkMode ? Colors.bgLightGray : Colors.bgDarkGray}]}>{startIndex + (index+1)}</Text>
+                <Text style={styles.item}>{startIndex + (index+1)}</Text>
               </DataTable.Cell>
 
               <DataTable.Cell style={styles.nameCell}>
-                <Text style={[, {color: isDarkMode ? Colors.bgLightGray: Colors.bgDarkGray}]}>{user.name}</Text>
+                <Text style={styles.bgDarkGray}>{user.name}</Text>
               </DataTable.Cell>
 
               <DataTable.Cell style={styles.nameCell}>
-                <Text style={[styles.item, {color: isDarkMode ? Colors.bgLightGray : Colors.bgDarkGray}]}>{user.email}</Text>
+                <Text style={styles.item}>{user.email}</Text>
               </DataTable.Cell>
             </DataTable.Row>
           ))}
@@ -71,7 +71,7 @@ return (
                label = {`${page+1} of ${numberOfPages}`}
            />
         </DataTable>
-        <Pressable style={[styles.cancelButton, {backgroundColor: isDarkMode ? Colors.bgDarkGray : 'white'}]} onPress={()=>setModalVisible(false)}>
+        <Pressable style={[styles.cancelButton, {backgroundColor: isDarkMode ? Colors.bgGray : 'white'}]} onPress={()=>setModalVisible(false)}>
             <Text style={styles.cancelText}>
               Close
             </Text>
@@ -118,7 +118,8 @@ const styles = StyleSheet.create({
         fontSize: 16,
       },
       itemText:{
-        fontStyle: 'PTSans-Regular'
+        fontStyle: 'PTSans-Regular',
+        color: Colors.bgDarkGray
       },
       cancelButton: {
         backgroundColor: 'white',
