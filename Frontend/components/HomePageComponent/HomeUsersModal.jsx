@@ -1,7 +1,7 @@
 import { View, Text, StyleSheet, Pressable, Modal, ScrollView, Dimensions} from "react-native";
 import { useContext, useState, useEffect} from "react";
-import { AuthContext, DarkModeContext } from "../../context/AuthProvider";
-import { DataTable } from 'react-native-paper';
+import { AuthContext } from "../../context/AuthProvider";
+import { DataTable, useTheme } from 'react-native-paper';
 import Colors from "../../constants/Colors";
 import {  axiosGet } from "../../utils/axios";
 
@@ -11,7 +11,7 @@ const deviceWidth = dimensions.width;
 export default function HomeUserModal({ visibility, setModalVisible, users }) {
   // const [refresh, setRefresh] = useState(true)
   const [page, setPage] = useState(0);
-  const {isDarkMode} = useContext(DarkModeContext)
+  const theme = useTheme()
 
 const itemsPerPage = 5;
 const numberOfPages = Math.ceil(users.length / itemsPerPage);
@@ -27,38 +27,38 @@ return (
    onRequestClose={() => visibility(false)}>
     
     <View style={styles.modalMainContainer}>
-      <View style={[styles.modalContentContainer, {backgroundColor: isDarkMode ? Colors.bgGray : 'white'}]}>
+      <View style={[styles.modalContentContainer, {backgroundColor: theme.colors.darkGrayWhite}]}>
         <View style={styles.titleContainer}>
-          <Text style={[styles.titleText, {color: isDarkMode ? 'white' : Colors.bgDarkGray}]}>List of Users</Text>
+          <Text style={[styles.titleText, {color: theme.colors.fontcolor}]}>List of Users</Text>
         </View>
        
-        <DataTable style={[styles.table, {backgroundColor: isDarkMode ? Colors.bgLightGray : 'white'}]}>
-          <DataTable.Header style={[styles.purpleTint, {backgroundColor: isDarkMode ? Colors.bgDarkPurpleTint : Colors.bgPurpleTint}]}>
+        <DataTable style={[styles.table, {backgroundColor: theme.colors.darkGrayWhite}]}>
+          <DataTable.Header style={[styles.purpleTint, {backgroundColor: theme.colors.Purple}]}>
             <DataTable.Title style={styles.idCell}>
-              <Text style={[styles.headerText, {color: isDarkMode ? Colors.bgPurpleTint : Colors.bgPurple}]}>ID</Text>
+              <Text style={styles.headerText}>ID</Text>
             </DataTable.Title>
 
             <DataTable.Title style={styles.nameCell}>
-              <Text style={[styles.headerText, {color: isDarkMode ? Colors.bgPurpleTint : Colors.bgPurple}]}>Name</Text>
+              <Text style={styles.headerText}>Name</Text>
             </DataTable.Title>
 
             <DataTable.Title style={styles.nameCell}>
-              <Text style={[styles.headerText, {color: isDarkMode ? Colors.bgPurpleTint : Colors.bgPurple}]}>Email</Text>
+              <Text style={styles.headerText}>Email</Text>
             </DataTable.Title>
           </DataTable.Header>
 
           {visibleItems.map((user, index) => (
             <DataTable.Row style={styles.tableRows} key={index}>
               <DataTable.Cell style={styles.idCell}>
-                <Text style={styles.item}>{startIndex + (index+1)}</Text>
+                <Text style={[styles.item, {color: theme.colors.fontcolor}]}>{startIndex + (index+1)}</Text>
               </DataTable.Cell>
 
               <DataTable.Cell style={styles.nameCell}>
-                <Text style={styles.bgDarkGray}>{user.name}</Text>
+                <Text style={[, {color: theme.colors.fontcolor}]}>{user.name}</Text>
               </DataTable.Cell>
 
               <DataTable.Cell style={styles.nameCell}>
-                <Text style={styles.item}>{user.email}</Text>
+                <Text style={[styles.item, {color: theme.colors.fontcolor}]}>{user.email}</Text>
               </DataTable.Cell>
             </DataTable.Row>
           ))}
@@ -71,7 +71,7 @@ return (
                label = {`${page+1} of ${numberOfPages}`}
            />
         </DataTable>
-        <Pressable style={[styles.cancelButton, {backgroundColor: isDarkMode ? Colors.bgGray : 'white'}]} onPress={()=>setModalVisible(false)}>
+        <Pressable style={[styles.cancelButton, {backgroundColor: theme.colors.darkGrayWhite}]} onPress={()=>setModalVisible(false)}>
             <Text style={styles.cancelText}>
               Close
             </Text>
@@ -113,7 +113,7 @@ const styles = StyleSheet.create({
         height:340,
       },
       headerText:{
-        color:Colors.bgPurple,
+        color:Colors.bgOffWhite,
         fontFamily: 'PTSans-Bold',
         fontSize: 16,
       },

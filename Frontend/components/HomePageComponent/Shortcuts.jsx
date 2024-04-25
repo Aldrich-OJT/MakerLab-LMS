@@ -1,27 +1,35 @@
 import React, { useContext } from 'react';
 import { View, Text, Pressable, StyleSheet } from 'react-native';
 import Colors from '../../constants/Colors';
-import { DarkModeContext } from '../../context/AuthProvider';
 
-export default function Shortcut({ icon, text, onPress }) {
-  const {isDarkMode} = useContext(DarkModeContext)
+import { useTheme } from 'react-native-paper';
+
+
+function ShortcutTextContainer({ text, theme }) {
 
   return (
-    <Pressable style={[styles.shortcuts, {backgroundColor: isDarkMode ? Colors.bgDarkGray : 'white'}]} onPress={onPress}>
-      <Text style={[styles.icons, { fontSize: 70, color: isDarkMode ? Colors.bgOffWhite : Colors.bgGray}]}>{icon}</Text>
-      <ShortcutTextContainer text={text} isDarkMode={isDarkMode} />
+    <View style={styles.shortcutTextContainer}>
+      <Text style={[styles.shortcutText, {color: theme.colors.fontcolor}]}>{text}</Text>
+      <Text style={[styles.icons, {fontSize: 30, color:  theme.colors.offwhiteGray}]}></Text>
+    </View>
+  );
+}
+
+export default function Shortcut({ icon, text, onPress }) {
+  const theme = useTheme()
+  //const {isDarkMode} = useContext(DarkModeContext)
+
+  return (
+    <Pressable style={[styles.shortcuts, {backgroundColor:theme.colors.darkGrayWhite}]} onPress={onPress}>
+      <Text style={[styles.icons, { fontSize: 70, color: theme.colors.offwhiteGray}]}>{icon}</Text>
+      <ShortcutTextContainer 
+      theme = {theme}
+      text={text}  />
     </Pressable>
   );
 }
 
-function ShortcutTextContainer({ text, isDarkMode }) {
-  return (
-    <View style={styles.shortcutTextContainer}>
-      <Text style={[styles.shortcutText, {color: isDarkMode ? 'white' : Colors.bgGray}]}>{text}</Text>
-      <Text style={[styles.icons, {fontSize: 30, color: isDarkMode ?  Colors.bgOffWhite : Colors.bgGray}]}></Text>
-    </View>
-  );
-}
+
   
 const styles = StyleSheet.create({
   shortcuts: {

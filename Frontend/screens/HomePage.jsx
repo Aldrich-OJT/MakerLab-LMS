@@ -1,5 +1,5 @@
 import { View, Text, StyleSheet} from "react-native";
-import {AuthContext, DarkModeContext} from "../context/AuthProvider";
+import {AuthContext} from "../context/AuthProvider";
 import { useContext, useState, useEffect, useCallback } from "react";
 import ProgressBar from 'react-native-progress/Bar';
 import Colors from "../constants/Colors";
@@ -8,10 +8,13 @@ import HomeLessonsModal from "../components/HomePageComponent/HomeLessonsModal";
 import Shortcut from "../components/HomePageComponent/Shortcuts";
 import { axiosGet } from "../utils/axios";
 import { useFocusEffect } from "@react-navigation/native";
-export default function HomePage() {
+import { useTheme } from "react-native-paper";
 
+
+
+export default function HomePage() {
   const { userData } = useContext(AuthContext);
-  const { isDarkMode } = useContext(DarkModeContext);
+  const  theme =useTheme()
   const [ gradeModalVisible, setGradeModalVisible] = useState(false)
   const [ userListModalVisible, setUserListModalVisible] = useState(false)
   const [ refresh, setRefresh]  = useState(true)
@@ -22,6 +25,7 @@ export default function HomePage() {
   const [categories, setCategories] = useState([])
   const [progress, setProgress] = useState(null)
   
+  //console.log("this is userdata",userData)
   useEffect(() => {
     const filteredData = {};
 
@@ -31,7 +35,7 @@ export default function HomePage() {
       const categoryId = categories._id;
       const categoryTitle = categories.title; // Store the category title
 
-      // Find matching data objects
+      // Find matching category id
       const matchingData = userScores.filter(item => item.categoryId === categoryId);
 
 
@@ -54,6 +58,8 @@ export default function HomePage() {
         const data = await axiosGet('/api/user')
         const userdata = await axiosGet(`/api/user/data/${userData._id}`, userData.token)
         const categories = await axiosGet(`/api/categories/`, userData.token)
+        // console.log("userdata",userdata)
+        // console.log("categories",categories)
         setUserScores(userdata.quizScores)
         setProgress(parseFloat(userdata.progress.$numberDecimal))
         setCategories(categories)
@@ -102,9 +108,9 @@ export default function HomePage() {
       onPress: () => { },
     },
   ];
-
+  //console.log("filtered",userScores)
   return (
-    <View style={[styles.container, {backgroundColor: Colors.bgOffWhite}]}>
+    <View style={[styles.container, { backgroundColor: theme.colors.grayOffwhite }]}>
       {!loading && <HomeUserModal
         visibility={userListModalVisible}
         users={users}
@@ -117,14 +123,13 @@ export default function HomePage() {
         setModalVisible={() => setGradeModalVisible(false)}
       />}
 
-      <View style={[styles.bottomSheet, {backgroundColor: isDarkMode ? Colors.bgGray : Colors.bgOffWhite}]}>
-        <View style={[styles.progressContainer, {backgroundColor: isDarkMode ?  Colors.bgDarkGray : 'white'}]}>
+      <View style={[styles.bottomSheet, {backgroundColor: theme.colors.grayOffwhite}]}>
+        <View style={[styles.progressContainer, {backgroundColor: theme.colors.darkGrayWhite}]}>
           <View style={styles.progressTopContainer}>
-            <Text style={[styles.icons, {fontSize:100, color: isDarkMode ?  Colors.bgOffWhite : Colors.bgGray}]}></Text>
-
+            <Text style={[styles.icons, {fontSize:100, color: theme.colors.fontcolor}]}></Text>
             <View style={styles.progressTextContainer}>
-              <Text style={[styles.greetingText, {color: isDarkMode ? 'white' : Colors.bgDarkGray}]}>Hi {userData.name},</Text>
-              <Text style={[styles.progressText, {color: isDarkMode ? 'white' : Colors.bgDarkGray}]}>
+              <Text style={[styles.greetingText, {color: theme.colors.fontcolor}]}>Hi {userData.name},</Text>
+              <Text style={[styles.progressText, {color: theme.colors.fontcolor}]}>
                 {userData.role === 'user' ? `You have finished ${Math.floor(progress * 100)}% of the course. ${(progress*100) < 50 ? "Keep going!" :"Good job!"}` : "Welcome back!"}
               </Text>
             </View>
@@ -136,7 +141,7 @@ export default function HomePage() {
               width={300}
               height={10}
               borderRadius={10}
-              unfilledColor={isDarkMode ? Colors.bgLightGray : Colors.bgOffWhite}
+              unfilledColor={theme.lightGrayOffwhite}
               borderWidth={0}
               color={Colors.bgPurple}
             />

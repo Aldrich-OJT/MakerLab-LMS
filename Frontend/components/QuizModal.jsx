@@ -1,10 +1,10 @@
 import { useCallback, useContext, useState } from 'react';
 import { Text, Pressable, StyleSheet, View, Modal, Dimensions, TouchableWithoutFeedback, KeyboardAvoidingView, Keyboard } from "react-native";
-import { TextInput, RadioButton } from "react-native-paper"
+import { TextInput, RadioButton, useTheme } from "react-native-paper"
 import Colors from "../constants/Colors";
 import { axiosPost, axiosPut } from '../utils/axios';
 import { AuthContext } from '../context/AuthProvider';
-import { DarkModeContext } from '../context/AuthProvider';
+
 
 const dimensions = Dimensions.get("window");
 const deviceWidth = dimensions.width;
@@ -16,8 +16,8 @@ const contentType = "application/json"
 export default function QuizModal({ item, selectedData,setSelectedData ,setRefresh, visibility, setModalVisible, children, postID, }) {
   const { userData } = useContext(AuthContext)
   const [errorMessage, setErrorMessage] = useState("")
+  const theme = useTheme()
   const [checked, setChecked] = useState(selectedData?.answer);
-  const {isDarkMode} = useContext(DarkModeContext)
   
   const questionFormInitialValue = {
     question: selectedData?.question ?? "",
@@ -79,9 +79,9 @@ export default function QuizModal({ item, selectedData,setSelectedData ,setRefre
       >
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
           <View style={styles.mainContainer} >
-            <View style={[styles.inputContainer, {backgroundColor: isDarkMode ? Colors.bgGray : 'white'}]}>
+            <View style={[styles.inputContainer, {backgroundColor: theme.colors.darkGrayWhite }]}>
               <View style={styles.titleContainer}>
-                <Text style={[styles.textTitle, {color: isDarkMode ? 'white' : 'black'}]}>{children}</Text>
+                <Text style={[styles.textTitle, {color: theme.colors.fontcolor}]}>{children}</Text>
               </View>
 
               <View style={styles.inputText}>
@@ -91,15 +91,15 @@ export default function QuizModal({ item, selectedData,setSelectedData ,setRefre
                   mode="flat"
                   onChangeText={(inputValue) => { handleForm("question", inputValue) }}
                   value={questionForm.question}
-                  style={{maxHeight:90}}
+                  style={{maxHeight:90, color: Colors.bgPurple}}
                 />
               </View>
 
-              <Text style={{ fontFamily: 'PTSans-Bold', color: isDarkMode ? Colors.bgOffWhite : 'black' }}>Input choices and select the correct answer.</Text>
+              <Text style={{ fontFamily: 'PTSans-Bold', color: theme.colors.fontcolorOffwhiteBlack }}>Input choices and select the correct answer.</Text>
 
               <View style={styles.inputChoicesContainer}>
                 {questionForm.options.map((option, i) => (
-                  <View key={i} style={[styles.radiobuttonContainer, {backgroundColor: isDarkMode ? Colors.bgDarkGray : 'white'}]}>
+                  <View key={i} style={[styles.radiobuttonContainer, {backgroundColor: theme.colors.darkGrayWhite}]}>
                     <RadioButton.Android
                       style={{}}
 
@@ -120,13 +120,13 @@ export default function QuizModal({ item, selectedData,setSelectedData ,setRefre
               </View>
               {errorMessage && <Text style={styles.errorMessage}>{errorMessage}</Text>}
               <View style={styles.buttonContainer}>
-                <Pressable style={[styles.cancelButton, {backgroundColor: isDarkMode? Colors.bgGray : 'white'}]} onPress={cancelForm}>
+                <Pressable style={[styles.cancelButton, {backgroundColor: theme.colors.darkGrayWhite}]} onPress={cancelForm}>
                   <Text style={[styles.submitText, { color: Colors.bgPurple }]}>
                     Cancel
                   </Text>
                 </Pressable>
 
-                <Pressable style={[styles.submitButton, {backgrounColor: isDarkMode? Colors.bgDarkPurpleTint : Colors.bgPurple}]} onPress={submitQuestion}>
+                <Pressable style={[styles.submitButton, {backgroundColor: Colors.bgPurple}]} onPress={submitQuestion}>
                   <Text style={styles.submitText}>
                     {children.split(" ")[0]} Question
                   </Text>

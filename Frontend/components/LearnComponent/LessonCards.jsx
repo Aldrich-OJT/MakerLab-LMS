@@ -1,8 +1,8 @@
 import React, { useCallback, useContext, useState } from "react";
 import { StyleSheet, View, Text, Pressable, Alert, ImageBackground } from "react-native";
 import { axiosDelete, } from "../../utils/axios";
-import { AuthContext, DarkModeContext } from "../../context/AuthProvider";
-import { Menu } from 'react-native-paper';
+import { AuthContext } from "../../context/AuthProvider";
+import { Menu, useTheme } from 'react-native-paper';
 import LessonModal from "./LessonModal";
 import Colors from "../../constants/Colors";
 import background from "../../assets/lesson-image.png"
@@ -12,8 +12,8 @@ const deleteCategoryURL = "/api/categories/delete/"
 export default function LessonCards({ title, description, setModalVisible, ID, setRefresh, onPress, index, setSelectedData, length }) {
   const { userData } = useContext(AuthContext)
   const [menuVisible, setMenuVisible] = useState(false);
-  const { isDarkMode } = useContext(DarkModeContext)
-
+  const theme = useTheme()
+console.log
   const [showDescription, setShowDescription] = useState(false);
 
   const showDescriptionHandler = () => {
@@ -43,7 +43,7 @@ export default function LessonCards({ title, description, setModalVisible, ID, s
       {marginBottom:
         (userData.role === 'admin' && index === length - 1 ? 70 :
         (userData.role === 'user' && index === length - 1 ? 20 : 0))
-      , backgroundColor: isDarkMode ? Colors.bgDarkGray : 'white'}]} onPress={onPress}>
+      , backgroundColor: theme.colors.darkGrayWhite}]} onPress={onPress}>
       {/* <LessonModal
         setModalVisibility={() => setModalVisible(false)}
         visibility={modalVisible}
@@ -58,10 +58,10 @@ export default function LessonCards({ title, description, setModalVisible, ID, s
         source={background}
         style={styles.imageContainer}>
 
-        <View style={{backgroundColor: isDarkMode ? Colors.bgDarkPurpleTint : Colors.bgPurpleTint}}>
+        <View style={{backgroundColor: theme.colors.purpletintPurple}}>
           <View style={styles.titleContainer}>
-            <Text style={{ fontFamily: 'icon', fontSize: 23, color: isDarkMode ? Colors.bgPurpleTint : Colors.bgPurple, marginTop: 2 }}></Text>
-            <Text style={[styles.title, {color: isDarkMode ? Colors.bgPurpleTint : Colors.bgPurple}]}>{title}</Text>
+            <Text style={{ fontFamily: 'icon', fontSize: 23, color: theme.colors.fontcolorPurple, marginTop: 2 }}></Text>
+            <Text style={[styles.title, {color: theme.colors.fontcolorPurple}]}>{title}</Text>
 
             {userData.role === 'admin' && (
               <Menu
@@ -69,19 +69,18 @@ export default function LessonCards({ title, description, setModalVisible, ID, s
                 onDismiss={() => setMenuVisible(false)}
                 anchor={
                   <Pressable style={{ width: 50, height: 30 }} onPress={() => (setMenuVisible(true))}>
-                    <Text style={{ fontFamily: 'icon', fontSize: 22, color: isDarkMode ? Colors.bgPurpleTint : Colors.bgPurple, alignSelf: 'flex-end', marginRight: 5 }}> </Text>
+                    <Text style={{ fontFamily: 'icon', fontSize: 22, color: theme.colors.fontcolorPurple, alignSelf: 'flex-end', marginRight: 5 }}> </Text>
                   </Pressable>
                 }>
                 <Menu.Item onPress={() => {
                   setModalVisible(true),
                   setSelectedData({
-
                     title,
                     description,
                     ID 
                   })
-                }} title={<Text style={{ fontFamily: 'icon', fontSize: 16, color: Colors.bgDarkGray, textAlign: "left" }}> Edit</Text>} />
-                <Menu.Item onPress={createTwoButtonAlert} title={<Text style={{ fontFamily: 'icon', fontSize: 16, color: Colors.bgDarkGray, textAlign: "left" }}> Delete</Text>} />
+                }} title={<Text style={{ fontFamily: 'icon', fontSize: 16, color: theme.colors.lightGrayDarkgray , textAlign: "left" }}> Edit</Text>} />
+                <Menu.Item onPress={createTwoButtonAlert} title={<Text style={{ fontFamily: 'icon', fontSize: 16, color: theme.colors.lightGrayDarkgray, textAlign: "left" }}> Delete</Text>} />
               </Menu>
             )}
           </View>
@@ -91,7 +90,7 @@ export default function LessonCards({ title, description, setModalVisible, ID, s
       <View>
         <Text
           numberOfLines={showDescription ? undefined : 2}
-          style={[styles.lessonDescription, {color: isDarkMode ? Colors.bgOffWhite : 'black'}]}>
+          style={[styles.lessonDescription, {color: theme.colors.fontcolorOffwhiteBlack}]}>
           {description}
         </Text>
       </View>

@@ -11,22 +11,21 @@ import Colors from "../../constants/Colors";
 import LearnHeader from "../../components/LearnComponent/LearnHeader";
 import Templearncards from "../../components/LearnComponent/templearncards";
 import { axiosGet } from "../../utils/axios";
-import { AuthContext, DarkModeContext } from "../../context/AuthProvider";
+import { AuthContext} from "../../context/AuthProvider";
 import { useFocusEffect } from '@react-navigation/native';
 import ModalContent from "../../components/LearnComponent/ModalContent";
-import { ActivityIndicator } from 'react-native-paper';
+import { ActivityIndicator, useTheme } from 'react-native-paper';
 
 const getPostURL = "/api/post/category/";
 
 export default function Templearn({ route, navigation }) {
+  const theme = useTheme()
   const [modalVisible, setModalVisible] = useState(false);
   const { param } = route.params;
   const { userData } = useContext(AuthContext);
   const [postData, setpostData] = useState([]);
   const [contentLoading, setContentLoading] = useState(false)
   const [refresh, setRefresh] = useState(false)
-  const {isDarkMode} = useContext(DarkModeContext)
-  console.log(param)
 
 
   const fetchData = useCallback(async () => {
@@ -67,15 +66,15 @@ export default function Templearn({ route, navigation }) {
   //console.log(nocontent)
   //console.log(refresh)
   return (
-    <View style={[styles.maincontainer, {backgroundColor: isDarkMode ? Colors.bgGray : Colors.bgOffWhite}]}>
+    <View style={[styles.maincontainer, {backgroundColor: theme.colors.grayOffwhite}]}>
       <LearnHeader title={param.title} navigation={navigation} />
 
-      <View style={[styles.bottomsheet, {backgroundColor: isDarkMode ? Colors.bgGray : Colors.bgOffWhite}]}>
+      <View style={[styles.bottomsheet, {backgroundColor: theme.colors.grayOffwhite}]}>
         <View style={styles.FlatListContainer}>
           {contentLoading ?
             "" : (
               postData.length == 0 ? (
-                <Text style={{ fontFamily: 'PTSans-Bold', textAlign: "center", color: isDarkMode ? Colors.bgOffWhite : 'black' }}>
+                <Text style={{ fontFamily: 'PTSans-Bold', textAlign: "center", color: theme.colors.fontcolorOffwhiteBlack }}>
                   No contents found
                 </Text>
               ) : (
