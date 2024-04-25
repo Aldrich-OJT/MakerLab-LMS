@@ -13,7 +13,7 @@ export default function LessonCards({ title, description, setModalVisible, ID, s
   const { userData } = useContext(AuthContext)
   const [menuVisible, setMenuVisible] = useState(false);
   const theme = useTheme()
-
+console.log
   const [showDescription, setShowDescription] = useState(false);
 
   const showDescriptionHandler = () => {
@@ -58,10 +58,10 @@ export default function LessonCards({ title, description, setModalVisible, ID, s
         source={background}
         style={styles.imageContainer}>
 
-        <View style={{backgroundColor: theme.colors.darkpurpletintPurple}}>
+        <View style={{backgroundColor: theme.colors.purpletintPurple}}>
           <View style={styles.titleContainer}>
-            <Text style={{ fontFamily: 'icon', fontSize: 23, color: Colors.bgOffWhite, marginTop: 2 }}></Text>
-            <Text style={[styles.title, {color: Colors.bgOffWhite}]}>{title}</Text>
+            <Text style={{ fontFamily: 'icon', fontSize: 23, color: theme.colors.fontcolorPurple, marginTop: 2 }}></Text>
+            <Text style={[styles.title, {color: theme.colors.fontcolorPurple}]}>{title}</Text>
 
             {userData.role === 'admin' && (
               <Menu
@@ -69,7 +69,7 @@ export default function LessonCards({ title, description, setModalVisible, ID, s
                 onDismiss={() => setMenuVisible(false)}
                 anchor={
                   <Pressable style={{ width: 50, height: 30 }} onPress={() => (setMenuVisible(true))}>
-                    <Text style={{ fontFamily: 'icon', fontSize: 22, color: theme.colors.purpletintPurple, alignSelf: 'flex-end', marginRight: 5 }}> </Text>
+                    <Text style={{ fontFamily: 'icon', fontSize: 22, color: theme.colors.fontcolorPurple, alignSelf: 'flex-end', marginRight: 5 }}> </Text>
                   </Pressable>
                 }>
                 <Menu.Item onPress={() => {
@@ -79,8 +79,8 @@ export default function LessonCards({ title, description, setModalVisible, ID, s
                     description,
                     ID 
                   })
-                }} title={<Text style={{ fontFamily: 'icon', fontSize: 16, color: Colors.bgDarkGray, textAlign: "left" }}> Edit</Text>} />
-                <Menu.Item onPress={createTwoButtonAlert} title={<Text style={{ fontFamily: 'icon', fontSize: 16, color: Colors.bgDarkGray, textAlign: "left" }}> Delete</Text>} />
+                }} title={<Text style={{ fontFamily: 'icon', fontSize: 16, color: theme.colors.lightGrayDarkgray , textAlign: "left" }}> Edit</Text>} />
+                <Menu.Item onPress={createTwoButtonAlert} title={<Text style={{ fontFamily: 'icon', fontSize: 16, color: theme.colors.lightGrayDarkgray, textAlign: "left" }}> Delete</Text>} />
               </Menu>
             )}
           </View>

@@ -1,13 +1,10 @@
-import { TextInput } from "react-native-paper"
+import { TextInput, useTheme } from "react-native-paper"
 import { View, Pressable, Text, StyleSheet, Modal, KeyboardAvoidingView, TouchableWithoutFeedback, Keyboard, Dimensions, Platform } from "react-native"
 import { useCallback, useContext, useState } from "react"
 import Colors from "../../constants/Colors";
-// import * as DocumentPicker from 'expo-document-picker';
 import { axiosPost, axiosPut } from "../../utils/axios";
-import { AuthContext, DarkModeContext } from "../../context/AuthProvider";
-//import { SafeAreaView } from "react-native-safe-area-context";
+import { AuthContext} from "../../context/AuthProvider";
 import { useNavigation } from '@react-navigation/native';
-
 
 const dimensions = Dimensions.get("window");
 const deviceWidth = dimensions.width;
@@ -21,7 +18,7 @@ export default function LessonModal({ visibility,selectedData, setSelectedData,s
   const { userData } = useContext(AuthContext)
   //const navigation = useNavigation()
   const [errorMessage, setErrorMessage] = useState("");
-  const {isDarkMode} = useContext(DarkModeContext);
+  const theme  = useTheme()
 
   const formInitialData = {
     title: selectedData?.title,
@@ -75,9 +72,9 @@ export default function LessonModal({ visibility,selectedData, setSelectedData,s
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
         <View style={styles.mainContainer} >
           <KeyboardAvoidingView behavior={Platform.OS === "ios" ? "padding" : "height"}>
-            <View style={[styles.inputContainer, {backgroundColor: isDarkMode ? Colors.bgGray : 'white'}]}>
+            <View style={[styles.inputContainer, {backgroundColor: theme.colors.darkGrayWhite}]}>
               <View style={styles.titleContainer}>
-                <Text style={[styles.textTitle, {color: isDarkMode ? Colors.bgOffWhite : 'black'}]}>{children}</Text>
+                <Text style={[styles.textTitle, {color:theme.colors.fontcolorOffwhiteBlack}]}>{children}</Text>
               </View>
 
               <TextInput
@@ -97,13 +94,13 @@ export default function LessonModal({ visibility,selectedData, setSelectedData,s
                 value={formData.description} />
               {errorMessage && <Text style={styles.errorMessage}>{errorMessage}</Text>}
               <View style={styles.buttonContainer}>
-                <Pressable style={[styles.cancelButton, {backgroundColor: isDarkMode ? Colors.bgGray : 'white'}]} onPress={cancelForm}>
+                <Pressable style={[styles.cancelButton, {backgroundColor: theme.colors.darkGrayWhite}]} onPress={cancelForm}>
                   <Text style={[styles.submitText, { color: Colors.bgPurple }]}>
                     Cancel
                   </Text>
                 </Pressable>
 
-                <Pressable style={[styles.submitButton, {backgroundColor: isDarkMode ? Colors.bgDarkPurpleTint : Colors.bgPurple}]} onPress={submitForm}>
+                <Pressable style={[styles.submitButton, {backgroundColor: Colors.bgPurple}]} onPress={submitForm}>
                   <Text style={styles.submitText}>
                     Submit
                   </Text>

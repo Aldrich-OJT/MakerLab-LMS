@@ -6,8 +6,8 @@ import QuizModal from "../../components/QuizModal";
 import { useCallback, useContext, useEffect, useRef, useState } from "react";
 import { FlatList } from "react-native";
 import {  axiosGet, axiosPut } from "../../utils/axios";
-import { AuthContext, DarkModeContext } from "../../context/AuthProvider";
-import { ActivityIndicator, Modal } from "react-native-paper";
+import { AuthContext} from "../../context/AuthProvider";
+import { ActivityIndicator, Modal, useTheme } from "react-native-paper";
 
 
 const getQuizzesURL = "/api/question/"
@@ -31,7 +31,7 @@ export default function Quiz({route, navigation}) {
   const [quizData, setQuizData] = useState([])
   const [totalQuizzes, setTotalQuizzes] = useState(0)
   const finishedAnswering = useRef(false)
-  const {isDarkMode} = useContext(DarkModeContext)
+  const theme = useTheme()
   //const [selectedNumber, setSelectedNumber] = useState(0)
 
   //console.log(param)
@@ -202,7 +202,7 @@ export default function Quiz({route, navigation}) {
   
   //console.log("this is selected number",selectedNumber)
   return (
-    <View style={[styles.mainContainer, {backgroundColor: isDarkMode ? Colors.bgGray : Colors.bgOffWhite}]}>
+    <View style={[styles.mainContainer, {backgroundColor: theme.colors.grayOffwhite}]}>
       {selectedData ? (<QuizModal 
         setRefresh={() => setRefresh(true)} 
         visibility={modalVisible} 
@@ -232,7 +232,7 @@ export default function Quiz({route, navigation}) {
               ListHeaderComponent={() => (
                 <View>
                   {quizData.length > 0 && (
-                    <Text style={[styles.quizDescription, {color: isDarkMode ? Colors.bgOffWhite : 'black'}]}>
+                    <Text style={[styles.quizDescription, {color: theme.colors.fontcolorOffwhiteBlack}]}>
                       Choose the correct answer.
                     </Text>
                   )}
@@ -242,7 +242,7 @@ export default function Quiz({route, navigation}) {
                 quizData.length > 0 && (
                  <View>
                    {errorMessage && <Text style={styles.errorMessage}>{errorMessage}</Text>}
-                  <Pressable style={[styles.submitButton, {backgroundColor: isDarkMode ? Colors.bgDarkPurpleTint : Colors.bgPurple}]} onPress={() => {
+                  <Pressable style={[styles.submitButton, {backgroundColor: theme.colors.darkpurpletintPurple}]} onPress={() => {
                     handleSubmit();
                   }}>
                     <Text style={styles.submitText}>Submit</Text>
@@ -251,7 +251,7 @@ export default function Quiz({route, navigation}) {
                 )
               }/>
           ) : (
-            <Text style={{ alignSelf: "center", fontFamily: 'PTSans-Bold', color: isDarkMode ? Colors.bgOffWhite : 'black'}}> No questions found</Text>)}
+            <Text style={{ alignSelf: "center", fontFamily: 'PTSans-Bold', color: theme.colors.fontcolorOffwhiteBlack}}> No questions found</Text>)}
         </View>
       </View>
 

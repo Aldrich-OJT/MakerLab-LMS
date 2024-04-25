@@ -9,7 +9,7 @@ function ShortcutTextContainer({ text, theme }) {
 
   return (
     <View style={styles.shortcutTextContainer}>
-      <Text style={[styles.shortcutText, {color: theme.colors.whiteGray}]}>{text}</Text>
+      <Text style={[styles.shortcutText, {color: theme.colors.fontcolor}]}>{text}</Text>
       <Text style={[styles.icons, {fontSize: 30, color:  theme.colors.offwhiteGray}]}></Text>
     </View>
   );

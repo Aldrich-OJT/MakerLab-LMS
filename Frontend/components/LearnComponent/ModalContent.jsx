@@ -1,8 +1,8 @@
-import { TextInput } from "react-native-paper"
+import { TextInput, useTheme } from "react-native-paper"
 import { View, Pressable, Text, StyleSheet, Modal, KeyboardAvoidingView, TouchableWithoutFeedback, Keyboard, Dimensions } from "react-native"
 import { useCallback, useContext, useState } from "react"
 import { axiosPost, axiosPut } from "../../utils/axios";
-import { AuthContext, DarkModeContext } from "../../context/AuthProvider";
+import { AuthContext } from "../../context/AuthProvider";
 //import { SafeAreaView } from "react-native-safe-area-context";
 import { useNavigation } from '@react-navigation/native';
 import Colors from "../../constants/Colors";
@@ -25,7 +25,7 @@ export default function ModalContent({ documentName, title, description, visibil
   const { userData } = useContext(AuthContext)
   //const navigation = useNavigation()
   const [errorMessage, setErrorMessage] = useState("");
-  const {isDarkMode} = useContext(DarkModeContext)
+  const theme = useTheme()
 
   const formInitialData = {
     title: title ?? "",
@@ -120,9 +120,9 @@ export default function ModalContent({ documentName, title, description, visibil
       >
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
           <View style={styles.mainContainer} >
-            <View style={[styles.inputContainer,{backgroundColor: isDarkMode ? Colors.bgGray : 'white'}]}>
+            <View style={[styles.inputContainer,{backgroundColor: theme.colors.darkGrayWhite}]}>
               <View style={styles.titleContainer}>
-                <Text style={[styles.textTitle, {color: isDarkMode ? Colors.bgOffWhite : 'black'}]}>{children}</Text>
+                <Text style={[styles.textTitle, {color: theme.colors.fontcolorOffwhiteBlack}]}>{children}</Text>
               </View>
 
               <TextInput
@@ -154,13 +154,13 @@ export default function ModalContent({ documentName, title, description, visibil
               {errorMessage && <Text style={styles.errorMessage}>{errorMessage}</Text>}
 
               <View style={styles.buttonContainer}>
-                <Pressable style={[styles.cancelButton, {backgroundColor: isDarkMode ? Colors.bgGray : 'white'}]} onPress={cancelForm}>
+                <Pressable style={[styles.cancelButton, {backgroundColor: theme.colors.grayWhite}]} onPress={cancelForm}>
                   <Text style={[styles.submitText, { color: Colors.bgPurple }]}>
                     Cancel
                   </Text>
                 </Pressable>
 
-                <Pressable style={[styles.submitButton, {backgroundColor: isDarkMode ? Colors.bgDarkPurpleTint : Colors.bgPurple}]} onPress={submitForm}>
+                <Pressable style={[styles.submitButton, {backgroundColor: Colors.bgPurple}]} onPress={submitForm}>
                   <Text style={styles.submitText}>
                     Submit
                   </Text>

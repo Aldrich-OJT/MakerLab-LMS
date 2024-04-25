@@ -3,8 +3,8 @@ import { View, Text, StyleSheet, Pressable, Alert, ScrollView } from "react-nati
 import Colors from "../../constants/Colors";
 import { axiosDelete, axiosGet, } from "../../utils/axios";
 import ModalContent from "../../components/LearnComponent/ModalContent";
-import { AuthContext, DarkModeContext } from "../../context/AuthProvider";
-import { ActivityIndicator, Portal } from 'react-native-paper';
+import { AuthContext } from "../../context/AuthProvider";
+import { ActivityIndicator, Portal, useTheme } from 'react-native-paper';
 // import * as FileSystem from 'expo-file-system';
 // import { shareAsync } from 'expo';
 import * as Linking from 'expo-linking';
@@ -24,8 +24,7 @@ export default function LearnDetails({ route, navigation }) {
     const [refresh, setRefresh] = useState(true)
     const { userData } = useContext(AuthContext);
     const [menuVisible, setMenuVisible] = useState(false);
-    const {isDarkMode} = useContext(DarkModeContext)
-
+    const theme = useTheme()
 
     useEffect(() => {
         const fetchData = async () => {
@@ -135,7 +134,7 @@ export default function LearnDetails({ route, navigation }) {
     return (
         <Portal.Host>
             <Portal>
-                <View style={[styles.mainContainer, {backgroundColor: isDarkMode ? Colors.bgGray : Colors.bgOffWhite}]}>
+                <View style={[styles.mainContainer, {backgroundColor: theme.colors.grayOffwhite}]}>
                     {(postData && Object.keys(postData).length > 0) ? (
                         <ModalContent
                             setRefresh={() => setRefresh(true)}
@@ -150,11 +149,11 @@ export default function LearnDetails({ route, navigation }) {
                         </ModalContent>
                     ) : ""}
 
-                    <View style={[styles.lessonContainer, {backgroundColor: isDarkMode ? Colors.bgDarkGray : 'white'}]}>
-                        <View style={[styles.purpleTint, {backgroundColor: isDarkMode ? Colors.bgDarkPurpleTint : Colors.bgPurpleTint}]}>
+                    <View style={[styles.lessonContainer, {backgroundColor: theme.colors.darkGrayWhite}]}>
+                        <View style={[styles.purpleTint, {backgroundColor:theme.colors.purpletintPurple}]}>
                             <View style={styles.titleContainer}>
 
-                                <Text style={[styles.title, {color: isDarkMode ? Colors.bgPurpleTint : Colors.bgPurple}]}>{postData.title} </Text>
+                                <Text style={[styles.title, {color: theme.colors.fontcolorPurple}]}>{postData.title} </Text>
                                 {userData.role === 'admin' && (
                                     <Menu
                                         style={{position:"absolute", top:40}}
@@ -162,12 +161,12 @@ export default function LearnDetails({ route, navigation }) {
                                         onDismiss={() => setMenuVisible(false)}
                                         anchor={
                                             <Pressable style={{ width: 50, height: 30 }} onPress={() => (setMenuVisible(true))}>
-                                                <Text style={{ fontFamily: 'icon', fontSize: 22, color: isDarkMode ? Colors.bgPurpleTint : Colors.bgPurple, alignSelf: 'flex-end' }}> </Text>
+                                                <Text style={{ fontFamily: 'icon', fontSize: 22, color:theme.colors.fontcolorPurple, alignSelf: 'flex-end' }}> </Text>
                                             </Pressable>
                                         }>
 
-                                        <Menu.Item onPress={() => setModalVisible(true)} title={<Text style={{ fontFamily: 'icon', fontSize: 16, color: Colors.bgDarkGray, textAlign: 'left' }}> Edit</Text>} />
-                                        <Menu.Item onPress={createTwoButtonAlert} title={<Text style={{ fontFamily: 'icon', fontSize: 16, color: Colors.bgDarkGray, textAlign: 'left' }}> Delete</Text>} />
+                                        <Menu.Item onPress={() => setModalVisible(true)} title={<Text style={{ fontFamily: 'icon', fontSize: 16, color: theme.colors.lightGrayDarkgray, textAlign: 'left' }}> Edit</Text>} />
+                                        <Menu.Item onPress={createTwoButtonAlert} title={<Text style={{ fontFamily: 'icon', fontSize: 16, color: theme.colors.lightGrayDarkgray, textAlign: 'left' }}> Delete</Text>} />
                                     </Menu>
 
                                 )}
@@ -199,7 +198,7 @@ export default function LearnDetails({ route, navigation }) {
                                 }
                             </View>
                             <View style={styles.textcontainer}>
-                                <Text style={[styles.description, {color: isDarkMode ? Colors.bgOffWhite : 'black'}]}>
+                                <Text style={[styles.description, {color: theme.colors.fontcolorOffwhiteBlack}]}>
                                     {postData.description}
                                 </Text>
                             </View>

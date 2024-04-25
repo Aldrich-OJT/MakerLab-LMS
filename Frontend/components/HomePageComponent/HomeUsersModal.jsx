@@ -33,7 +33,7 @@ return (
         </View>
        
         <DataTable style={[styles.table, {backgroundColor: theme.colors.darkGrayWhite}]}>
-          <DataTable.Header style={[styles.purpleTint, {backgroundColor: theme.colors.darkpurpletintPurple}]}>
+          <DataTable.Header style={[styles.purpleTint, {backgroundColor: theme.colors.Purple}]}>
             <DataTable.Title style={styles.idCell}>
               <Text style={styles.headerText}>ID</Text>
             </DataTable.Title>
