@@ -11,7 +11,7 @@ import Colors from "../../constants/Colors";
 import LearnHeader from "../../components/LearnComponent/LearnHeader";
 import Templearncards from "../../components/LearnComponent/templearncards";
 import { axiosGet } from "../../utils/axios";
-import { AuthContext } from "../../context/AuthProvider";
+import { AuthContext, DarkModeContext } from "../../context/AuthProvider";
 import { useFocusEffect } from '@react-navigation/native';
 import ModalContent from "../../components/LearnComponent/ModalContent";
 import { ActivityIndicator } from 'react-native-paper';
@@ -25,6 +25,7 @@ export default function Templearn({ route, navigation }) {
   const [postData, setpostData] = useState([]);
   const [contentLoading, setContentLoading] = useState(false)
   const [refresh, setRefresh] = useState(false)
+  const {isDarkMode} = useContext(DarkModeContext)
   console.log(param)
 
 
@@ -66,15 +67,15 @@ export default function Templearn({ route, navigation }) {
   //console.log(nocontent)
   //console.log(refresh)
   return (
-    <View style={styles.maincontainer}>
+    <View style={[styles.maincontainer, {backgroundColor: isDarkMode ? Colors.bgGray : Colors.bgOffWhite}]}>
       <LearnHeader title={param.title} navigation={navigation} />
 
-      <View style={styles.bottomsheet}>
+      <View style={[styles.bottomsheet, {backgroundColor: isDarkMode ? Colors.bgGray : Colors.bgOffWhite}]}>
         <View style={styles.FlatListContainer}>
           {contentLoading ?
             "" : (
               postData.length == 0 ? (
-                <Text style={{ fontFamily: 'PTSans-Bold', textAlign: "center" }}>
+                <Text style={{ fontFamily: 'PTSans-Bold', textAlign: "center", color: isDarkMode ? Colors.bgOffWhite : 'black' }}>
                   No contents found
                 </Text>
               ) : (
@@ -128,7 +129,6 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   bottomsheet: {
-    backgroundColor: Colors.bgOffWhite,
     flex: 1,
   },
   addButton: {
@@ -140,7 +140,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     borderRadius: 10,
-    backgroundColor: Colors.bgDarkGray,
+    backgroundColor: Colors.bgDarkerGray,
 
   },
   buttonText: {

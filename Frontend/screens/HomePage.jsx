@@ -92,7 +92,7 @@ export default function HomePage() {
     {
       role: 'user',
       icon: '',
-      text: 'Placeholder\nText',
+      text: 'View\nGrades',
       onPress: () => { },
     },
     {

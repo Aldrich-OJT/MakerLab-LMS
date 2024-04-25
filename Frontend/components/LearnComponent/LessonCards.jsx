@@ -133,28 +133,11 @@ const styles = StyleSheet.create({
       overflow:"hidden",
     },
     title:{
-        color: Colors.bgPurple,
         fontSize: 21,
         fontFamily: 'PTSans-Bold',
         marginRight:5,
         flex:2,
         textAlignVertical: 'center'
-    },
-    buttons:{
-      borderRadius:10,
-      padding:7,
-      backgroundColor: Colors.bgDarkGray,
-      marginLeft: 10,
-      overflow:"hidden",
-      shadowColor: "#000",
-      shadowOffset: {
-        width: 0,
-        height: 1,
-      },
-      shadowOpacity: 0.22,
-      shadowRadius: 2.22,
-      
-      elevation: 3,
     },
     lessonDescription:{
         marginVertical: 5,

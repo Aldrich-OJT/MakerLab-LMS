@@ -96,7 +96,7 @@ export default function Settings() {
   return (
     <ScrollView showsVerticalScrollIndicator={false}>
       <View
-        style={[styles.mainContainer, { backgroundColor: theme.colors.grayOffwhite }]}
+          style={[styles.mainContainer, { backgroundColor: theme.colors.grayOffwhite }]}
       >
 
         <Modal

@@ -118,7 +118,8 @@ const styles = StyleSheet.create({
         fontSize: 16,
       },
       itemText:{
-        fontStyle: 'PTSans-Regular'
+        fontStyle: 'PTSans-Regular',
+        color: Colors.bgDarkGray
       },
       cancelButton: {
         backgroundColor: 'white',

@@ -3,7 +3,7 @@ import { View, Text, StyleSheet, Pressable, Alert, ScrollView } from "react-nati
 import Colors from "../../constants/Colors";
 import { axiosDelete, axiosGet, } from "../../utils/axios";
 import ModalContent from "../../components/LearnComponent/ModalContent";
-import { AuthContext } from "../../context/AuthProvider";
+import { AuthContext, DarkModeContext } from "../../context/AuthProvider";
 import { ActivityIndicator, Portal } from 'react-native-paper';
 // import * as FileSystem from 'expo-file-system';
 // import { shareAsync } from 'expo';
@@ -24,7 +24,7 @@ export default function LearnDetails({ route, navigation }) {
     const [refresh, setRefresh] = useState(true)
     const { userData } = useContext(AuthContext);
     const [menuVisible, setMenuVisible] = useState(false);
-
+    const {isDarkMode} = useContext(DarkModeContext)
 
 
     useEffect(() => {
@@ -135,7 +135,7 @@ export default function LearnDetails({ route, navigation }) {
     return (
         <Portal.Host>
             <Portal>
-                <View style={styles.mainContainer}>
+                <View style={[styles.mainContainer, {backgroundColor: isDarkMode ? Colors.bgGray : Colors.bgOffWhite}]}>
                     {(postData && Object.keys(postData).length > 0) ? (
                         <ModalContent
                             setRefresh={() => setRefresh(true)}
@@ -150,11 +150,11 @@ export default function LearnDetails({ route, navigation }) {
                         </ModalContent>
                     ) : ""}
 
-                    <View style={styles.lessonContainer}>
-                        <View style={styles.purpleTint}>
+                    <View style={[styles.lessonContainer, {backgroundColor: isDarkMode ? Colors.bgDarkGray : 'white'}]}>
+                        <View style={[styles.purpleTint, {backgroundColor: isDarkMode ? Colors.bgDarkPurpleTint : Colors.bgPurpleTint}]}>
                             <View style={styles.titleContainer}>
 
-                                <Text style={styles.title}>{postData.title} </Text>
+                                <Text style={[styles.title, {color: isDarkMode ? Colors.bgPurpleTint : Colors.bgPurple}]}>{postData.title} </Text>
                                 {userData.role === 'admin' && (
                                     <Menu
                                         style={{position:"absolute", top:40}}
@@ -162,7 +162,7 @@ export default function LearnDetails({ route, navigation }) {
                                         onDismiss={() => setMenuVisible(false)}
                                         anchor={
                                             <Pressable style={{ width: 50, height: 30 }} onPress={() => (setMenuVisible(true))}>
-                                                <Text style={{ fontFamily: 'icon', fontSize: 22, color: Colors.bgPurple, alignSelf: 'flex-end' }}> </Text>
+                                                <Text style={{ fontFamily: 'icon', fontSize: 22, color: isDarkMode ? Colors.bgPurpleTint : Colors.bgPurple, alignSelf: 'flex-end' }}> </Text>
                                             </Pressable>
                                         }>
 
@@ -185,7 +185,8 @@ export default function LearnDetails({ route, navigation }) {
 
 
 
-                                    <Text>{postData.documentName}</Text><Text style={{ fontFamily: 'icon', fontSize: 18 }}></Text>
+                                    <Text>{postData.documentName}</Text>
+                                    <Text style={{ fontFamily: 'icon', fontSize: 18 }}></Text>
                                 </Pressable>) : postData.documentType == "video/mp4" && (
                                     <Video
                                         source={{
@@ -198,7 +199,7 @@ export default function LearnDetails({ route, navigation }) {
                                 }
                             </View>
                             <View style={styles.textcontainer}>
-                                <Text style={styles.description}>
+                                <Text style={[styles.description, {color: isDarkMode ? Colors.bgOffWhite : 'black'}]}>
                                     {postData.description}
                                 </Text>
                             </View>
@@ -216,7 +217,6 @@ const styles = StyleSheet.create({
     },
     lessonContainer: {
         flexDirection: 'column',
-        backgroundColor: 'white',
         borderRadius: 10,
         marginHorizontal: 20,
         marginTop: 20,
@@ -241,12 +241,12 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between'
     },
     title: {
-        color: Colors.bgPurple,
         fontSize: 20,
         fontFamily: 'PTSans-Bold',
     },
     purpleTint: {
-        backgroundColor: 'rgba(238, 227, 255, 0.90)',
+        borderTopLeftRadius: 10,
+        borderTopRightRadius: 10,
     },
     textcontainer: {
         justifyContent: "center",
@@ -258,7 +258,7 @@ const styles = StyleSheet.create({
         fontFamily: 'PTSans-Regular'
     },
     attachmentContainer: {
-        backgroundColor: Colors.bgOffWhite,
+        backgroundColor: Colors.bgLightGray,
         alignItems: 'center',
         height: "fit-content",
         marginHorizontal: 20,
