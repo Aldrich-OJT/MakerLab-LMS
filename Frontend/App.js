@@ -6,8 +6,9 @@ import Welcome from './screens/auths/Welcome';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { PaperProvider } from 'react-native-paper';
-import AuthProvider, { AuthContext, DarkModeContext } from './context/AuthProvider';
-import { Text} from 'react-native';
+import AuthProvider, { AuthContext } from './context/AuthProvider';
+import ThemeProvider, { DarkModeContext } from './context/ThemeProvider';
+import { Text } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Settings from './screens/Settings';
 import Header from "./components/Header";
@@ -29,22 +30,24 @@ const Tab = createBottomTabNavigator()
 const LearnStackGroup = () => {
   return (
     <LearnStack.Navigator>
-      <LearnStack.Screen options={{ headerShown: false }} name="TabGroup" component={TabGroup} />
-      {/* <LearnStack.Screen options={{ headerShown: false }} name='Lessons' component={Lessons} /> */}
       <LearnStack.Screen options={{ 
+        headerShown: false 
+        }} name="TabGroup" component={TabGroup} />
+      {/* <LearnStack.Screen options={{ headerShown: false }} name='Lessons' component={Lessons} /> */}
+      <LearnStack.Screen options={{
         presentation: "modal",
         headerStyle: {
-            backgroundColor: "black",
+          backgroundColor: "black",
         },
         headerTitleStyle: {
-            fontWeight: 'bold',
-            color: 'white',
+          fontWeight: 'bold',
+          color: 'white',
         },
         headerTintColor: 'white',
         headerTitleAlign: 'center',
-        }} name="LearnDetails" component={LearnDetails} />
+      }} name="LearnDetails" component={LearnDetails} />
       <LearnStack.Screen options={{ headerShown: false }} name="templearn" component={Templearn} />
-      <LearnStack.Screen options={{ headerShown: false }} name="Questions" component={Questions}  />
+      <LearnStack.Screen options={{ headerShown: false }} name="Questions" component={Questions} />
     </LearnStack.Navigator>
 
   )
@@ -59,49 +62,51 @@ const TabGroup = () => {
 
           switch (route.name) {
             case 'Home':
-              iconName = <Text style={{fontFamily: 'icon', fontSize:30, color: focused ? Colors.bgDarkGray : Colors.bgYellow}}></Text>
+              iconName = <Text style={{ fontFamily: 'icon', fontSize: 30, color: focused ? Colors.bgDarkGray : Colors.bgYellow }}></Text>
               break;
             case 'Profile':
-              iconName = <Text style={{fontFamily: 'icon', fontSize:30, color: focused ? Colors.bgDarkGray : Colors.bgYellow}}></Text>
+              iconName = <Text style={{ fontFamily: 'icon', fontSize: 30, color: focused ? Colors.bgDarkGray : Colors.bgYellow }}></Text>
               break;
             case 'Learn':
-              iconName = <Text style={{fontFamily: 'icon', fontSize:30, color: focused ? Colors.bgDarkGray : Colors.bgYellow}}></Text>
+              iconName = <Text style={{ fontFamily: 'icon', fontSize: 30, color: focused ? Colors.bgDarkGray : Colors.bgYellow }}></Text>
               break;
-            }
+          }
           return iconName;
         },
-      
+
         tabBarActiveTintColor: "black",
         tabBarActiveBackgroundColor: Colors.bgYellow,
         tabBarHideOnKeyboard: true,
         tabBarInactiveTintColor: Colors.bgYellow,
         tabBarStyle: {
-          backgroundColor: Colors.bgDarkGray,
-          overflow: "hidden",
-          borderTopLeftRadius: 20,
-          borderTopRightRadius: 20,
+          
+          backgroundColor: "black",
+          borderTopWidth:0,
+          //overflow: "hidden",
+          // borderTopLeftRadius: 20,
+          // borderTopRightRadius: 20,
           position: "absolute",
-          height: '8%',
+          height: '9%',
           alignItems: 'center',
         },
         tabBarItemStyle: {
           height: 45,
-          paddingVertical:3,
+          paddingVertical: 3,
           maxWidth: 80,
-          alignSelf:'center',
+          alignSelf: 'center',
           borderRadius: 100,
           marginHorizontal: 15,
         },
       })}
-      >
-      <Tab.Screen options={{ headerStyle: {height: 105}, headerShown: true, headerTitle: '', headerBackground: ()=> (<Header/>) }} name='Home' component={HomePage} />  
-      <Tab.Screen options={{ headerStyle: {height: 105,}, headerShown: true, headerTitle: '', headerBackground: ()=> (<Header/>) }} name='Learn' component={Lessons} />
+    >
+      <Tab.Screen options={{ headerStyle: { height: 100 }, headerShown: true, headerTitle: '', headerBackground: () => (<Header />) }} name='Home' component={HomePage} />
+      <Tab.Screen options={{ headerStyle: { height: 100, }, headerShown: true, headerTitle: '', headerBackground: () => (<Header />) }} name='Learn' component={Lessons} />
       {/* <Tab.Screen options={{ headerShown: false }} name='AssesStackGroup' component={AssesStackGroup} /> */}
-      <Tab.Screen options={{ 
-        headerStyle: {height: 105},
-        headerShown: true, 
-        headerTitle: '', 
-        headerBackground: ()=> (<Header/>)
+      <Tab.Screen options={{
+        headerStyle: { height: 100 },
+        headerShown: true,
+        headerTitle: '',
+        headerBackground: () => (<Header />)
       }} name='Profile' component={Settings} />
     </Tab.Navigator>
   )
@@ -133,7 +138,7 @@ const Root = () => {
   const [fontsLoaded, fontError] = useFonts({
     'PTSans-Regular': require('./assets/fonts/PTSans-Regular.ttf'),
     'PTSans-Bold': require('./assets/fonts/PTSans-Bold.ttf'),
-    'icon' : require('./assets/fonts/icomoon.ttf'),
+    'icon': require('./assets/fonts/icomoon.ttf'),
   });
 
   useEffect(() => {
@@ -143,7 +148,7 @@ const Root = () => {
     const fetchData = async () => {
       try {
         const userData = await AsyncStorage.getItem('userData');
-        console.log("this is the userdata",userData)
+        console.log("this is the userdata", userData)
         if (userData) {
           authContext.authenticate(JSON.parse(userData));
         } else {
@@ -157,7 +162,7 @@ const Root = () => {
           setLoading(false);
         } else if (fontError) {
           console.error("Error loading fonts:", fontError);
-          setLoading(false); 
+          setLoading(false);
         }
         // } else {
         //   setLoading(false); 
@@ -166,17 +171,28 @@ const Root = () => {
     };
 
     fetchData();
-  }, [fontsLoaded,fontError]);
+  }, [fontsLoaded, fontError]);
 
   return loading ? <LoadingScreen /> : <Navigation />;
 };
-
-export default function App() {
+const Wrapper = () => {
   return (
     <AuthProvider>
-      <PaperProvider>
-        <Root />
-      </PaperProvider>
+      <ThemeProvider>
+        <App />
+      </ThemeProvider>
     </AuthProvider>
+  )
+}
+
+export function App() {
+  const { theme } = useContext(DarkModeContext)
+  return (
+    <PaperProvider theme={theme} >
+      <Root />
+    </PaperProvider>
+
   );
 }
+
+export default Wrapper;

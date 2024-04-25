@@ -8,7 +8,7 @@ const deviceWidth = dimensions.width;
 export default function HomeLessonsModal({ visibility, setModalVisible, data }) {
 
   // if(data.length < 1){console.log("nothing")}
-  // console.log(data)
+   //console.log(data)
   const coursekeys = Object.keys(data)
   //console.log(data[coursekeys[0]])
   //console.log(data[coursekeys[0]][0].postName)

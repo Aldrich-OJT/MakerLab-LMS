@@ -1,26 +1,13 @@
-const Colors = {
-    bgYellow: '#FFB800',
-    bgLightYellow: "#ffd766",
-    bgError: "#CF316A",
-    bgOffWhite: '#EDEDED',
-    bgViolet: "#733AD1",
-    bgRedInvalid: "#Be254b",
-    bgPurple: "#8F7CFF",
-    bgGray: "#484848",
-    bgLightGray: "#CBCBCB",
-    bgDarkGray: "#1D1D1D",
-    bgPurpleTint: "rgba(238, 227, 255, 0.90)",
-    bgDarkPurpleTint: "rgba(143, 124, 255,0.90)"
-}
+import { createContext, useEffect, useState } from "react";
 
 const light = {
     "colors": {
         "lightYellow": "#ffd766",
         "error": "#CF316A",
-        "grayOffwhite": "#484848",
-        "offwhiteGray": "#EDEDED",
+        "grayOffwhite": "#EDEDED",
+        "offwhiteGray": "#484848",
         "whiteGray": "#484848",
-        "darkGrayWhite": "#1D1D1D",
+        "darkGrayWhite": "white",
         "lightGrayOffwhite": "#CBCBCB",
         "lightGrayDarkgray": "#1D1D1D",
         "fontcolorPurple": "rgba(143, 124, 255,0.90)",
@@ -49,10 +36,10 @@ const dark = {
         "thisisdark":"dark",
         "lightYellow": "#ffd766",
         "error": "#CF316A",
-        "grayOffwhite": "#EDEDED",
-        "offwhiteGray": "#484848",
-        "whiteGray": "white",
-        "darkGrayWhite": "#white",
+        "grayOffwhite": "#484848",
+        "offwhiteGray": "#EDEDED",
+        "whiteGray": "#EDEDED",
+        "darkGrayWhite": "#1D1D1D",
         "lightGrayOffwhite":"#EDEDED",
         "lightGrayDarkgray": "#CBCBCB",
         "fontcolorPurple": "rgba(238, 227, 255, 0.90)",
@@ -70,10 +57,45 @@ const dark = {
         "offWhite": '#EDEDED',
         "violet": "#733AD1",
         "redInvalid": "#Be254b",
+        "DarkGray": "#1D1D1D",
         "purpleTint": "rgba(238, 227, 255, 0.90)",
         "darkPurpleTint": "#8F7CFF"
     }
 
 }
 
-export default Colors
+
+export const DarkModeContext = createContext({})
+
+const ThemeProvider =({children})=>{
+    const [isDarkMode, setIsDarkMode] = useState(false)
+    const [theme, setTheme] = useState(light)
+
+
+    const toggleDarkMode = ()=>{
+        setIsDarkMode(!isDarkMode)
+        
+        
+       
+    }
+    useEffect(()=>{
+        setTheme(isDarkMode ? dark : light)
+    },[isDarkMode])
+
+    const contextValue = {
+        theme: theme,
+        toggleDarkMode: toggleDarkMode
+    }
+    console.log("dark",isDarkMode)
+     //console.log(theme)
+    return(
+        <DarkModeContext.Provider value={contextValue}>
+            {children}
+        </DarkModeContext.Provider>
+    
+    )
+}
+
+export default ThemeProvider;
+
+

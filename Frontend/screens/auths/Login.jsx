@@ -26,7 +26,7 @@ export default function Login() {
   const [textInputFocused, setTextInputFocused] = useState(false);
 
   const passwordhandler = () => {
-    setpasshidden((prevState) => !prevState);
+    setpasshidden(!passhidden);
   }
   const handleInput = (textName, textValue) => {
     // Function to update the textInputs state when user types in the input fields

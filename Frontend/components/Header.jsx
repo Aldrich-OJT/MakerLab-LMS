@@ -1,16 +1,16 @@
 import { StyleSheet, View, Image, Dimensions } from "react-native";
 import Colors from "../constants/Colors";
-import { DarkModeContext } from "../context/AuthProvider";
 import { useContext } from "react";
+import { useTheme } from "react-native-paper";
 
 const dimensions = Dimensions.get('window');   
 const deviceWidth = dimensions.width;
 
 export default function Header({children}) {
-  const {isDarkMode} = useContext(DarkModeContext);
+  const theme = useTheme()
 
   return (
-    <View style={[styles.container, {backgroundColor: isDarkMode ? Colors.bgGray : Colors.bgOffWhite}]}>
+    <View style={[styles.container, {backgroundColor: theme.colors.grayOffwhite}]}>
         <Image source={require('.././assets/top-home.png')} style={styles.bgimage}></Image>
         {children}
     </View>
@@ -19,11 +19,12 @@ export default function Header({children}) {
 
 const styles = StyleSheet.create({
     container:{
-      position: 'relative',
+      flex:1
+      //position: 'relative',
     },
     bgimage: {
-        height: deviceWidth * 0.27,
-        width: deviceWidth * 1,
-        resizeMode: 'stretch',
+        height: "100%",
+        width: "100%",
+        //resizeMode: "cover",
       },
 })
