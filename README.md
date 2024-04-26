@@ -9,6 +9,6 @@ by the admins for learning purposes. They are also able to take assessments on t
 to gain a badge once they pass and finish a course.
 
 ## Contributors
- - Designer - Cyrille Magdaluyo
- - Back-end Developer - Tristan Jasper Santos
- - Front-end Developer - Keren Calalang
+ - **Cyrille Magdaluyo** - Designer
+ - **Tristan Jasper Santos** - Back-end Developer
+ - **Keren Calalang** - Front-end Developer
