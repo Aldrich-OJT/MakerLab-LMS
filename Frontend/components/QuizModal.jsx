@@ -45,22 +45,20 @@ export default function QuizModal({ item, selectedData,setSelectedData ,setRefre
   // },[])
 
   const submitQuestion = useCallback(async () => {
-    console.log("click")
     try {
 
       if (children.split(" ")[0] === "Upload") {
         const data = await axiosPost(postquestionURL, questionForm, contentType, userData.token);
-        console.log(data);
+        //console.log(data);
 
       } else if (children.split(" ")[0] === "Edit") {
         const data = await axiosPut(`${updateQuestionURL}${selectedData?._id}`, questionForm, contentType, userData.token);
-        console.log("ssuccess");
+        //console.log("ssuccess");
 
       }
       setRefresh()
       cancelForm()
     } catch (error) {
-      console.log("error occured")
       console.log(error.data.message);
       setErrorMessage(error?.data?.message);
     }
@@ -68,7 +66,7 @@ export default function QuizModal({ item, selectedData,setSelectedData ,setRefre
   },[selectedData, questionForm])
 
 
-  //console.log(questionForm)
+
   return (
     <KeyboardAvoidingView behavior="padding">
       <Modal

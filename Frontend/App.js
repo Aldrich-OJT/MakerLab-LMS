@@ -22,6 +22,7 @@ import Questions from './screens/Assess/Quiz';
 import Templearn from './screens/Learn/templearn';
 
 
+
 const Stack = createNativeStackNavigator()
 const LearnStack = createNativeStackNavigator()
 const Tab = createBottomTabNavigator()
@@ -148,7 +149,7 @@ const Root = () => {
     const fetchData = async () => {
       try {
         const userData = await AsyncStorage.getItem('userData');
-        console.log("this is the userdata", userData)
+        //console.log("this is the userdata", userData)
         if (userData) {
           authContext.authenticate(JSON.parse(userData));
         } else {
@@ -177,6 +178,7 @@ const Root = () => {
 };
 const Wrapper = () => {
   return (
+    
     <AuthProvider>
       <ThemeProvider>
         <App />

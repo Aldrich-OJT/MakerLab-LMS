@@ -13,9 +13,9 @@ import LessonModal from "../../components/LearnComponent/LessonModal";
 const getCategoryURL = "/api/categories/"
 
 export default function Lessons({ navigation }) {
- const theme = useTheme()
+  const tabBarHeight = useBottomTabBarHeight();
+  const theme = useTheme()
   const {userData,logout} = useContext(AuthContext);
-  const  tabBarHeight  = useBottomTabBarHeight();
   const [lessonData, setLessonData] = useState([]);
   const [refresh, setRefresh] = useState(true);
   const [modalVisible, setModalVisible] = useState(false);
@@ -50,7 +50,7 @@ export default function Lessons({ navigation }) {
  //console.log(selectedData)
  
   return (
-    <View style={[styles.mainContainer,{ backgroundColor: theme.colors.grayOffwhite}]}>
+    <View style={[styles.mainContainer,{ backgroundColor: theme.colors.grayOffwhite, marginBottom:tabBarHeight}]}>
       {selectedData ? (<LessonModal 
         setRefresh={() => setRefresh(true)} 
         selectedData= {selectedData}
@@ -115,7 +115,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     borderRadius: 10,
-    backgroundColor: Colors.bgDarkerGray,
+    backgroundColor: Colors.bgDarkGray,
   },
   buttonText: {
     color: Colors.bgYellow,

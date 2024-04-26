@@ -5,7 +5,7 @@ import { AuthContext } from "../../context/AuthProvider";
 import { Menu, useTheme } from 'react-native-paper';
 import LessonModal from "./LessonModal";
 import Colors from "../../constants/Colors";
-import background from "../../assets/lesson-image.png"
+
 
 const deleteCategoryURL = "/api/categories/delete/"
 
@@ -13,7 +13,6 @@ export default function LessonCards({ title, description, setModalVisible, ID, s
   const { userData } = useContext(AuthContext)
   const [menuVisible, setMenuVisible] = useState(false);
   const theme = useTheme()
-console.log
   const [showDescription, setShowDescription] = useState(false);
 
   const showDescriptionHandler = () => {
@@ -32,10 +31,10 @@ console.log
   const deletePost = useCallback(() => {
 
     const res = axiosDelete(`${deleteCategoryURL}${ID}`, userData.token)
-    //console.log(res, "deleted")
+  
     setRefresh(true)
   },[])
-  //console.log(title)
+
 
   return (
     <Pressable style={[
@@ -54,9 +53,7 @@ console.log
         Edit Lesson
       </LessonModal> */}
 
-      <ImageBackground
-        source={background}
-        style={styles.imageContainer}>
+      <View>
 
         <View style={{backgroundColor: theme.colors.purpletintPurple}}>
           <View style={styles.titleContainer}>
@@ -85,7 +82,7 @@ console.log
             )}
           </View>
         </View>
-      </ImageBackground>
+      </View>
 
       <View>
         <Text
@@ -110,6 +107,7 @@ const styles = StyleSheet.create({
     lessonContainer: {
         flexDirection: 'column',
         borderRadius: 10,
+        overflow:"hidden",
         minHeight: 155,
         marginHorizontal: 20,
         marginTop: 20,
@@ -126,6 +124,7 @@ const styles = StyleSheet.create({
     titleContainer: {
         flexDirection: 'row',
         padding:20,
+        
     },
     imageContainer:{
       borderTopLeftRadius: 10,

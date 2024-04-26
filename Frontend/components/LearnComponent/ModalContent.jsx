@@ -48,7 +48,6 @@ export default function ModalContent({ documentName, title, description, visibil
         type: mimeTypes
       });
       if (result) {
-        console.log(result.assets[0]);
         handleForm("document", result.assets[0]);
       } else {
         handleForm("document", null);
@@ -64,9 +63,10 @@ export default function ModalContent({ documentName, title, description, visibil
     setErrorMessage("");
   }, [])
 
-  const submitForm = useCallback(async () => {
+  const submitForm = async () => {
 
     const formDataToSend = new FormData()
+    formDataToSend.append('userId', userData._id)
     formDataToSend.append('title', formData?.title)
     formDataToSend.append('description', formData?.description)
 
@@ -83,9 +83,7 @@ export default function ModalContent({ documentName, title, description, visibil
       formDataToSend.append('categoryID', id)
       try {
         const data = await axiosPost(POSTURL, formDataToSend, contentType, userData.token)
-        console.log(data)
       } catch (error) {
-        console.log(error.data.message)
         setErrorMessage(error?.data?.message)
         //console.log(errorMessage)
         return
@@ -93,23 +91,16 @@ export default function ModalContent({ documentName, title, description, visibil
     } else if (children.split(" ")[0] === "Edit") {
       try {
         const data = await axiosPut(`${PUTURL}${id}`, formDataToSend, contentType, userData.token)
-        console.log(data)
 
       } catch (error) {
         setErrorMessage(error?.data?.message)
         return
       }
-      console.log("done adding now will close modal")
     }
 
     setRefresh(true)
     cancelForm()
-  }, [id,children,formData])
-  //console.log(formDataToSend)
-  // console.log(selectedFile)
-  // console.log(formData)
-  //console.log(formData.title)
-  //console.log(formData)
+  }
   return (
     <KeyboardAvoidingView behavior="padding">
       <Modal

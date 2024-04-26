@@ -5,8 +5,10 @@ const storage = multer.diskStorage({
     destination: (req, file, cb) => {
         if (file.mimetype.startsWith('video/')) {
             destination = 'Videos';
-        } else {
+        } else if(file.mimetype.startsWith('application/')) {
             destination = 'Documents';
+        }else{
+            destination = "Images"
         }
         cb(null, destination)
     },

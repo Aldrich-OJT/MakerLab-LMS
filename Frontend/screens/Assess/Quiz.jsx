@@ -154,9 +154,8 @@ export default function Quiz({route, navigation}) {
     getTotalScore(singleScore)
   },[singleScore])
   useEffect(()=>{
-    console.log("score before putting",score)
+
     const passed = score > Math.round(quizData.length * .6) ? true : false
-    console.log("this is passed or not",passed)
     setQuizForm(prevstate => ({
       ...prevstate,
       quizScores: {
@@ -170,14 +169,9 @@ export default function Quiz({route, navigation}) {
   },[score])
 
   const handleSubmit = useCallback(async () => {
-    //console.log("before passing",numberQuestionsAnswered)
-    // if (numberQuestionsAnswered.every(number => number === 1)) {
-    
-      //console.log("scooooooooore",score)
-   
 
+   
       try {
-        console.log(quizForm)
         const data = await axiosPut(`${editScoreURL}${userData._id}`, quizForm, contentType, userData.token);
         console.log("updatedData",data);
       } catch (error) {
@@ -189,18 +183,9 @@ export default function Quiz({route, navigation}) {
     // }
 
     finishedAnswering.current = true
-    //console.log("after submit",finishedAnswering.current)
 
   },[quizForm])
-  //console.log(quiz  Form)
-  // console.log("number of answered question is",answeredQuestion)
-  //console.log("scores",singleScore)
-  //console.log(selectedNumber)
-  //console.log("total number of selected ooptions",numberQuestionsAnswered)
-  //console.log("every render",finishedAnswering.current)
-  //console.log(numberQuestionsAnswered)
-  
-  //console.log("this is selected number",selectedNumber)
+
   return (
     <View style={[styles.mainContainer, {backgroundColor: theme.colors.grayOffwhite}]}>
       {selectedData ? (<QuizModal 
@@ -242,7 +227,7 @@ export default function Quiz({route, navigation}) {
                 quizData.length > 0 && (
                  <View>
                    {errorMessage && <Text style={styles.errorMessage}>{errorMessage}</Text>}
-                  <Pressable style={[styles.submitButton, {backgroundColor: theme.colors.darkpurpletintPurple}]} onPress={() => {
+                  <Pressable style={[styles.submitButton, {backgroundColor: theme.colors.darkPurpleTint}]} onPress={() => {
                     handleSubmit();
                   }}>
                     <Text style={styles.submitText}>Submit</Text>

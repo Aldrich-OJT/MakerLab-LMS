@@ -6,7 +6,7 @@ const { protect } = require("../middleware/authMiddleware")
 const { singleUpload } = require("../middleware/multerMiddleware")
 
 
-router.get("/category/:categoryID",getposts)
+router.get("/category/:categoryID",(getposts))
 router.get("/id/:id",getpost)
 router.get("/count",getallpostcount)
 router.get("/download/:id",getpostfile)

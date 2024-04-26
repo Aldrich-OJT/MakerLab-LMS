@@ -11,14 +11,14 @@ const AuthProvider = ({ children }) => {
 
     const authenticate = async (newUserData) => {
         setUserData(newUserData)
-        console.log("this will be my userdata", userData)
+        //("this will be my userdata", userData)
         AsyncStorage.setItem('userData', JSON.stringify(newUserData));
     }
     const logout = () => {
-        console.log("logout called")
+        //console.log("logout called")
         setUserData(null)
         AsyncStorage.removeItem('userData')
-        console.log("logout success")
+        //console.log("logout success")
     }
 
     const value = {
@@ -28,7 +28,7 @@ const AuthProvider = ({ children }) => {
         logout: logout
 
     }
-    console.log(userData)
+    //console.log(userData)
 
     return (
         <AuthContext.Provider value={value}>

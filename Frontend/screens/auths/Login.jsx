@@ -39,7 +39,6 @@ export default function Login() {
   const submitForm = async () => {
 
     try {
-      console.log("trying to log in")
       const data = await axiosPost(loginURL, textInputs)
       
       if (data) {

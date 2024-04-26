@@ -4,6 +4,15 @@ const quizScoreSchema = new mongoose.Schema({
     postId: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Post', 
+        required:true
+    },
+    categoryId:{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Category', 
+        required:true
+    },
+    postName:{
+        type: String,
     },
     score: {
         type: Number,
@@ -25,7 +34,7 @@ const userDataSchema = new mongoose.Schema({
         required: true
     },
     avatar: {
-        type: String,
+        type: Number,
     },
     progress: {
         type: mongoose.Decimal128,
@@ -33,12 +42,6 @@ const userDataSchema = new mongoose.Schema({
     },
     badges:[{
         type: String
-    }],
-    completedAssessments:[{
-
-    }],
-    finishedLessons:[{
-
     }],
     quizScores: [quizScoreSchema]
 

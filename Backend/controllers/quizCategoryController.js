@@ -4,10 +4,9 @@ const Category = require("../models/postCategoryModel");
 const getcategories = asyncHandler(async (req, res) => {
     const categories = await Category.find();
 
-    if (!categories) {
+    if (!categories.length ) {
         res.status(400).json({ message: "no category found" });
         return;
-        
     }
 
     res.json(categories);
@@ -36,8 +35,12 @@ const addcategory = asyncHandler(async (req, res) => {
         return;
     }
     const categoryExist = await Category.findOne({ title });
+    
+    
 
-    if (categoryExist) {
+    const existingTitle = categoryExist.title
+    console.log(existingTitle.toUpperCase(), title.toUpperCase())
+    if (existingTitle.toUpperCase() === title.toUpperCase()) {
         res.status(400).json({ message: "category already exist!" });
         return;
         
@@ -52,7 +55,7 @@ const addcategory = asyncHandler(async (req, res) => {
         return;
         
     }
-
+  
     res.status(201).json(newCategory);
 });
 
@@ -86,7 +89,7 @@ const updatecategory = asyncHandler(async (req, res) => {
     res.status(200).json(upatedCategory);
 });
 
-const deleteategory = asyncHandler(async (req, res) => {
+const deletecategory = asyncHandler(async (req, res) => {
     const id = req.params.id;
 
     const deletedData = await Category.findByIdAndDelete(id);
@@ -105,5 +108,5 @@ module.exports = {
     getcategory,
     addcategory,
     updatecategory,
-    deleteategory,
+    deletecategory,
 };

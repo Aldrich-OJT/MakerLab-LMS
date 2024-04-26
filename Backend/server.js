@@ -26,6 +26,8 @@ app.use('/api/question', questionRoute)
 app.use("/api/documents",express.static("Documents"))
 app.use("/api/videos",express.static("Videos"))
 app.use('/api/categories',categoryRoute)
+
+
 //app.use('/api/post',videoRoute)
 
 //app.use(errorHandler)

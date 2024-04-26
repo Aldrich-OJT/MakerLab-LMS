@@ -4,7 +4,7 @@ export default function Title({ isTextInputFocused }) {
   return (
     <View style={styles.topsheet}>
 		<Image source={require('../../assets/top-register.png')} 
-		style={[styles.bgimage, { resizeMode: isTextInputFocused ? "cover" : "contain" }]}></Image>
+		style={[styles.bgimage]}></Image>
     </View>
   )
 }

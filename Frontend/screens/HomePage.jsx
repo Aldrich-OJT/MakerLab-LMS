@@ -25,10 +25,9 @@ export default function HomePage() {
   const [categories, setCategories] = useState([])
   const [progress, setProgress] = useState(null)
   
-  //console.log("this is userdata",userData)
+
   useEffect(() => {
     const filteredData = {};
-
     // Loop through categories
     categories.forEach(categories => {
 
@@ -44,11 +43,14 @@ export default function HomePage() {
         filteredData[categoryTitle] = matchingData;
       }
     });
+   
 
-    setfilteredData(filteredData)
+    if(!loading){
+      setfilteredData(filteredData)
+    }
 
 
-  }, [userScores, categories])
+  }, [loading])
 
   useEffect(() => {
     const fetchData = async () => {
@@ -58,8 +60,6 @@ export default function HomePage() {
         const data = await axiosGet('/api/user')
         const userdata = await axiosGet(`/api/user/data/${userData._id}`, userData.token)
         const categories = await axiosGet(`/api/categories/`, userData.token)
-        // console.log("userdata",userdata)
-        // console.log("categories",categories)
         setUserScores(userdata.quizScores)
         setProgress(parseFloat(userdata.progress.$numberDecimal))
         setCategories(categories)
@@ -96,13 +96,13 @@ export default function HomePage() {
       onPress: () => { },
     },
     {
-      role: 'user',
+      role: 'admin',
       icon: '',
       text: 'Finished\nLessons',
       onPress: () => setGradeModalVisible(true),
     },
     {
-      role: 'admin',
+      role: 'user',
       icon: '',
       text: 'Placeholder\nText',
       onPress: () => { },

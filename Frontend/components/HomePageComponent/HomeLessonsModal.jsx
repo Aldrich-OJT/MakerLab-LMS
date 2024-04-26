@@ -1,17 +1,16 @@
 import { View, Text, StyleSheet, Pressable, Modal, ScrollView, Dimensions } from "react-native";
-import { List } from 'react-native-paper';
+import { List, useTheme } from 'react-native-paper';
 import Colors from "../../constants/Colors";
 
 const dimensions = Dimensions.get('window');
 const deviceWidth = dimensions.width;
 
 export default function HomeLessonsModal({ visibility, setModalVisible, data }) {
-
+  const theme = useTheme()
   // if(data.length < 1){console.log("nothing")}
-   //console.log(data)
+
   const coursekeys = Object.keys(data)
-  //console.log(data[coursekeys[0]])
-  //console.log(data[coursekeys[0]][0].postName)
+
   return (
     <Modal
       animationType="fade"
@@ -20,9 +19,9 @@ export default function HomeLessonsModal({ visibility, setModalVisible, data }) 
       onRequestClose={() => setModalVisible(false)}
     >
       <View style={styles.modalMainContainer}>
-        <View style={styles.modalContentContainer}>
+        <View style={[styles.modalContentContainer, {backgroundColor: theme.colors.darkGrayWhite}]}>
           <View style={styles.titleContainer}>
-            <Text style={styles.titleText}>Finished Lessons</Text>
+            <Text style={[styles.titleText, {color: theme.colors.fontcolor}]}>Finished Lessons</Text>
           </View>
           <View style={styles.listHeader}>
             <Text style={styles.coursesText}>Lessons</Text>
@@ -33,7 +32,7 @@ export default function HomeLessonsModal({ visibility, setModalVisible, data }) 
             {data ? coursekeys.map((course, index) => (
               <List.Accordion key={index}
                 title={course}
-                titleStyle={styles.accordionheader}
+                titleStyle={[styles.accordionheader,{ color: theme.colors.fontcolor}]}
                 titleNumberOfLines={1}
                 style={styles.purpleTint}
               >
@@ -52,7 +51,7 @@ export default function HomeLessonsModal({ visibility, setModalVisible, data }) 
               </List.Accordion>
             )): "Answer Quizzes to get scores"}
           </ScrollView>
-          <Pressable style={styles.cancelButton} onPress={() => setModalVisible(false)}>
+          <Pressable style={[styles.cancelButton,{backgroundColor: theme.colors.darkGrayWhite}]} onPress={() => setModalVisible(false)}>
             <Text style={styles.cancelText}>
               Close
             </Text>
@@ -72,7 +71,7 @@ const styles = StyleSheet.create({
     },
     modalContentContainer: {
       gap: 10,
-      backgroundColor: 'white',
+      //backgroundColor: 'white',
       margin: 20,
       padding: 10,
       alignItems: 'center',
@@ -129,6 +128,8 @@ const styles = StyleSheet.create({
       fontFamily: 'PTSans-Bold',
     },
     purpleTint:{
-      backgroundColor: Colors.bgPurpleTint
+      backgroundColor: Colors.bgPurpleTint,
+      borderTopLeftRadius:10,
+      borderTopRightRadius:10
     },
 })

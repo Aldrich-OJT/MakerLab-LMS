@@ -66,7 +66,6 @@ export default function Signup() {
 				...prevState,
 				isTextEmpty: true
 			}));
-			console.log("Please fill all fields");
 			return;
 		}
 
@@ -76,7 +75,7 @@ export default function Signup() {
 				...prevState,
 				isPassNotMatch: true
 			}));
-			console.log("Password mismatch");
+			//console.log("Password mismatch");
 			return;
 		}
 		const emailValid = textInputs.email.includes("@")
@@ -85,7 +84,7 @@ export default function Signup() {
 				...prevState,
 				isEmailInvalid: true
 			}));
-			console.log("email not avail");
+			//console.log("email not avail");
 			return;
 		}
 		if (textInputs.password.length <= 6 && textInputs.confirmpassword.length <= 6) {
@@ -94,7 +93,7 @@ export default function Signup() {
 					...prevState,
 					isPasswordInvalid: true
 				}));
-				console.log("email not avail");
+				//console.log("email not avail");
 				return;
 			}
 		}

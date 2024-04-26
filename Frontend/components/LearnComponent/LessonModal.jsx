@@ -25,7 +25,6 @@ export default function LessonModal({ visibility,selectedData, setSelectedData,s
     description: selectedData?.description,
   }
   const [formData, setFormData] = useState(formInitialData)
-  console.log(formData)
   const handleForm = (inputName, inputValue) => {
     setFormData(prevData => ({
       ...prevData,
@@ -33,24 +32,24 @@ export default function LessonModal({ visibility,selectedData, setSelectedData,s
     }))
 
   }
-  //console.log(ID)
-  const cancelForm = useCallback(() => {
+ 
+  const cancelForm = () => {
     setModalVisible();
     setFormData(formInitialData);
     setErrorMessage("");
     setSelectedData("");
-  },[])
+  }
 
   const submitForm = useCallback(async () => {
-    //console.log(formData)
+  
 
     try {
       if (children.split(" ")[0] === "Upload") {
         await axiosPost(POSTURL, formData, contentType, userData.token)
-        console.log("success")
+        //console.log("success")
       } else {
        await axiosPut(`${EDITURL}${selectedData.ID}`, formData, contentType, userData.token)
-        console.log("success")
+        //console.log("success")
       }
       cancelForm()
       setRefresh(true)

@@ -26,7 +26,7 @@ const styles = StyleSheet.create({
     width: "100%",
     flexDirection: 'row',
     paddingVertical: "7%",
-    backgroundColor: Colors.bgDarkerGray,
+    backgroundColor: Colors.bgDarkGray,
     borderBottomRightRadius: 10,
     borderBottomLeftRadius: 10
   },

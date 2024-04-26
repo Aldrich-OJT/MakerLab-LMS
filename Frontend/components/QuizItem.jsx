@@ -100,7 +100,7 @@ export default function QuizItem(props) {
 
       <View style={styles.questioncontainer}>
         <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-          <Text style={[styles.questionNumberText, {backgroundColor: theme.colors.darkpurpletintPurple}]}>Question {props.itemNumber + 1} </Text>
+          <Text style={[styles.questionNumberText, {backgroundColor: Colors.bgDarkPurpleTint}]}>Question {props.itemNumber + 1} </Text>
           <View style={styles.buttonsContainer}>
             {userData.role === 'admin' && (
               <Menu
@@ -178,7 +178,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontFamily: 'PTSans-Bold',
     color: 'white',
-    backgroundColor: Colors.bgPurple,
+    //backgroundColor: "green",
     borderRadius: 10,
     width: '33%',
     textAlign: 'center',

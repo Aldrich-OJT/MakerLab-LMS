@@ -28,38 +28,46 @@ export default function Settings() {
   const tabBarHeight = useBottomTabBarHeight();
   const [avatarModalVisible, setAvatarModalVisible] = useState(false);
   const [avatar, setAvatar] = useState(null)
-  const [user, setUser] = useState();
+  const [user, setUser] = useState("");
   const [loading, setLoading] = useState(false);
   const [refresh, setRefresh] = useState(false);
   const { logout, userData } = useContext(AuthContext);
   const { toggleDarkMode } = useContext(DarkModeContext);
   const [pressed, setPressed] = useState(false)
-  const [progress, setProgress] = useState();
-  const [formdata, setFormdata] = useState({
-    avatar: 0
-  });
+  const [progress, setProgress] = useState(null);
+  const [formdata, setFormdata] = useState("");
 
-  //console.log("current avatar",avatar)
+
   const darkModeHandler = () => {
     toggleDarkMode()
     setPressed(!pressed)
   };
 
   const saveAvatar = (index) => {
-    console.log(index)
+
     setFormdata({ avatar: index })
     setAvatarModalVisible(false);
+
+    // const updateAvatar = async () => {
+    //   setAvatar(null)
+    //   const data = await axiosPut(`${updateuserDataURL}${user.user}`, formdata, contentType, userData.token)
+    //   console.log("avatar from database", data)
+    //   setAvatar(data.avatar)
+    // }
+    // updateAvatar()
 
   };
   useEffect(() => {
     const updateAvatar = async () => {
       setAvatar(null)
       const data = await axiosPut(`${updateuserDataURL}${user.user}`, formdata, contentType, userData.token)
-      console.log("avatar from database", data)
+      //console.log("avatar from database", data)
       setAvatar(data.avatar)
     }
-    updateAvatar()
-  }, [formdata, user])
+    if(formdata){
+      updateAvatar()
+    }
+  }, [formdata])
 
   useEffect(() => {
     const fetchData = async () => {
@@ -156,7 +164,7 @@ export default function Settings() {
                 Progress {parseInt(progress * 100)}%
               </Text>
 
-              <View style={styles.progressBar}>
+             { progress && <View style={styles.progressBar}>
                 <ProgressBar
                   animated={true}
                   progress={progress}
@@ -167,7 +175,7 @@ export default function Settings() {
                   borderWidth={0}
                   color={Colors.bgPurple}
                 />
-              </View>
+              </View>}
             </View>
           </View>
         )}
@@ -187,7 +195,7 @@ export default function Settings() {
             ))}
           </View>
         </View>
-        <Pressable style={[styles.logoutButton, { backgroundColor: theme.colors.darkGrayWhite }]} onPress={logout}>
+        <Pressable style={[styles.logoutButton, { backgroundColor: theme.colors.darkGrayWhite }]} onPress={()=>(logout())}>
           <Text style={styles.logoutText}>
             <Text style={{ fontFamily: 'icon', fontSize: 18 }}></Text>
             Logout

@@ -31,7 +31,7 @@ export default function LearnDetails({ route, navigation }) {
             setPostData({})
             try {
                 const data = await axiosGet(`${postURL}${_id}`, postData.token)
-                console.log(data)
+
 
                 //fetch the file itself
                 // const response = await axios.get(`http://192.168.100.93:5000${getFileURL}${_id}`, {
@@ -73,7 +73,7 @@ export default function LearnDetails({ route, navigation }) {
 
     const deleteData = useCallback(async () => {
         try {
-            const deleteddata = await axiosDelete(`${deleteURL}${_id}`, postData.token)
+            const deleteddata = await axiosDelete(`${deleteURL}${_id}?userId=${userData._id}`, postData.token)
             console.log(`${deleteddata._id} deleted`)
             navigation.goBack()
         } catch (error) {
